@@ -11,34 +11,52 @@ export class InvoiceService {
   async bulkInsert(invoices: Invoice[], userId: string, username: string): Promise<number> {
     if (!invoices.length) return 0;
 
-    const operations = invoices.map(invoice => {
-      const doc = {
-        ...invoice,
-        user_id: userId,
-        username: username,
-        created_at: new Date(),
-        updated_at: new Date()
-      };
-      
-      return {
-        updateOne: {
-          filter: { order_no: invoice.order_no },
-          update: { $setOnInsert: doc },
-          upsert: true
-        }
-      };
-    });
+    let affected = 0;
+    const now = new Date();
 
-    try {
-      const result = await database.invoices.bulkWrite(operations, { ordered: false });
-      return result.upsertedCount;
-    } catch (error: any) {
-      // Handle duplicate key errors gracefully
-      if (error.code === 11000) {
-        return 0; // All were duplicates
+    for (const invoice of invoices) {
+      const existing = await database.invoices.findOne({ order_no: invoice.order_no });
+
+      if (!existing) {
+        await database.invoices.insertOne({
+          ...invoice,
+          user_id: userId,
+          username,
+          created_at: now,
+          updated_at: now
+        } as any);
+        affected += 1;
+        continue;
       }
-      throw error;
+
+      const sameTotals =
+        existing.items_total === invoice.items_total &&
+        (existing.items?.length ?? 0) === (invoice.items?.length ?? 0);
+
+      if (sameTotals) {
+        // Duplicate with same totals and item count; no action needed.
+        continue;
+      }
+
+      await database.invoices.updateOne(
+        { order_no: invoice.order_no },
+        {
+          $set: {
+            ...invoice,
+            user_id: userId,
+            username,
+            items: invoice.items,
+            items_total: invoice.items_total,
+            created_at: existing.created_at ?? (existing as any).date ?? now,
+            updated_at: now
+          }
+        }
+      );
+
+      affected += 1;
     }
+
+    return affected;
   }
 
   async getInvoices(filters: InvoiceFilters, userId: string, isAdmin: boolean): Promise<PaginatedResponse<Invoice>> {

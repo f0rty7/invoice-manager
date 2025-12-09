@@ -6,9 +6,13 @@ export const CATEGORIES = [
   'Tobacco',
   'Snacks & Munchies',
   'Savories | Sweet Tooth',
+  'Fruits',
+  'Instant foods',
   'Dairy',
   'Beverages',
+  'Refreshments',
   'Groceries',
+  'Charges',
   'Others'
 ] as const;
 

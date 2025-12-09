@@ -7,7 +7,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "jest"
+    "test": "jest",
+    "migrate:categories": "tsx scripts/update-categories.ts"
   },
   "dependencies": {
     "@pdf-invoice/shared": "file:../shared",

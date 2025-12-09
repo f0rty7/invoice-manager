@@ -289,7 +289,7 @@ export class BlinkitParser implements PDFParser {
           qty,
           unit_price,
           price: total,
-          category: 'Others'
+          category: 'Charges'
         }
       ],
       items_total: total || null

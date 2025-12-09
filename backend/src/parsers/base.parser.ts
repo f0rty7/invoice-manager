@@ -7,7 +7,7 @@ export interface PDFParser {
 
 export const CATEGORIES = [
   {
-    regex: /\b(cigarette|tobacco|cigar|vape|hookah|pan|paan|supari|stellar define|chewing tobacco|rolling paper|lighter|smoke|\bGold\s*Flake\b|\bWills\s*(?:Classic|Navy\s*Cut)\b|\bClassic\b|\bNavy\s*Cut\b|\bFour\s*Square\b|\bBenson\s*&\s*Hedges\b|\bMarlboro\b|\bBristol\b|\bInsignia\b|\bPlayers\b|\bScissors\b|\bCapstan\b|\bBerkeley\b|\bRed\s*&\s*White\b)\b/i,
+    regex: /\b(cigarette|tobacco|cigar|vape|hookah|pan|paan|supari|stellar define|chewing tobacco|rolling paper|lighter|smoke|\bGold\s*Flake\b|\bWills\s*(?:Classic|Navy\s*Cut)\b|\bClassic\b|\bNavy\s*Cut\b|\bFour\s*Square\b|\bBenson\s*&\s*Hedges\b|\bMarlboro\b|\bBristol\b|\bInsignia\b|\bPlayers\b|\bScissors\b|\bCapstan\b|\bBerkeley\b|\bRed\s*&\s*White\b|\bMagnate\b|\bMagic\s*Switch\b)\b/i,
     category: 'Tobacco'
   },
   {
@@ -15,8 +15,16 @@ export const CATEGORIES = [
     category: 'Snacks & Munchies'
   },
   {
-    regex: /\b(chocolate|candy|sweet|sweets|mithai|barfi|ladoo|pedha|halwa|dessert|ice cream|ice-cream|icecream|cornetto|popsicle|frozen dessert|cookie|biscuit|wafer|cake|pastry|sweet snack)\b/i,
+    regex: /\b(chocolate|candy|sweet|sweets|mithai|barfi|ladoo|pedha|halwa|dessert|ice cream|ice-cream|icecream|cornetto|popsicle|frozen dessert|cookie|biscuit|wafer|wafy|croissant|britannia treat|cake|pastry|sweet snack)\b/i,
     category: 'Savories | Sweet Tooth'
+  },
+  {
+    regex: /\b(mango|banana|apple|grape|fruit|fruits|berry|berries|orange|watermelon|papaya|pineapple)\b/i,
+    category: 'Fruits'
+  },
+  {
+    regex: /\b(maggi|noodle|noodles|ramen|instant\s*(?:meal|meals|food|foods)|cup noodles|yippee|top ramen)\b/i,
+    category: 'Instant foods'
   },
   {
     regex: /\b(milk|curd|yogurt|dahi|paneer|cheese|butter|cream|margarine|lassi|buttermilk|ghee|milk powder|condensed milk)\b/i,
@@ -27,8 +35,16 @@ export const CATEGORIES = [
     category: 'Beverages'
   },
   {
-    regex: /\b(onion|beetroot|leaves|leaf|potato|tomato|ginger|garlic|chilli|lemon|coriander|spinach|palak|carrot|cauliflower|cabbage|cucumber|capsicum|gourd|okra|bhindi|brinjal|mushroom|peas|beans|vegetable|vegetables|fresh produce|rice|dal|pulse|lady finger|methi|fenugreek|idli|dosa|batter|lentil|flour|atta|sooji|besan|maida|sugar|salt|jaggery|poha|grain|grains|oil|ghee|groundnut|peanut)\b/i,
+    regex: /\b(onion|beetroot|leaves|leaf|potato|tomato|ginger|garlic|chilli|lemon|coriander|spinach|palak|carrot|cauliflower|cabbage|cucumber|capsicum|gourd|okra|bhindi|brinjal|mushroom|peas|beans|vegetable|vegetables|fresh produce|rice|dal|pulse|lady finger|methi|fenugreek|idli|dosa|batter|lentil|flour|atta|sooji|besan|maida|sugar|salt|jaggery|poha|grain|grains|oil|ghee|groundnut|peanut|pickle)\b/i,
     category: 'Groceries'
+  },
+  {
+    regex: /\b(tender\s*coconut|coconut\s*water|nariyal\s*pani)\b/i,
+    category: 'Refreshments'
+  },
+  {
+    regex: /\b(convenience\s*charge|delivery\s*charge|service\s*charge|platform\s*fee|handling\s*charge)\b/i,
+    category: 'Charges'
   },
   {
     regex: /.*/i,

@@ -57,6 +57,23 @@ mat-card-header {
     color: #424242;
   }
 
+  .sortable-content {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #757575;
+    }
+    &:hover mat-icon {
+      color: #424242;
+    }
+  }
+
   .invoice-row {
     cursor: pointer;
     transition: background-color 0.2s;

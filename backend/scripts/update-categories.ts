@@ -8,39 +8,74 @@ type Rule = {
 
 const RULES: Rule[] = [
   {
-    label: 'Croissant / Britannia Treat / Wafy / Wafers',
-    regex: /\b(croissant|britannia treat|wafy|wafer|wafers)\b/i,
-    category: 'Savories | Sweet Tooth'
+    label: 'Fresh fruits',
+    regex: /\b(apple|banana|mango|orange|grape|berry|berries|watermelon|papaya|pineapple|kiwi|melon|pomegranate|coconut|tender\s*coconut|fruit|fruits)\b/i,
+    category: 'Fresh Produce – Fruits'
   },
   {
-    label: 'Magnate Magic Switch King Size',
-    regex: /\bmagnate.*magic\s*switch.*king\s*size\b/i,
-    category: 'Tobacco'
+    label: 'Fresh vegetables and herbs',
+    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|leaves|herb|herbs)\b/i,
+    category: 'Fresh Produce – Vegetables & Herbs'
   },
   {
-    label: 'Mango',
-    regex: /\bmango(es)?\b/i,
-    category: 'Fruits'
+    label: 'Staples and pantry items',
+    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|pulse|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
+    category: 'Staples & Pantry'
   },
   {
-    label: 'Pickle',
-    regex: /\bpickle(s)?\b/i,
-    category: 'Groceries'
+    label: 'Spices, condiments and cooking essentials',
+    regex: /\b(spice|masala|masalas|salt|pepper|seasoning|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
+    category: 'Spices, Condiments & Cooking Essentials'
   },
   {
-    label: 'Maggi / Instant noodles',
-    regex: /\b(maggi|instant\s*noodle|noodles|cup\s*noodles|ramen)\b/i,
-    category: 'Instant foods'
+    label: 'Dairy and eggs',
+    regex: /\b(milk|dairy|curd|yogurt|yoghurt|paneer|cheese|butter|cream|ghee|dahi|lassi|buttermilk|condensed\s*milk|milk\s*powder)\b/i,
+    category: 'Dairy & Eggs'
   },
   {
-    label: 'Tender coconut',
-    regex: /\btender\s*coconut|coconut\s*water|nariyal\s*pani\b/i,
-    category: 'Refreshments'
+    label: 'Bakery and bread',
+    regex: /\b(bread|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll|rolls)\b/i,
+    category: 'Bakery & Bread'
   },
   {
-    label: 'Convenience charge',
+    label: 'Snacks and salty snacks',
+    regex: /\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
+    category: 'Snacks & Salty Snacks'
+  },
+  {
+    label: 'Confectionery and sweet tooth',
+    regex: /\b(chocolate|chocolates|candy|sweets?|dessert|ice\s*cream|ice\-cream|icecream|cornetto|popsicle|frozen\s*dessert|cookie|cookies|biscuit|biscuits|wafer|waffle|croissant|cake|sweet\s*snack|sweet)\b/i,
+    category: 'Confectionery & Sweet Tooth'
+  },
+  {
+    label: 'Frozen and refrigerated items',
+    regex: /\b(ice\s*cream|frozen|frozen\s*food|icecream|cornetto|popsicle)\b/i,
+    category: 'Frozen & Refrigerated Items'
+  },
+  {
+    label: 'Instant and ready-to-cook foods',
+    regex: /\b(maggi|noodle|noodles|instant\s*(meal|meals|food|foods)|ramen|cup\s*noodles|ready[-\s]*to[-\s]*eat|ready[-\s]*to[-\s]*cook|batter|meal\s*kit)\b/i,
+    category: 'Instant & Ready-to-Cook Foods'
+  },
+  {
+    label: 'Beverages and drinks',
+    regex: /\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|coffee\s*powder|tea\s*bag|milk\s*drink|health\s*drink)\b/i,
+    category: 'Beverages & Drinks'
+  },
+  {
+    label: 'Tobacco and related products',
+    regex: /\b(cigarette|tobacco|cigar|pan|paan|supari|smoke|hookah|chewing\s*tobacco|rolling\s*paper|lighter|\bGold\s*Flake\b|\bMarlboro\b|\bWills\b|\bPlayers\b|\bStellar\s*Define\b|\bMagnate\b|\bMagic\s*Switch\b)\b/i,
+    category: 'Tobacco & Related'
+  },
+  {
+    label: 'Household, personal care and miscellaneous',
+    regex: /\b(bouquet|flower|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous)\b/i,
+    category: 'Household, Personal Care & Miscellaneous'
+  },
+  {
+    label: 'Charges and fees',
     regex: /\b(convenience\s*charge|delivery\s*charge|service\s*charge|platform\s*fee|handling\s*charge)\b/i,
-    category: 'Charges'
+    category: 'Charges & Fees'
   }
 ];
 

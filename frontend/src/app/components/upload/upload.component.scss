@@ -1,15 +1,26 @@
-mat-card {
-  margin-bottom: 20px;
-}
-
-mat-card-header {
-  margin-bottom: 16px;
-
-  mat-card-title {
+.upload-dialog {
+  h2[mat-dialog-title] {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 20px;
+    margin: 0;
+    padding: 0;
+
+    mat-icon {
+      color: #3f51b5;
+    }
+  }
+}
+
+mat-dialog-content {
+  min-width: 500px;
+  max-width: 600px;
+  padding: 20px 0;
+
+  @media (max-width: 768px) {
+    min-width: auto;
+    width: 90vw;
   }
 }
 

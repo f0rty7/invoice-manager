@@ -1,10 +1,11 @@
-import { Component, signal, output } from '@angular/core';
+import { Component, signal, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { InvoiceService } from '../../services/invoice.service';
 
 interface FileUploadStatus {
@@ -24,17 +25,19 @@ interface FileUploadStatus {
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
 export class UploadComponent {
+  private invoiceService = inject(InvoiceService);
+  private dialogRef = inject(MatDialogRef<UploadComponent>, { optional: true });
+  
   files = signal<FileUploadStatus[]>([]);
   isDragging = signal(false);
   uploadComplete = output<void>();
-
-  constructor(private invoiceService: InvoiceService) {}
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -141,6 +144,13 @@ export class UploadComponent {
           );
 
           this.uploadComplete.emit();
+          
+          // Close dialog after successful upload (with small delay to show success state)
+          if (this.dialogRef) {
+            setTimeout(() => {
+              this.dialogRef?.close(true);
+            }, 1500);
+          }
         } else {
           // Handle case where response.success is false or no data
           this.files.update(files =>

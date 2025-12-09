@@ -1,0 +1,81 @@
+@if (hasData()) {
+  <div class="charts-container">
+    <h2 class="section-title">
+      <mat-icon>analytics</mat-icon>
+      Analytics & Insights
+    </h2>
+
+    <div class="charts-grid">
+      <!-- Monthly Spending Trends -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>trending_up</mat-icon>
+            Monthly Spending Trends
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="line"
+              [data]="monthlyTrendsData()"
+              [options]="monthlyTrendsOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Top Categories -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>category</mat-icon>
+            Top Categories by Spending
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="topCategoriesData()"
+              [options]="topCategoriesOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Top Items -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>shopping_basket</mat-icon>
+            Most Ordered Items
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="topItemsData()"
+              [options]="topItemsOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+} @else {
+  <div class="no-data">
+    <mat-card class="empty-state">
+      <mat-card-content>
+        <mat-icon>analytics</mat-icon>
+        <h3>No Data Available</h3>
+        <p>Upload some invoices or adjust your filters to see analytics</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+

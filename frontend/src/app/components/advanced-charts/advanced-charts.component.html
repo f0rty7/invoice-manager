@@ -1,0 +1,141 @@
+@if (hasData()) {
+  <div class="advanced-charts-container">
+    <h2 class="section-title">
+      <mat-icon>insights</mat-icon>
+      Advanced Analytics
+    </h2>
+
+    <div class="charts-grid">
+      <!-- 1. Spending by Delivery Partner -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>local_shipping</mat-icon>
+            Spending by Delivery Partner
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="doughnut"
+              [data]="deliveryPartnerData()"
+              [options]="deliveryPartnerOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 2. Average Order Value Trend -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>show_chart</mat-icon>
+            Average Order Value Trend
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="line"
+              [data]="avgOrderValueData()"
+              [options]="avgOrderValueOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 3. Items Count Distribution -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>inventory_2</mat-icon>
+            Items Count Distribution
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="itemsCountData()"
+              [options]="itemsCountOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 4. Category Mix Over Time -->
+      <mat-card class="chart-card full-width">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>layers</mat-icon>
+            Category Mix Over Time
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper tall">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="categoryMixData()"
+              [options]="categoryMixOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 5A. Price Range Distribution - Detailed -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>price_check</mat-icon>
+            Price Range Distribution (Detailed)
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="priceRangeDetailedData()"
+              [options]="priceRangeOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 5B. Price Range Distribution - Overview -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>attach_money</mat-icon>
+            Price Range Distribution (Overview)
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              type="bar"
+              [data]="priceRangeOverviewData()"
+              [options]="priceRangeOptions">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+} @else {
+  <div class="no-data">
+    <mat-card class="empty-state">
+      <mat-card-content>
+        <mat-icon>insights</mat-icon>
+        <h3>No Data for Advanced Analytics</h3>
+        <p>Upload invoices or adjust filters to see advanced analytics</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
+

@@ -5,6 +5,7 @@ import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 // Angular 21: Zoneless by default, no need for provideExperimentalZonelessChangeDetection
 bootstrapApplication(AppComponent, {
@@ -14,7 +15,8 @@ bootstrapApplication(AppComponent, {
       withInterceptors([authInterceptor]),
       withFetch() // Angular 21: Use native fetch API
     ),
-    provideAnimations()
+    provideAnimations(),
+    provideCharts(withDefaultRegisterables())
   ]
 }).catch(err => console.error(err));
 

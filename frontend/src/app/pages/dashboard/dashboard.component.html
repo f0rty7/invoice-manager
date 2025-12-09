@@ -8,6 +8,14 @@
 
     <span class="toolbar-spacer"></span>
 
+    <button 
+      mat-button 
+      (click)="openUploadDialog()"
+      matTooltip="Upload PDF Invoices">
+      <mat-icon>cloud_upload</mat-icon>
+      Upload
+    </button>
+
     <span class="user-info">
       <mat-icon>person</mat-icon>
       {{ currentUser()?.username }}
@@ -47,8 +55,11 @@
       <!-- Statistics Cards -->
       <app-stats-cards></app-stats-cards>
 
-      <!-- Upload Component -->
-      <app-upload (uploadComplete)="onUploadComplete()"></app-upload>
+      <!-- Charts -->
+      <app-charts></app-charts>
+
+      <!-- Advanced Analytics -->
+      <app-advanced-charts></app-advanced-charts>
 
       <!-- Filters -->
       <app-filter-bar></app-filter-bar>

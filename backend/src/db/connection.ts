@@ -1,4 +1,4 @@
-import { MongoClient, Db, Collection } from 'mongodb';
+import { MongoClient, Db, Collection, Document } from 'mongodb';
 import { CONFIG } from '../config';
 import type { User, Invoice } from '@pdf-invoice/shared';
 
@@ -57,7 +57,7 @@ class Database {
     return this.db;
   }
 
-  collection<T = any>(name: string): Collection<T> {
+  collection<T extends Document = Document>(name: string): Collection<T> {
     return this.getDb().collection<T>(name);
   }
 

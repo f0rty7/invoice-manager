@@ -129,7 +129,7 @@
               <button 
                 mat-icon-button 
                 [matTooltip]="isExpanded(invoice.order_no || '') ? 'Collapse' : 'Expand'"
-                (click)="toggleExpand(invoice.order_no || '')">
+                (click)="toggleExpand(invoice.order_no || '', $event)">
                 <mat-icon>{{ isExpanded(invoice.order_no || '') ? 'expand_less' : 'expand_more' }}</mat-icon>
               </button>
               <button 
@@ -174,7 +174,14 @@
             mat-row 
             *matRowDef="let invoice; columns: displayedColumns;"
             [class.expanded-row]="isExpanded(invoice.order_no || '')"
-            class="invoice-row"></tr>
+            class="invoice-row"
+            (click)="toggleExpand(invoice.order_no || '')"
+            role="button"
+            tabindex="0"
+            [id]="invoice.order_no || ''"
+            (keydown.enter)="toggleExpand(invoice.order_no || '')"
+            (keydown.space)="toggleExpand(invoice.order_no || '')"
+            [attr.aria-expanded]="isExpanded(invoice.order_no || '')"></tr>
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
         </table>
 

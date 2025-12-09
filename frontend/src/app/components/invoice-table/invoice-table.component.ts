@@ -130,7 +130,13 @@ export class InvoiceTableComponent {
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  toggleExpand(orderNo: string): void {
+  toggleExpand(orderNo: string, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    requestAnimationFrame(() => {
+      document.getElementById(orderNo)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    })
     if (this.expandedInvoice() === orderNo) {
       this.expandedInvoice.set(null);
     } else {

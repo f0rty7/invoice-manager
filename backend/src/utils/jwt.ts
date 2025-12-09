@@ -10,7 +10,7 @@ export interface JwtPayload {
 export function generateToken(payload: JwtPayload): string {
   return jwt.sign(payload, CONFIG.jwt.secret, {
     expiresIn: CONFIG.jwt.expiresIn,
-  });
+  } as jwt.SignOptions);
 }
 
 export function verifyToken(token: string): JwtPayload {

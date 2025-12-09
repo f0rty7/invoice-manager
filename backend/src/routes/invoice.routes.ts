@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
-import { authMiddleware, adminMiddleware } from '../middleware/auth';
+import { authMiddleware, adminMiddleware, type AuthContext } from '../middleware/auth';
 import { invoiceService } from '../services/invoice.service';
 import { pdfParserService } from '../services/pdf-parser.service';
 import type { JwtPayload } from '../utils/jwt';
 import type { InvoiceFilters } from '@pdf-invoice/shared';
 
-const invoiceRouter = new Hono();
+const invoiceRouter = new Hono<{ Variables: AuthContext }>();
 
 // Upload and parse PDFs
 invoiceRouter.post('/upload', authMiddleware, async (c) => {
@@ -16,7 +16,7 @@ invoiceRouter.post('/upload', authMiddleware, async (c) => {
     // Collect all files from the "files" field; parseBody() keeps only the last item.
     const fileArray = formData
       .getAll('files')
-      .filter((f): f is File => f instanceof File);
+      .filter(f => f instanceof Blob) as Array<Blob & { name: string }>;
 
     if (!fileArray.length) {
       return c.json({
@@ -110,6 +110,50 @@ invoiceRouter.get('/', authMiddleware, async (c) => {
   }
 });
 
+// Get statistics (must come before /:id to avoid matching "stats" as an ID)
+invoiceRouter.get('/stats/summary', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    
+    const stats = await invoiceService.getStats(
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch statistics'
+    }, 500);
+  }
+});
+
+// Get unique categories (must come before /:id to avoid matching "categories" as an ID)
+invoiceRouter.get('/categories', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    
+    const categories = await invoiceService.getUniqueCategories(
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: categories
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch categories'
+    }, 500);
+  }
+});
+
 // Get single invoice
 invoiceRouter.get('/:id', authMiddleware, async (c) => {
   try {
@@ -168,28 +212,6 @@ invoiceRouter.delete('/:id', authMiddleware, async (c) => {
     return c.json({
       success: false,
       error: error instanceof Error ? error.message : 'Failed to delete invoice'
-    }, 500);
-  }
-});
-
-// Get statistics
-invoiceRouter.get('/stats/summary', authMiddleware, async (c) => {
-  try {
-    const user = c.get('user') as JwtPayload;
-    
-    const stats = await invoiceService.getStats(
-      user.userId,
-      user.role === 'admin'
-    );
-
-    return c.json({
-      success: true,
-      data: stats
-    });
-  } catch (error) {
-    return c.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch statistics'
     }, 500);
   }
 });

@@ -136,8 +136,8 @@ export class ZeptoParser implements PDFParser {
     // Compute total
     const sum = invoice.items
       .map(it => it.price)
-      .filter(v => typeof v === 'number' && !Number.isNaN(v))
-      .reduce((a, b) => a + b!, 0);
+      .filter((v): v is number => typeof v === 'number' && !Number.isNaN(v))
+      .reduce((a, b) => a + b, 0);
     invoice.items_total = sum || null;
     
     return invoice;

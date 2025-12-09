@@ -31,7 +31,7 @@
         <mat-label>Category</mat-label>
         <mat-select formControlName="category">
           <mat-option value="">All Categories</mat-option>
-          @for (category of categories; track category) {
+          @for (category of categories(); track category) {
             <mat-option [value]="category">{{ category }}</mat-option>
           }
         </mat-select>

@@ -216,8 +216,8 @@ export class BlinkitParser implements PDFParser {
     
     const items_total = items
       .map(it => it.price)
-      .filter(v => typeof v === 'number' && !Number.isNaN(v))
-      .reduce((a, b) => a + b!, 0);
+      .filter((v): v is number => typeof v === 'number' && !Number.isNaN(v))
+      .reduce((a, b) => a + b, 0);
     
     return {
       ...header,
@@ -319,8 +319,8 @@ export class BlinkitParser implements PDFParser {
     
     const items_total = allItems
       .map(it => it.price)
-      .filter(v => typeof v === 'number' && !Number.isNaN(v))
-      .reduce((a, b) => a + b!, 0);
+      .filter((v): v is number => typeof v === 'number' && !Number.isNaN(v))
+      .reduce((a, b) => a + b, 0);
     
     const uniqueOrders = [...new Set(orderNos)];
     const order_no = uniqueOrders.length <= 1 ? (uniqueOrders[0] || null) : uniqueOrders;

@@ -53,5 +53,9 @@ export class InvoiceService {
   getStats(): Observable<ApiResponse<InvoiceStats>> {
     return this.http.get<ApiResponse<InvoiceStats>>(`${this.API_URL}/stats/summary`);
   }
+
+  getCategories(): Observable<ApiResponse<string[]>> {
+    return this.http.get<ApiResponse<string[]>>(`${this.API_URL}/categories`);
+  }
 }
 

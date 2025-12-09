@@ -207,6 +207,24 @@ export class InvoiceService {
       by_month
     };
   }
+
+  async getUniqueCategories(userId: string, isAdmin: boolean): Promise<string[]> {
+    const match: any = isAdmin ? {} : { user_id: userId };
+
+    const pipeline = [
+      { $match: match },
+      { $unwind: '$items' },
+      { 
+        $group: { 
+          _id: '$items.category' 
+        } 
+      },
+      { $sort: { _id: 1 } }
+    ];
+
+    const result = await database.invoices.aggregate(pipeline).toArray();
+    return result.map(r => r._id).filter(Boolean);
+  }
 }
 
 export const invoiceService = new InvoiceService();

@@ -12,8 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { debounceTime } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
+import { InvoiceService } from '../../services/invoice.service';
 import { AuthService } from '../../services/auth.service';
-import { CATEGORIES } from '@pdf-invoice/shared';
 
 @Component({
   selector: 'app-filter-bar',
@@ -38,10 +38,11 @@ import { CATEGORIES } from '@pdf-invoice/shared';
 export class FilterBarComponent {
   private fb = inject(FormBuilder);
   private invoiceState = inject(InvoiceStateService);
+  private invoiceService = inject(InvoiceService);
   private authService = inject(AuthService);
 
   filterForm: FormGroup;
-  categories = CATEGORIES;
+  categories = signal<string[]>([]);
   isAdmin = this.authService.isAdmin;
   expanded = signal(false);
 
@@ -54,6 +55,9 @@ export class FilterBarComponent {
       price_max: [''],
       username: ['']
     });
+
+    // Load categories from API
+    this.loadCategories();
 
     // Debounce filter changes
     this.filterForm.valueChanges
@@ -82,6 +86,21 @@ export class FilterBarComponent {
 
         this.invoiceState.setFilters(filters);
       });
+  }
+
+  private loadCategories(): void {
+    this.invoiceService.getCategories().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.categories.set(response.data);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load categories:', err);
+        // Set empty array on error
+        this.categories.set([]);
+      }
+    });
   }
 
   private formatDate(date: Date): string {

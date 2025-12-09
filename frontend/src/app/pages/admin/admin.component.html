@@ -1,0 +1,61 @@
+<div class="admin-container">
+  <!-- Toolbar -->
+  <mat-toolbar color="accent" class="admin-toolbar">
+    <span class="toolbar-title">
+      <mat-icon>admin_panel_settings</mat-icon>
+      Admin Panel
+    </span>
+
+    <span class="toolbar-spacer"></span>
+
+    <span class="user-info">
+      <mat-icon>person</mat-icon>
+      {{ currentUser()?.username }}
+      <span class="admin-badge">ADMIN</span>
+    </span>
+
+    <button 
+      mat-button 
+      (click)="goToDashboard()"
+      matTooltip="My Dashboard">
+      <mat-icon>dashboard</mat-icon>
+      My Dashboard
+    </button>
+
+    <button 
+      mat-button 
+      (click)="logout()"
+      matTooltip="Logout">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="admin-content">
+    <div class="container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1>Admin Dashboard</h1>
+        <p class="subtitle">View and manage all users' invoices</p>
+        <div class="admin-notice">
+          <mat-icon>info</mat-icon>
+          <span>You are viewing data for all users. Use the username filter to narrow down results.</span>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <app-stats-cards></app-stats-cards>
+
+      <!-- Upload Component -->
+      <app-upload (uploadComplete)="onUploadComplete()"></app-upload>
+
+      <!-- Filters (with username field visible for admin) -->
+      <app-filter-bar></app-filter-bar>
+
+      <!-- Invoice Table -->
+      <app-invoice-table></app-invoice-table>
+    </div>
+  </div>
+</div>
+

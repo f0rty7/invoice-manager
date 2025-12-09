@@ -1,0 +1,139 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>receipt</mat-icon>
+      Invoices ({{ total() }})
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (loading()) {
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading invoices...</p>
+      </div>
+    } @else if (error()) {
+      <div class="error-container">
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ error() }}</p>
+      </div>
+    } @else if (invoices().length === 0) {
+      <div class="empty-container">
+        <mat-icon>inbox</mat-icon>
+        <p>No invoices found</p>
+        <p class="hint">Upload some PDF invoices to get started!</p>
+      </div>
+    } @else {
+      <div class="table-container">
+        <table mat-table [dataSource]="invoices()" multiTemplateDataRows class="invoice-table">
+          <!-- Order Number Column -->
+          <ng-container matColumnDef="order_no">
+            <th mat-header-cell *matHeaderCellDef>Order No</th>
+            <td mat-cell *matCellDef="let invoice">
+              <div class="order-no">{{ getOrderNoDisplay(invoice.order_no) }}</div>
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let invoice">
+              {{ formatDate(invoice.date) }}
+            </td>
+          </ng-container>
+
+          <!-- Delivery Partner Column -->
+          <ng-container matColumnDef="delivery_partner">
+            <th mat-header-cell *matHeaderCellDef>Partner</th>
+            <td mat-cell *matCellDef="let invoice">
+              <div class="partner-name">
+                {{ invoice.delivery_partner?.known_name || 'N/A' }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Items Count Column -->
+          <ng-container matColumnDef="items_count">
+            <th mat-header-cell *matHeaderCellDef>Items</th>
+            <td mat-cell *matCellDef="let invoice">
+              <mat-chip>{{ invoice.items.length }}</mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Total Column -->
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let invoice">
+              <div class="total-amount">₹{{ (invoice.items_total || 0).toFixed(2) }}</div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let invoice">
+              <button 
+                mat-icon-button 
+                [matTooltip]="isExpanded(invoice.order_no || '') ? 'Collapse' : 'Expand'"
+                (click)="toggleExpand(invoice.order_no || '')">
+                <mat-icon>{{ isExpanded(invoice.order_no || '') ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              <button 
+                mat-icon-button 
+                color="warn" 
+                matTooltip="Delete"
+                (click)="deleteInvoice(invoice, $event)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Expanded Detail Column -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let invoice" [attr.colspan]="displayedColumns.length">
+              @if (isExpanded(invoice.order_no || '')) {
+                <div class="expanded-content">
+                  <h4>Items Details</h4>
+                  <div class="items-grid">
+                    @for (item of invoice.items; track item.sr) {
+                      <div class="item-card">
+                        <div class="item-header">
+                          <span class="item-sr">#{{ item.sr }}</span>
+                          <mat-chip class="category-chip">{{ item.category }}</mat-chip>
+                        </div>
+                        <div class="item-description">{{ item.description }}</div>
+                        <div class="item-details">
+                          <span>Qty: {{ item.qty }}</span>
+                          <span>Unit: ₹{{ (item.unit_price || 0).toFixed(2) }}</span>
+                          <span class="item-price">₹{{ (item.price || 0).toFixed(2) }}</span>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr 
+            mat-row 
+            *matRowDef="let invoice; columns: displayedColumns;"
+            [class.expanded-row]="isExpanded(invoice.order_no || '')"
+            class="invoice-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+        </table>
+
+        <mat-paginator
+          [length]="total()"
+          [pageSize]="filters().limit || 20"
+          [pageIndex]="(filters().page || 1) - 1"
+          [pageSizeOptions]="[10, 20, 50, 100]"
+          (page)="onPageChange($event)"
+          showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>
+

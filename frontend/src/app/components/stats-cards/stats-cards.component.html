@@ -1,0 +1,72 @@
+<div class="stats-container">
+  <mat-card class="stat-card total-invoices">
+    <mat-card-content>
+      <div class="stat-icon">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+      <div class="stat-details">
+        <div class="stat-value">{{ totalInvoices() }}</div>
+        <div class="stat-label">Total Invoices</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="stat-card total-amount">
+    <mat-card-content>
+      <div class="stat-icon">
+        <mat-icon>currency_rupee</mat-icon>
+      </div>
+      <div class="stat-details">
+        <div class="stat-value">₹{{ totalAmount().toFixed(2) }}</div>
+        <div class="stat-label">Total Amount</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="stat-card categories">
+    <mat-card-content>
+      <div class="stat-icon">
+        <mat-icon>category</mat-icon>
+      </div>
+      <div class="stat-details">
+        <div class="stat-label">Top Categories</div>
+        @if (topCategories().length > 0) {
+          <div class="category-list">
+            @for (cat of topCategories(); track cat.category) {
+              <div class="category-item">
+                <span class="category-name">{{ cat.category }}</span>
+                <span class="category-amount">₹{{ cat.total.toFixed(2) }}</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="no-data">No data available</div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (stats()) {
+    <mat-card class="stat-card global-stats">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>insights</mat-icon>
+        </div>
+        <div class="stat-details">
+          <div class="stat-label">All-Time Stats</div>
+          <div class="global-stats-grid">
+            <div class="global-stat-item">
+              <span class="label">Invoices:</span>
+              <span class="value">{{ stats()!.total_invoices }}</span>
+            </div>
+            <div class="global-stat-item">
+              <span class="label">Total:</span>
+              <span class="value">₹{{ stats()!.total_amount.toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+

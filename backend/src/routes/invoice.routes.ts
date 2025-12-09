@@ -11,13 +11,14 @@ const invoiceRouter = new Hono();
 invoiceRouter.post('/upload', authMiddleware, async (c) => {
   try {
     const user = c.get('user') as JwtPayload;
-    const body = await c.req.parseBody();
-    
-    // Handle multiple files
-    const files = body['files'];
-    const fileArray = Array.isArray(files) ? files : [files];
-    
-    if (!fileArray.length || !fileArray[0]) {
+    const formData = await c.req.formData();
+
+    // Collect all files from the "files" field; parseBody() keeps only the last item.
+    const fileArray = formData
+      .getAll('files')
+      .filter((f): f is File => f instanceof File);
+
+    if (!fileArray.length) {
       return c.json({
         success: false,
         error: 'No files provided'

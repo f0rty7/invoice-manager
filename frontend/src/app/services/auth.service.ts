@@ -35,6 +35,9 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
+    // Load persisted auth before any guards/interceptors run
+    this.checkStoredAuth();
+
     // Angular 21: Effect to sync auth state with localStorage
     effect(() => {
       const auth = this.authState();

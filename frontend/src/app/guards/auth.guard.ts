@@ -6,6 +6,11 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  // Check for stored auth first (in case of page refresh)
+  if (!authService.isAuthenticated()) {
+    authService.checkStoredAuth();
+  }
+
   if (authService.isAuthenticated()) {
     return true;
   }

@@ -100,7 +100,7 @@ export class UploadComponent {
     this.files.update(files => 
       files.map(f => 
         filesToUpload.includes(f.file) 
-          ? { ...f, status: 'uploading', progress: 50 }
+          ? { ...f, status: 'uploading' as const, progress: 50 }
           : f
       )
     );
@@ -112,30 +112,54 @@ export class UploadComponent {
           
           this.files.update(files =>
             files.map(f => {
+              // Only update files that were in this upload batch
+              if (!filesToUpload.includes(f.file)) {
+                return f;
+              }
+
               const result = results.find((r: any) => r.filename === f.file.name);
               if (result) {
                 return {
                   ...f,
                   progress: 100,
-                  status: result.success ? 'success' : 'error',
+                  status: result.success ? 'success' as const : 'error' as const,
                   message: result.success 
                     ? `${result.inserted} invoices added` 
                     : result.error,
                   invoiceCount: result.inserted
                 };
               }
-              return f;
+              
+              // If no result found for this file, mark as error
+              return {
+                ...f,
+                status: 'error' as const,
+                progress: 0,
+                message: 'No response received for this file'
+              };
             })
           );
 
           this.uploadComplete.emit();
+        } else {
+          // Handle case where response.success is false or no data
+          this.files.update(files =>
+            files.map(f =>
+              filesToUpload.includes(f.file)
+                ? { ...f, status: 'error' as const, progress: 0, message: 'Upload failed - no data received' }
+                : f
+            )
+          );
         }
       },
       error: (err) => {
+        console.error('Upload error:', err);
+        const errorMessage = err?.error?.error || err?.message || 'Upload failed';
+        
         this.files.update(files =>
           files.map(f =>
             filesToUpload.includes(f.file)
-              ? { ...f, status: 'error', progress: 0, message: 'Upload failed' }
+              ? { ...f, status: 'error' as const, progress: 0, message: errorMessage }
               : f
           )
         );

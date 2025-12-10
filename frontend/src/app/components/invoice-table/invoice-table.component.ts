@@ -47,7 +47,7 @@ export class InvoiceTableComponent {
   
   @Input() showUploader = false;
 
-  private readonly baseColumns = ['order_no', 'date', 'delivery_partner', 'items_count', 'total'] as const;
+  private readonly baseColumns = ['order_no', 'invoice_no', 'date', 'delivery_partner', 'items_count', 'total'] as const;
 
   get displayedColumns(): string[] {
     const cols: string[] = [...this.baseColumns];
@@ -130,22 +130,22 @@ export class InvoiceTableComponent {
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  toggleExpand(orderNo: string, event?: Event): void {
+  toggleExpand(invoiceId: string, event?: Event): void {
     if (event) {
       event.stopPropagation();
     }
     requestAnimationFrame(() => {
-      document.getElementById(orderNo)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById(invoiceId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     })
-    if (this.expandedInvoice() === orderNo) {
+    if (this.expandedInvoice() === invoiceId) {
       this.expandedInvoice.set(null);
     } else {
-      this.expandedInvoice.set(orderNo);
+      this.expandedInvoice.set(invoiceId);
     }
   }
 
-  isExpanded(orderNo: string): boolean {
-    return this.expandedInvoice() === orderNo;
+  isExpanded(invoiceId: string): boolean {
+    return this.expandedInvoice() === invoiceId;
   }
 
   private parseDateMs(dateStr: string | null | undefined): number {
@@ -183,8 +183,8 @@ export class InvoiceTableComponent {
     }
   }
 
-  trackByOrderNo(index: number, invoice: Invoice): string {
-    return invoice.order_no?.toString() || index.toString();
+  trackById(index: number, invoice: Invoice): string {
+    return invoice._id || index.toString();
   }
 
   formatDate(dateStr: string | null): string {

@@ -23,8 +23,11 @@ export class InvoiceService {
     return `${userId}_${isAdmin ? 'admin' : 'user'}`;
   }
 
-  async checkExists(order_no: string): Promise<boolean> {
-    const existing = await database.invoices.findOne({ order_no }, { projection: { _id: 1 } });
+  async checkExists(order_no: string, invoice_no: string | null): Promise<boolean> {
+    const existing = await database.invoices.findOne(
+      { order_no, invoice_no }, 
+      { projection: { _id: 1 } }
+    );
     return !!existing;
   }
 
@@ -33,21 +36,28 @@ export class InvoiceService {
 
     const now = new Date();
     
-    // First, check for existing invoices to determine if we need to update or insert
-    const orderNumbers = invoices.map(inv => inv.order_no);
+    // Build lookup queries using compound key (order_no + invoice_no)
+    const lookupQueries = invoices.map(inv => ({
+      order_no: inv.order_no,
+      invoice_no: inv.invoice_no
+    }));
+    
     const existingInvoices = await database.invoices
-      .find({ order_no: { $in: orderNumbers } })
+      .find({ $or: lookupQueries })
       .toArray();
     
-    // Create a map of existing invoices for quick lookup
-    const existingMap = new Map(existingInvoices.map(inv => [inv.order_no, inv]));
+    // Create a map using composite key for quick lookup
+    const existingMap = new Map(
+      existingInvoices.map(inv => [`${inv.order_no}|${inv.invoice_no}`, inv])
+    );
     
     // Build bulk write operations
     const operations: any[] = [];
     let affected = 0;
 
     for (const invoice of invoices) {
-      const existing = existingMap.get(invoice.order_no);
+      const compositeKey = `${invoice.order_no}|${invoice.invoice_no}`;
+      const existing = existingMap.get(compositeKey);
 
       if (existing) {
         // Check if this is a duplicate with same totals
@@ -63,7 +73,7 @@ export class InvoiceService {
         // Update operation for changed invoice
         operations.push({
           updateOne: {
-            filter: { order_no: invoice.order_no },
+            filter: { order_no: invoice.order_no, invoice_no: invoice.invoice_no },
             update: {
               $set: {
                 ...invoice,
@@ -84,7 +94,7 @@ export class InvoiceService {
         // Insert operation for new invoice
         operations.push({
           updateOne: {
-            filter: { order_no: invoice.order_no },
+            filter: { order_no: invoice.order_no, invoice_no: invoice.invoice_no },
             update: {
               $setOnInsert: {
                 ...invoice,
@@ -106,35 +116,15 @@ export class InvoiceService {
       return 0;
     }
 
-    // Use transactions for multiple operations to ensure atomicity
-    if (operations.length > 1) {
-      const client = database.getClient();
-      const session = client.startSession();
-      
-      try {
-        await session.withTransaction(async () => {
-          await database.invoices.bulkWrite(operations, { session });
-        });
-      } catch (error: any) {
-        // Handle duplicate key errors gracefully
-        if (error.code === 11000) {
-          console.warn('Duplicate key error during bulk insert, some invoices may already exist');
-        } else {
-          throw error;
-        }
-      } finally {
-        await session.endSession();
-      }
-    } else {
-      // Single operation doesn't need transaction
-      try {
-        await database.invoices.bulkWrite(operations);
-      } catch (error: any) {
-        if (error.code === 11000) {
-          console.warn('Duplicate key error during insert');
-        } else {
-          throw error;
-        }
+    // Use bulkWrite with ordered: false to continue on errors and handle duplicates gracefully
+    try {
+      await database.invoices.bulkWrite(operations, { ordered: false });
+    } catch (error: any) {
+      // Handle duplicate key errors gracefully
+      if (error.code === 11000) {
+        console.warn('Duplicate key error during bulk insert, some invoices may already exist');
+      } else {
+        throw error;
       }
     }
 

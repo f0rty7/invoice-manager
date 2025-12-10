@@ -296,16 +296,73 @@ export class BlinkitParser implements PDFParser {
     });
   }
 
+  private addFallbackHandlingCharge(tokens: string[], invoices: Invoice[]): void {
+    const already = invoices.some(inv =>
+      inv.items.some(it => /handling charge/i.test(it.description || ''))
+    );
+    if (already) return;
+    
+    const idx = tokens.findIndex(t => /handling charge/i.test(t));
+    if (idx === -1) return;
+    
+    const orderIdx = tokens.lastIndexOf('Order Id', idx);
+    const orderToken = orderIdx !== -1 ? (tokens[orderIdx + 1] === ':' ? tokens[orderIdx + 2] : tokens[orderIdx + 1]) : null;
+    
+    const dateIdx = tokens.lastIndexOf('Invoice Date', idx);
+    const dateToken = dateIdx !== -1 ? (tokens[dateIdx + 1] === ':' ? tokens[dateIdx + 2] : tokens[dateIdx + 1]) : null;
+    
+    const nums: number[] = [];
+    for (let j = idx + 1; j < tokens.length && nums.length < 9; j++) {
+      const n = this.numFrom(tokens[j]);
+      if (n === null) {
+        if (nums.length) break;
+        continue;
+      }
+      nums.push(n);
+    }
+    if (!nums.length) return;
+    
+    const qty = nums[2] ?? 1;
+    const total = nums[8] ?? nums[0];
+    const unit_price = qty ? total / qty : total;
+    
+    invoices.push({
+      invoice_no: null,
+      order_no: orderToken || null,
+      date: this.normalizeDate(dateToken),
+      delivery_partner: {
+        registered_name: 'Blink Commerce Private Limited (formerly known as Grofers India Private Limited)',
+        known_name: 'Blinkit'
+      },
+      items: [
+        {
+          sr: 1,
+          description: 'Handling charge',
+          qty,
+          unit_price,
+          price: total,
+          category: 'Charges'
+        }
+      ],
+      items_total: total || null
+    });
+  }
+
   private mergeAll(invoices: Invoice[], tokens: string[]): Invoice | null {
     this.addFallbackConvenience(tokens, invoices);
+    this.addFallbackHandlingCharge(tokens, invoices);
     
     const allItems: InvoiceItem[] = [];
     const orderNos: string[] = [];
+    const invoiceNos: string[] = [];
     
     for (const inv of invoices) {
-      const hasConvenience = inv.items.some(it => /convenience charge/i.test(it.description || ''));
-      if (inv.order_no && !hasConvenience && typeof inv.order_no === 'string') {
+      const hasChargesOnly = inv.items.some(it => /convenience charge|handling charge/i.test(it.description || ''));
+      if (inv.order_no && !hasChargesOnly && typeof inv.order_no === 'string') {
         orderNos.push(inv.order_no);
+      }
+      if (inv.invoice_no && typeof inv.invoice_no === 'string') {
+        invoiceNos.push(inv.invoice_no);
       }
       for (const item of inv.items) {
         allItems.push({ ...item });
@@ -325,8 +382,11 @@ export class BlinkitParser implements PDFParser {
     const uniqueOrders = [...new Set(orderNos)];
     const order_no = uniqueOrders.length <= 1 ? (uniqueOrders[0] || null) : uniqueOrders;
     
+    const uniqueInvoices = [...new Set(invoiceNos)];
+    const invoice_no = uniqueInvoices.length ? uniqueInvoices.join(', ') : null;
+    
     return {
-      invoice_no: null,
+      invoice_no,
       order_no,
       date: invoices.find(inv => inv.date)?.date || null,
       delivery_partner: invoices.find(inv => inv.delivery_partner)?.delivery_partner || null,

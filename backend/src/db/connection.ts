@@ -30,8 +30,11 @@ class Database {
       await this.db.collection('users').createIndex({ username: 1 }, { unique: true });
       await this.db.collection('users').createIndex({ email: 1 }, { unique: true, sparse: true });
 
-      // Invoices collection indexes
-      await this.db.collection('invoices').createIndex({ order_no: 1 }, { unique: true });
+      // Invoices collection indexes - compound unique key for order_no + invoice_no
+      await this.db.collection('invoices').createIndex(
+        { order_no: 1, invoice_no: 1 }, 
+        { unique: true }
+      );
       await this.db.collection('invoices').createIndex({ user_id: 1, date: -1 });
       await this.db.collection('invoices').createIndex({ 'items.category': 1, date: -1 });
       await this.db.collection('invoices').createIndex({ items_total: 1 });

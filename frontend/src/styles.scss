@@ -1,52 +1,78 @@
-// Custom Material Dark Theme
+// Custom Material Light Theme
 @use '@angular/material' as mat;
 
 @include mat.core();
 
-// Create the dark theme using M3 color system
-$dark-theme: mat.define-theme((
+// Create the light theme using M3 color system
+$light-theme: mat.define-theme((
   color: (
-    theme-type: dark,
-    primary: mat.$cyan-palette,
-    tertiary: mat.$yellow-palette,
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$green-palette,
   ),
   typography: (
-    brand-family: 'Roboto, "Helvetica Neue", sans-serif',
-    plain-family: 'Roboto, "Helvetica Neue", sans-serif',
+    brand-family: 'Inter, "Helvetica Neue", sans-serif',
+    plain-family: 'Inter, "Helvetica Neue", sans-serif',
   ),
   density: (
     scale: 0,
   )
 ));
 
-@include mat.all-component-themes($dark-theme);
+@include mat.all-component-themes($light-theme);
 
-// CSS Custom Properties for Theme Colors
+// CSS Custom Properties for Light Theme
 :root {
-  --bg-primary: #0f1419;
-  --bg-secondary: #1a1f2e;
-  --bg-tertiary: #252b3b;
-  --bg-card: rgba(26, 31, 46, 0.7);
-  --bg-card-hover: rgba(26, 31, 46, 0.85);
+  // Backgrounds
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-elevated: #ffffff;
   
-  --text-primary: #ffffff;
-  --text-secondary: #b8c5d6;
-  --text-tertiary: #8899aa;
+  // Text
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
   
-  --accent-primary: #00d4ff;
-  --accent-secondary: #ffd700;
-  --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #0088cc 100%);
+  // Accent Colors
+  --accent-primary: #3b82f6;
+  --accent-primary-light: #eff6ff;
+  --accent-primary-hover: #2563eb;
+  --accent-success: #10b981;
+  --accent-success-light: #ecfdf5;
+  --accent-warning: #f59e0b;
+  --accent-warning-light: #fffbeb;
+  --accent-danger: #ef4444;
+  --accent-danger-light: #fef2f2;
   
-  --border-color: rgba(0, 212, 255, 0.15);
-  --border-glow: rgba(0, 212, 255, 0.3);
+  // Borders
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
   
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.15);
+  // Shadows (soft, subtle)
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.03);
   
-  --border-radius: 12px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  // Spacing
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  
+  // Border Radius
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  
+  // Transitions
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
 }
 
 * {
@@ -57,92 +83,70 @@ $dark-theme: mat.define-theme((
 
 html, body {
   height: 100%;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  overflow-x: hidden;
 }
 
-// Scrollbar styling
+// Scrollbar styling - thin and subtle
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
-  border-radius: 4px;
+  background: var(--border-medium);
+  border-radius: 3px;
   
   &:hover {
-    background: rgba(0, 212, 255, 0.3);
+    background: var(--text-muted);
   }
+}
+
+// Firefox scrollbar
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-medium) transparent;
 }
 
 // Container
 .container {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0;
-}
-
-// Glassmorphism Card Utilities
-.glass-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  transition: var(--transition);
-  
-  &:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--border-glow);
-    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 212, 255, 0.2);
-    transform: translateY(-2px);
-  }
-}
-
-.glass-panel {
-  background: rgba(26, 31, 46, 0.6);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
+  padding: 0 var(--spacing-lg);
 }
 
 // Material Card Overrides
 .mat-mdc-card {
-  margin-bottom: 24px;
   background: var(--bg-card) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--border-radius) !important;
-  box-shadow: var(--shadow-md), var(--shadow-glow) !important;
-  transition: var(--transition) !important;
-  color: var(--text-primary) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal) !important;
   
   &:hover {
-    background: var(--bg-card-hover) !important;
-    border-color: var(--border-glow) !important;
-    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 212, 255, 0.2) !important;
-    transform: translateY(-2px);
+    box-shadow: var(--shadow-md) !important;
   }
 }
 
 .mat-mdc-card-header {
   .mat-mdc-card-title {
     color: var(--text-primary) !important;
+    font-weight: 600 !important;
+  }
+  
+  .mat-mdc-card-subtitle {
+    color: var(--text-secondary) !important;
   }
 }
 
@@ -150,67 +154,43 @@ body {
   color: var(--text-secondary) !important;
 }
 
-// Loading states
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  
-  .mat-mdc-progress-spinner {
-    --mdc-circular-progress-active-indicator-color: var(--accent-primary);
-  }
-}
-
-// Messages
-.error-message {
-  color: #ff6b6b;
-  padding: 16px;
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  border-radius: var(--border-radius);
-  backdrop-filter: blur(10px);
-  margin: 10px 0;
-}
-
-.success-message {
-  color: #51cf66;
-  padding: 16px;
-  background: rgba(81, 207, 102, 0.1);
-  border: 1px solid rgba(81, 207, 102, 0.3);
-  border-radius: var(--border-radius);
-  backdrop-filter: blur(10px);
-  margin: 10px 0;
-}
-
 // Material Button Overrides
-.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-stroked-button {
-  transition: var(--transition) !important;
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-stroked-button, .mat-mdc-flat-button {
+  border-radius: var(--radius-md) !important;
+  font-weight: 500 !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--accent-primary) !important;
   
-  &:hover {
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3) !important;
+  &:hover:not(:disabled) {
+    background-color: var(--accent-primary-hover) !important;
   }
 }
 
 // Material Table Overrides
 .mat-mdc-table {
   background: transparent !important;
-  color: var(--text-primary) !important;
   
   .mat-mdc-header-cell {
-    color: var(--accent-primary) !important;
+    color: var(--text-secondary) !important;
     font-weight: 600 !important;
-    border-bottom-color: var(--border-color) !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    background: var(--bg-secondary) !important;
   }
   
   .mat-mdc-cell {
-    color: var(--text-secondary) !important;
-    border-bottom-color: rgba(0, 212, 255, 0.08) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-light) !important;
   }
   
   .mat-mdc-row {
     &:hover {
-      background: rgba(0, 212, 255, 0.05) !important;
+      background: var(--bg-secondary) !important;
     }
   }
 }
@@ -218,19 +198,14 @@ body {
 // Material Form Field Overrides
 .mat-mdc-form-field {
   .mat-mdc-text-field-wrapper {
-    background: rgba(37, 43, 59, 0.5) !important;
-    backdrop-filter: blur(10px);
-    border-radius: 8px !important;
-  }
-  
-  .mat-mdc-form-field-focus-overlay {
-    background-color: rgba(0, 212, 255, 0.05) !important;
+    background: var(--bg-card) !important;
+    border-radius: var(--radius-md) !important;
   }
   
   .mdc-text-field--outlined .mdc-notched-outline__leading,
   .mdc-text-field--outlined .mdc-notched-outline__notch,
   .mdc-text-field--outlined .mdc-notched-outline__trailing {
-    border-color: var(--border-color) !important;
+    border-color: var(--border-light) !important;
   }
   
   &.mat-focused {
@@ -240,115 +215,145 @@ body {
       border-color: var(--accent-primary) !important;
     }
   }
+  
+  .mat-mdc-form-field-label, .mat-mdc-floating-label {
+    color: var(--text-secondary) !important;
+  }
+  
+  input, textarea {
+    color: var(--text-primary) !important;
+  }
 }
 
 // Material Chip Overrides
 .mat-mdc-chip {
-  background: rgba(0, 212, 255, 0.15) !important;
+  background: var(--accent-primary-light) !important;
   color: var(--accent-primary) !important;
-  border: 1px solid rgba(0, 212, 255, 0.3) !important;
-}
-
-// Material Expansion Panel Overrides
-.mat-expansion-panel {
-  background: var(--bg-card) !important;
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--border-radius) !important;
-  box-shadow: var(--shadow-md) !important;
-  color: var(--text-primary) !important;
-  
-  .mat-expansion-panel-header {
-    color: var(--text-primary) !important;
-    
-    &:hover {
-      background: rgba(0, 212, 255, 0.05) !important;
-    }
-  }
+  border: none !important;
+  font-weight: 500 !important;
 }
 
 // Material Paginator Overrides
 .mat-mdc-paginator {
-  background: transparent !important;
+  background: var(--bg-card) !important;
   color: var(--text-secondary) !important;
-  border-top: 1px solid var(--border-color) !important;
+  border-top: 1px solid var(--border-light) !important;
   
-  .mat-mdc-paginator-range-label {
-    color: var(--text-secondary) !important;
+  .mat-mdc-paginator-container { padding: var(--spacing-sm) var(--spacing-md) !important; min-height: 52px !important; }
+  .mat-mdc-paginator-range-label, .mat-mdc-paginator-page-size-label { color: var(--text-muted) !important; font-size: 13px !important; }
+  .mat-mdc-icon-button { color: var(--text-muted) !important; &:hover:not(:disabled) { background: var(--bg-secondary) !important; color: var(--text-primary) !important; } &:disabled { opacity: 0.3; } }
+  .mat-mdc-select { font-size: 13px !important; .mat-mdc-select-value { color: var(--text-primary) !important; } }
+}
+
+// Shared card with header styles
+.card-with-header {
+  mat-card-header {
+    display: flex; align-items: center; padding: var(--spacing-lg); border-bottom: 1px solid var(--border-light); background: var(--bg-card);
+    mat-card-title { display: flex; align-items: center; gap: var(--spacing-sm); font-size: 16px; font-weight: 600; color: var(--text-primary) !important; margin: 0 !important; mat-icon { color: var(--accent-primary); font-size: 22px; width: 22px; height: 22px; } }
   }
 }
 
+// Shared empty/loading/error states
+.state-container {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--spacing-2xl) var(--spacing-lg); text-align: center;
+  mat-icon { font-size: 56px; width: 56px; height: 56px; margin-bottom: var(--spacing-md); color: var(--text-muted); opacity: 0.5; }
+  p { font-size: 15px; color: var(--text-secondary); margin: var(--spacing-sm) 0; }
+  .hint { font-size: 14px; color: var(--text-muted); }
+  &.error mat-icon { color: var(--accent-danger); opacity: 1; }
+}
+
+// File status colors
+.status-pending { color: var(--text-muted); }
+.status-uploading { color: var(--accent-primary); animation: pulse 1.5s infinite; }
+.status-success { color: var(--accent-success); }
+.status-error { color: var(--accent-danger); }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+// Monospace font for codes
+.mono { font-family: 'SF Mono', Monaco, Inconsolata, monospace; }
+
 // Material Dialog Overrides
 .mat-mdc-dialog-container {
-  --mdc-dialog-container-color: var(--bg-secondary);
+  --mdc-dialog-container-color: var(--bg-card);
   --mdc-dialog-supporting-text-color: var(--text-secondary);
-  background: var(--bg-secondary) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--border-radius) !important;
-  box-shadow: var(--shadow-lg), var(--shadow-glow) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 0 !important;
   
   .mat-mdc-dialog-surface {
-    background: transparent !important;
-    padding: 0 !important;
+    background: var(--bg-card) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: var(--shadow-lg) !important;
   }
   
   .mat-mdc-dialog-title {
     color: var(--text-primary) !important;
-    padding: 0 !important;
-    margin: 0 !important;
   }
   
   .mat-mdc-dialog-content {
     color: var(--text-secondary) !important;
-    max-height: 70vh;
-    overflow: auto;
-  }
-  
-  .mat-mdc-dialog-actions {
-    background: rgba(15, 20, 25, 0.3);
-    backdrop-filter: blur(10px);
-    padding: 0 !important;
-    margin: 0 !important;
-    min-height: auto !important;
   }
 }
 
 .cdk-overlay-dark-backdrop {
-  background: rgba(0, 0, 0, 0.7) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.4) !important;
 }
 
-.mat-mdc-dialog-content::-webkit-scrollbar {
-  width: 6px;
+// Material Select Panel
+.mat-mdc-select-panel {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 
-.mat-mdc-dialog-content::-webkit-scrollbar-track {
-  background: rgba(37, 43, 59, 0.3);
-  border-radius: 3px;
-}
-
-.mat-mdc-dialog-content::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.3);
-  border-radius: 3px;
+.mat-mdc-option {
+  color: var(--text-primary) !important;
   
-  &:hover {
-    background: rgba(0, 212, 255, 0.5);
+  &:hover:not(.mat-mdc-option-disabled) {
+    background: var(--bg-secondary) !important;
   }
+  
+  &.mat-mdc-option-active {
+    background: var(--accent-primary-light) !important;
+  }
+}
+
+// Material Toolbar Override
+.mat-toolbar {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+}
+
+// Messages
+.error-message {
+  color: var(--accent-danger);
+  padding: var(--spacing-md);
+  background: var(--accent-danger-light);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-sm) 0;
+  font-size: 14px;
+}
+
+.success-message {
+  color: var(--accent-success);
+  padding: var(--spacing-md);
+  background: var(--accent-success-light);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-sm) 0;
+  font-size: 14px;
+}
+
+// Loading states
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
 }
 
 // Upload Dialog Custom Panel
 .upload-dialog-panel {
   .mat-mdc-dialog-container {
     padding: 0 !important;
-    overflow: hidden;
-  }
-  
-  .mat-mdc-dialog-content {
-    overflow: auto !important;
   }
 }
-

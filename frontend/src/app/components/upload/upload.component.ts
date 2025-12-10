@@ -144,13 +144,6 @@ export class UploadComponent {
           );
 
           this.uploadComplete.emit();
-          
-          // Close dialog after successful upload (with small delay to show success state)
-          if (this.dialogRef) {
-            setTimeout(() => {
-              this.dialogRef?.close(true);
-            }, 1500);
-          }
         } else {
           // Handle case where response.success is false or no data
           this.files.update(files =>

@@ -1,87 +1,89 @@
-<div class="upload-dialog">
-  <h2 mat-dialog-title>
-    <mat-icon>cloud_upload</mat-icon>
-    Upload Invoice PDFs
-  </h2>
+<h2 mat-dialog-title>
+  <mat-icon>cloud_upload</mat-icon>
+  Upload Invoice PDFs
+</h2>
 
-  <mat-dialog-content>
-    <div 
-      class="drop-zone"
-      [class.dragging]="isDragging()"
-      (dragover)="onDragOver($event)"
-      (dragleave)="onDragLeave($event)"
-      (drop)="onDrop($event)">
-      
-      <mat-icon class="upload-icon">cloud_upload</mat-icon>
-      <p class="drop-text">Drag & drop PDF files here</p>
-      <p class="or-text">or</p>
-      
-      <button mat-raised-button color="primary">
-        <label for="fileInput" style="cursor: pointer; margin: 0;">
-          Choose Files
-        </label>
-      </button>
-      
-      <input
-        id="fileInput"
-        type="file"
-        multiple
-        accept=".pdf"
-        (change)="onFileSelected($event)"
-        style="display: none;">
-      
-      <p class="file-info">Supports Zepto & Blinkit invoices (PDF, max 10MB each)</p>
-    </div>
+<mat-dialog-content>
+  <div 
+    class="drop-zone"
+    [class.dragging]="isDragging()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)">
+    
+    <mat-icon class="upload-icon">cloud_upload</mat-icon>
+    <p class="drop-text">Drag & drop PDF files here</p>
+    <p class="or-text">or</p>
+    
+    <button mat-raised-button color="primary" (click)="fileInput.click()">
+      <mat-icon>folder_open</mat-icon>
+      Choose Files
+    </button>
+    
+    <input
+      #fileInput
+      type="file"
+      multiple
+      accept=".pdf"
+      (change)="onFileSelected($event)"
+      style="display: none;">
+    
+    <p class="file-info">Supports Zepto & Blinkit invoices (PDF, max 10MB each)</p>
+  </div>
 
-    @if (files().length > 0) {
-      <div class="file-list">
-        <div class="list-header">
-          <h3>Files ({{ files().length }})</h3>
-          <button mat-button color="warn" (click)="clearFiles()">
-            Clear All
-          </button>
-        </div>
-
-        <mat-list>
-          @for (fileStatus of files(); track fileStatus.file.name; let i = $index) {
-            <mat-list-item>
-              <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status">
-                @switch (fileStatus.status) {
-                  @case ('pending') { schedule }
-                  @case ('uploading') { hourglass_empty }
-                  @case ('success') { check_circle }
-                  @case ('error') { error }
-                }
-              </mat-icon>
-
-              <div matListItemTitle class="file-details">
-                <span class="file-name">{{ fileStatus.file.name }}</span>
-                <span class="file-size">{{ (fileStatus.file.size / 1024 / 1024).toFixed(2) }} MB</span>
-              </div>
-
-              <div matListItemLine>
-                @if (fileStatus.status === 'uploading') {
-                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                }
-                @if (fileStatus.message) {
-                  <span [class]="'status-message ' + fileStatus.status">
-                    {{ fileStatus.message }}
-                  </span>
-                }
-              </div>
-
-              <button 
-                mat-icon-button 
-                matListItemMeta
-                (click)="removeFile(i)"
-                [disabled]="fileStatus.status === 'uploading'">
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-list-item>
-          }
-        </mat-list>
+  @if (files().length > 0) {
+    <div class="file-list">
+      <div class="list-header">
+        <h3>Files ({{ files().length }})</h3>
+        <button mat-button color="warn" (click)="clearFiles()">
+          <mat-icon>delete_sweep</mat-icon>
+          Clear All
+        </button>
       </div>
-    }
-  </mat-dialog-content>
-</div>
+
+      <mat-list>
+        @for (fileStatus of files(); track fileStatus.file.name; let i = $index) {
+          <mat-list-item>
+            <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status">
+              @switch (fileStatus.status) {
+                @case ('pending') { schedule }
+                @case ('uploading') { hourglass_empty }
+                @case ('success') { check_circle }
+                @case ('error') { error }
+              }
+            </mat-icon>
+
+            <div matListItemTitle class="file-details">
+              <span class="file-name">{{ fileStatus.file.name }}</span>
+              <span class="file-size">{{ (fileStatus.file.size / 1024 / 1024).toFixed(2) }} MB</span>
+            </div>
+
+            <div matListItemLine>
+              @if (fileStatus.status === 'uploading') {
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              }
+              @if (fileStatus.message) {
+                <span [class]="'status-message ' + fileStatus.status">
+                  {{ fileStatus.message }}
+                </span>
+              }
+            </div>
+
+            <button 
+              mat-icon-button 
+              matListItemMeta
+              (click)="removeFile(i)"
+              [disabled]="fileStatus.status === 'uploading'">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-list-item>
+        }
+      </mat-list>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
 

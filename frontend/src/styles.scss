@@ -278,3 +278,77 @@ body {
   }
 }
 
+// Material Dialog Overrides
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: var(--bg-secondary);
+  --mdc-dialog-supporting-text-color: var(--text-secondary);
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-lg), var(--shadow-glow) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 0 !important;
+  
+  .mat-mdc-dialog-surface {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  
+  .mat-mdc-dialog-title {
+    color: var(--text-primary) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .mat-mdc-dialog-content {
+    color: var(--text-secondary) !important;
+    max-height: 70vh;
+    overflow: auto;
+  }
+  
+  .mat-mdc-dialog-actions {
+    background: rgba(15, 20, 25, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+  }
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.mat-mdc-dialog-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mat-mdc-dialog-content::-webkit-scrollbar-track {
+  background: rgba(37, 43, 59, 0.3);
+  border-radius: 3px;
+}
+
+.mat-mdc-dialog-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+  border-radius: 3px;
+  
+  &:hover {
+    background: rgba(0, 212, 255, 0.5);
+  }
+}
+
+// Upload Dialog Custom Panel
+.upload-dialog-panel {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  
+  .mat-mdc-dialog-content {
+    overflow: auto !important;
+  }
+}
+

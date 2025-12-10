@@ -46,9 +46,13 @@ export class DashboardComponent {
 
   openUploadDialog(): void {
     const dialogRef = this.dialog.open(UploadComponent, {
-      width: '600px',
-      maxWidth: '90vw',
-      disableClose: false
+      width: 'auto',
+      maxWidth: '640px',
+      minWidth: '520px',
+      height: 'auto',
+      maxHeight: '90vh',
+      disableClose: false,
+      panelClass: 'upload-dialog-panel'
     });
 
     dialogRef.componentInstance.uploadComplete.subscribe(() => {

@@ -43,30 +43,35 @@
     </button>
   </mat-toolbar>
 
-  <!-- Main Content -->
+  <!-- Main Content with Sidebar Layout -->
   <div class="dashboard-content">
-    <div class="container">
-      <!-- Page Header -->
-      <div class="page-header">
-        <h1>My Dashboard</h1>
-        <p class="subtitle">Manage and track your invoices</p>
-      </div>
-
-      <!-- Statistics Cards -->
-      <app-stats-cards></app-stats-cards>
-
-      <!-- Charts -->
-      <app-charts></app-charts>
-
-      <!-- Advanced Analytics -->
-      <app-advanced-charts></app-advanced-charts>
-
-      <!-- Filters -->
+    <!-- Left Sidebar - Filters -->
+    <aside class="dashboard-sidebar">
       <app-filter-bar></app-filter-bar>
+    </aside>
 
-      <!-- Invoice Table -->
-      <app-invoice-table></app-invoice-table>
-    </div>
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+      <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1>My Dashboard</h1>
+          <p class="subtitle">Manage and track your invoices</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <app-stats-cards></app-stats-cards>
+
+        <!-- Charts -->
+        <app-charts></app-charts>
+
+        <!-- Advanced Analytics -->
+        <app-advanced-charts></app-advanced-charts>
+
+        <!-- Invoice Table -->
+        <app-invoice-table></app-invoice-table>
+      </div>
+    </main>
   </div>
 </div>
 

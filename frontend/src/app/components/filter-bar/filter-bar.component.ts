@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -29,7 +29,7 @@ import { AuthService } from '../../services/auth.service';
     MatNativeDateModule,
     MatButtonModule,
     MatIconModule,
-    MatExpansionModule
+    MatTooltipModule
   ],
   templateUrl: './filter-bar.component.html',
   styleUrls: ['./filter-bar.component.scss'],
@@ -44,7 +44,6 @@ export class FilterBarComponent {
   filterForm: FormGroup;
   categories = signal<string[]>([]);
   isAdmin = this.authService.isAdmin;
-  expanded = signal(false);
 
   constructor() {
     this.filterForm = this.fb.group({

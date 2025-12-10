@@ -52,11 +52,17 @@ export class ChartsComponent {
         label: 'Monthly Spending',
         data: sortedMonths.map(m => monthlyData[m]),
         fill: true,
-        backgroundColor: 'rgba(63, 81, 181, 0.2)',
-        borderColor: 'rgb(63, 81, 181)',
+        backgroundColor: 'rgba(0, 212, 255, 0.15)',
+        borderColor: 'rgb(0, 212, 255)',
         tension: 0.4,
-        pointRadius: 4,
-        pointHoverRadius: 6
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointBackgroundColor: 'rgb(0, 212, 255)',
+        pointBorderColor: 'rgba(26, 31, 46, 0.8)',
+        pointBorderWidth: 2,
+        pointHoverBackgroundColor: 'rgb(255, 215, 0)',
+        pointHoverBorderColor: 'rgb(0, 212, 255)',
+        pointHoverBorderWidth: 3,
       }]
     };
   });
@@ -67,11 +73,27 @@ export class ChartsComponent {
     plugins: {
       legend: {
         display: true,
-        position: 'top'
+        position: 'top',
+        labels: {
+          color: '#b8c5d6',
+          font: {
+            size: 13,
+            weight: 500
+          },
+          padding: 15,
+          usePointStyle: true,
+        }
       },
       tooltip: {
         mode: 'index',
         intersect: false,
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#00d4ff',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `${context.dataset.label}: ₹${(context.parsed.y ?? 0).toFixed(2)}`;
@@ -82,8 +104,33 @@ export class ChartsComponent {
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          },
           callback: (value) => `₹${value}`
+        },
+        border: {
+          display: false
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
         }
       }
     }
@@ -148,6 +195,13 @@ export class ChartsComponent {
         display: false
       },
       tooltip: {
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#00d4ff',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `${context.label}: ₹${(context.parsed.x ?? 0).toFixed(2)}`;
@@ -158,8 +212,33 @@ export class ChartsComponent {
     scales: {
       x: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          },
           callback: (value) => `₹${value}`
+        },
+        border: {
+          display: false
+        }
+      },
+      y: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#b8c5d6',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
         }
       }
     }
@@ -209,6 +288,13 @@ export class ChartsComponent {
         display: false
       },
       tooltip: {
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#00d4ff',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `Total Spent: ₹${(context.parsed.x ?? 0).toFixed(2)}`;
@@ -219,8 +305,33 @@ export class ChartsComponent {
     scales: {
       x: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          },
           callback: (value) => `₹${value}`
+        },
+        border: {
+          display: false
+        }
+      },
+      y: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#b8c5d6',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
         }
       }
     }

@@ -40,14 +40,18 @@ export class AdvancedChartsComponent {
         label: 'Spending',
         data: totals,
         backgroundColor: [
-          'rgba(255, 193, 7, 0.8)',   // Blinkit yellow
-          'rgba(139, 0, 139, 0.8)',   // Zepto purple
-          'rgba(158, 158, 158, 0.8)'  // Unknown gray
+          'rgba(255, 193, 7, 0.8)',   // Amber
+          'rgba(156, 39, 176, 0.8)',   // Purple
+          'rgba(158, 158, 158, 0.8)',  // Gray
+          'rgba(76, 175, 80, 0.8)',    // Green
+          'rgba(33, 150, 243, 0.8)'    // Blue
         ],
         borderColor: [
           'rgb(255, 193, 7)',
-          'rgb(139, 0, 139)',
-          'rgb(158, 158, 158)'
+          'rgb(156, 39, 176)',
+          'rgb(158, 158, 158)',
+          'rgb(76, 175, 80)',
+          'rgb(33, 150, 243)'
         ],
         borderWidth: 2
       }]
@@ -60,9 +64,25 @@ export class AdvancedChartsComponent {
     plugins: {
       legend: {
         display: true,
-        position: 'bottom'
+        position: 'bottom',
+        labels: {
+          color: '#b8c5d6',
+          font: {
+            size: 13,
+            weight: 500
+          },
+          padding: 15,
+          usePointStyle: true,
+        }
       },
       tooltip: {
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#ffd700',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(255, 215, 0, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             const label = context.label || '';
@@ -113,8 +133,11 @@ export class AdvancedChartsComponent {
         pointRadius: 5,
         pointHoverRadius: 7,
         pointBackgroundColor: 'rgb(76, 175, 80)',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2
+        pointBorderColor: 'rgba(26, 31, 46, 0.8)',
+        pointBorderWidth: 2,
+        pointHoverBackgroundColor: 'rgb(255, 215, 0)',
+        pointHoverBorderColor: 'rgb(76, 175, 80)',
+        pointHoverBorderWidth: 3,
       }]
     };
   });
@@ -125,9 +148,25 @@ export class AdvancedChartsComponent {
     plugins: {
       legend: {
         display: true,
-        position: 'top'
+        position: 'top',
+        labels: {
+          color: '#b8c5d6',
+          font: {
+            size: 13,
+            weight: 500
+          },
+          padding: 15,
+          usePointStyle: true,
+        }
       },
       tooltip: {
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#00d4ff',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `Avg: ₹${(context.parsed.y ?? 0).toFixed(2)}`;
@@ -138,8 +177,33 @@ export class AdvancedChartsComponent {
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          },
           callback: (value) => `₹${value}`
+        },
+        border: {
+          display: false
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
         }
       }
     }
@@ -183,6 +247,13 @@ export class AdvancedChartsComponent {
         display: false
       },
       tooltip: {
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#00d4ff',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `Invoices: ${context.parsed.y}`;
@@ -193,8 +264,33 @@ export class AdvancedChartsComponent {
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
-          precision: 0
+          precision: 0,
+          color: '#8899aa',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#b8c5d6',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
         }
       }
     }
@@ -280,12 +376,22 @@ export class AdvancedChartsComponent {
           boxWidth: 12,
           font: {
             size: 11
-          }
+          },
+          color: '#b8c5d6',
+          padding: 10,
+          usePointStyle: true,
         }
       },
       tooltip: {
         mode: 'index',
         intersect: false,
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#00d4ff',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `${context.dataset.label}: ₹${(context.parsed.y ?? 0).toFixed(2)}`;
@@ -295,13 +401,36 @@ export class AdvancedChartsComponent {
     },
     scales: {
       x: {
-        stacked: true
+        stacked: true,
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#8899aa',
+          font: {
+            size: 11
+          }
+        },
+        border: {
+          display: false
+        }
       },
       y: {
         stacked: true,
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
+          color: '#8899aa',
+          font: {
+            size: 12
+          },
           callback: (value) => `₹${value}`
+        },
+        border: {
+          display: false
         }
       }
     }
@@ -378,6 +507,13 @@ export class AdvancedChartsComponent {
         display: false
       },
       tooltip: {
+        backgroundColor: 'rgba(26, 31, 46, 0.95)',
+        titleColor: '#ffd700',
+        bodyColor: '#b8c5d6',
+        borderColor: 'rgba(255, 215, 0, 0.3)',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: (context) => {
             return `Invoices: ${context.parsed.y}`;
@@ -388,8 +524,33 @@ export class AdvancedChartsComponent {
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 212, 255, 0.08)',
+          lineWidth: 1,
+        },
         ticks: {
-          precision: 0
+          precision: 0,
+          color: '#8899aa',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          color: '#b8c5d6',
+          font: {
+            size: 12
+          }
+        },
+        border: {
+          display: false
         }
       }
     }

@@ -1,31 +1,62 @@
 .advanced-charts-container {
-  margin: 2rem 0;
+  margin: 56px 0;
+  
+  @media (max-width: 768px) {
+    margin: 40px 0;
+  }
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 1.5rem;
+  gap: 12px;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  position: relative;
+  padding-bottom: 20px;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
 
   mat-icon {
-    font-size: 1.75rem;
-    width: 1.75rem;
-    height: 1.75rem;
-    color: #9c27b0;
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: var(--accent-secondary);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-bottom: 24px;
+    
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
   }
 }
 
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 28px;
   
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
   }
 
   @media (min-width: 1200px) {
@@ -34,11 +65,20 @@
 }
 
 .chart-card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md), var(--shadow-glow) !important;
+  transition: var(--transition) !important;
+  overflow: hidden;
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--bg-card-hover) !important;
+    border-color: var(--border-glow) !important;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 212, 255, 0.25) !important;
+    transform: translateY(-4px);
   }
 
   &.full-width {
@@ -48,72 +88,89 @@
   }
 
   mat-card-header {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 20px 20px 0 20px;
+    background: rgba(255, 215, 0, 0.03);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
 
     mat-card-title {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 1.1rem;
-      color: #555;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding-bottom: 16px;
 
       mat-icon {
-        font-size: 1.25rem;
-        width: 1.25rem;
-        height: 1.25rem;
-        color: #9c27b0;
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        color: var(--accent-secondary);
+        filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.4));
       }
     }
   }
 
   mat-card-content {
-    padding: 1rem;
+    padding: 24px !important;
   }
 }
 
 .chart-wrapper {
   position: relative;
-  height: 300px;
+  height: 320px;
   width: 100%;
 
   &.tall {
-    height: 400px;
+    height: 420px;
     
     @media (min-width: 768px) {
-      height: 450px;
+      height: 480px;
     }
   }
 
   @media (min-width: 768px) {
     height: 350px;
   }
+  
+  canvas {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  }
 }
 
 .no-data {
-  margin: 2rem 0;
+  margin: 3rem 0;
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem 2rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 4rem 2rem;
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md) !important;
 
   mat-icon {
-    font-size: 4rem;
-    width: 4rem;
-    height: 4rem;
-    color: #999;
-    margin-bottom: 1rem;
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
   }
 
   h3 {
-    font-size: 1.5rem;
-    color: #555;
-    margin: 1rem 0 0.5rem;
+    font-size: 1.75rem;
+    color: var(--text-secondary);
+    margin: 1.5rem 0 0.75rem;
+    font-weight: 600;
   }
 
   p {
-    color: #777;
+    color: var(--text-tertiary);
     font-size: 1rem;
   }
 }

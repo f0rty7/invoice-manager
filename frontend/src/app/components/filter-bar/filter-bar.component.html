@@ -1,17 +1,22 @@
-<mat-expansion-panel [(expanded)]="expanded">
-  <mat-expansion-panel-header>
-    <mat-panel-title>
+<div class="filter-sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">
       <mat-icon>filter_list</mat-icon>
       <span>Filters</span>
-      @if (hasActiveFilters()) {
-        <mat-icon class="active-indicator">check_circle</mat-icon>
-      }
-    </mat-panel-title>
-  </mat-expansion-panel-header>
+    </div>
+    @if (hasActiveFilters()) {
+      <mat-icon class="active-indicator" matTooltip="Active filters">check_circle</mat-icon>
+    }
+  </div>
 
   <form [formGroup]="filterForm" class="filter-form">
-    <div class="filter-row">
-      <!-- Date Range -->
+    <!-- Date Range Section -->
+    <div class="filter-section">
+      <div class="section-label">
+        <mat-icon>date_range</mat-icon>
+        <span>Date Range</span>
+      </div>
+      
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>From Date</mat-label>
         <input matInput [matDatepicker]="fromPicker" formControlName="date_from">
@@ -25,10 +30,17 @@
         <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
         <mat-datepicker #toPicker></mat-datepicker>
       </mat-form-field>
+    </div>
 
-      <!-- Category -->
+    <!-- Category Section -->
+    <div class="filter-section">
+      <div class="section-label">
+        <mat-icon>category</mat-icon>
+        <span>Category</span>
+      </div>
+      
       <mat-form-field appearance="outline" class="filter-field">
-        <mat-label>Category</mat-label>
+        <mat-label>Select Category</mat-label>
         <mat-select formControlName="category">
           <mat-option value="">All Categories</mat-option>
           @for (category of categories(); track category) {
@@ -38,8 +50,13 @@
       </mat-form-field>
     </div>
 
-    <div class="filter-row">
-      <!-- Price Range -->
+    <!-- Price Range Section -->
+    <div class="filter-section">
+      <div class="section-label">
+        <mat-icon>payments</mat-icon>
+        <span>Price Range</span>
+      </div>
+      
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Min Price</mat-label>
         <input matInput type="number" formControlName="price_min" placeholder="0">
@@ -51,27 +68,35 @@
         <input matInput type="number" formControlName="price_max" placeholder="10000">
         <span matTextPrefix>₹&nbsp;</span>
       </mat-form-field>
+    </div>
 
-      <!-- Username (Admin Only) -->
-      @if (isAdmin()) {
+    <!-- Username Section (Admin Only) -->
+    @if (isAdmin()) {
+      <div class="filter-section">
+        <div class="section-label">
+          <mat-icon>person</mat-icon>
+          <span>User</span>
+        </div>
+        
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>Username</mat-label>
           <input matInput formControlName="username" placeholder="Filter by user">
-          <mat-icon matIconPrefix>person</mat-icon>
         </mat-form-field>
-      }
-    </div>
+      </div>
+    }
 
+    <!-- Clear Filters Button -->
     <div class="filter-actions">
       <button 
-        mat-stroked-button 
+        mat-raised-button 
+        color="primary"
         type="button" 
         (click)="clearFilters()"
         [disabled]="!hasActiveFilters()">
-        <mat-icon>clear</mat-icon>
-        Clear Filters
+        <mat-icon>clear_all</mat-icon>
+        Clear All Filters
       </button>
     </div>
   </form>
-</mat-expansion-panel>
+</div>
 

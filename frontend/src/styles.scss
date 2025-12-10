@@ -1,4 +1,53 @@
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+// Custom Material Dark Theme
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Create the dark theme using M3 color system
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$cyan-palette,
+    tertiary: mat.$yellow-palette,
+  ),
+  typography: (
+    brand-family: 'Roboto, "Helvetica Neue", sans-serif',
+    plain-family: 'Roboto, "Helvetica Neue", sans-serif',
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+@include mat.all-component-themes($dark-theme);
+
+// CSS Custom Properties for Theme Colors
+:root {
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a1f2e;
+  --bg-tertiary: #252b3b;
+  --bg-card: rgba(26, 31, 46, 0.7);
+  --bg-card-hover: rgba(26, 31, 46, 0.85);
+  
+  --text-primary: #ffffff;
+  --text-secondary: #b8c5d6;
+  --text-tertiary: #8899aa;
+  
+  --accent-primary: #00d4ff;
+  --accent-secondary: #ffd700;
+  --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #0088cc 100%);
+  
+  --border-color: rgba(0, 212, 255, 0.15);
+  --border-glow: rgba(0, 212, 255, 0.3);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.15);
+  
+  --border-radius: 12px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 * {
   margin: 0;
@@ -13,39 +62,219 @@ html, body {
 
 body {
   margin: 0;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(0, 212, 255, 0.3);
+  }
+}
+
+// Container
 .container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
 }
 
+// Glassmorphism Card Utilities
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  transition: var(--transition);
+  
+  &:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.glass-panel {
+  background: rgba(26, 31, 46, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+// Material Card Overrides
 .mat-mdc-card {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md), var(--shadow-glow) !important;
+  transition: var(--transition) !important;
+  color: var(--text-primary) !important;
+  
+  &:hover {
+    background: var(--bg-card-hover) !important;
+    border-color: var(--border-glow) !important;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 212, 255, 0.2) !important;
+    transform: translateY(-2px);
+  }
 }
 
+.mat-mdc-card-header {
+  .mat-mdc-card-title {
+    color: var(--text-primary) !important;
+  }
+}
+
+.mat-mdc-card-content {
+  color: var(--text-secondary) !important;
+}
+
+// Loading states
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 200px;
+  
+  .mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: var(--accent-primary);
+  }
 }
 
+// Messages
 .error-message {
-  color: #f44336;
-  padding: 12px;
-  background-color: #ffebee;
-  border-radius: 4px;
+  color: #ff6b6b;
+  padding: 16px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
   margin: 10px 0;
 }
 
 .success-message {
-  color: #4caf50;
-  padding: 12px;
-  background-color: #e8f5e9;
-  border-radius: 4px;
+  color: #51cf66;
+  padding: 16px;
+  background: rgba(81, 207, 102, 0.1);
+  border: 1px solid rgba(81, 207, 102, 0.3);
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
   margin: 10px 0;
+}
+
+// Material Button Overrides
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-stroked-button {
+  transition: var(--transition) !important;
+  
+  &:hover {
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3) !important;
+  }
+}
+
+// Material Table Overrides
+.mat-mdc-table {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  
+  .mat-mdc-header-cell {
+    color: var(--accent-primary) !important;
+    font-weight: 600 !important;
+    border-bottom-color: var(--border-color) !important;
+  }
+  
+  .mat-mdc-cell {
+    color: var(--text-secondary) !important;
+    border-bottom-color: rgba(0, 212, 255, 0.08) !important;
+  }
+  
+  .mat-mdc-row {
+    &:hover {
+      background: rgba(0, 212, 255, 0.05) !important;
+    }
+  }
+}
+
+// Material Form Field Overrides
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    background: rgba(37, 43, 59, 0.5) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 8px !important;
+  }
+  
+  .mat-mdc-form-field-focus-overlay {
+    background-color: rgba(0, 212, 255, 0.05) !important;
+  }
+  
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-color: var(--border-color) !important;
+  }
+  
+  &.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--accent-primary) !important;
+    }
+  }
+}
+
+// Material Chip Overrides
+.mat-mdc-chip {
+  background: rgba(0, 212, 255, 0.15) !important;
+  color: var(--accent-primary) !important;
+  border: 1px solid rgba(0, 212, 255, 0.3) !important;
+}
+
+// Material Expansion Panel Overrides
+.mat-expansion-panel {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--text-primary) !important;
+  
+  .mat-expansion-panel-header {
+    color: var(--text-primary) !important;
+    
+    &:hover {
+      background: rgba(0, 212, 255, 0.05) !important;
+    }
+  }
+}
+
+// Material Paginator Overrides
+.mat-mdc-paginator {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border-top: 1px solid var(--border-color) !important;
+  
+  .mat-mdc-paginator-range-label {
+    color: var(--text-secondary) !important;
+  }
 }
 

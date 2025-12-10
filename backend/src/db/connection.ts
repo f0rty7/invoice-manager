@@ -57,6 +57,13 @@ class Database {
     return this.db;
   }
 
+  getClient(): MongoClient {
+    if (!this.client) {
+      throw new Error('Database client not connected');
+    }
+    return this.client;
+  }
+
   collection<T extends Document = Document>(name: string): Collection<T> {
     return this.getDb().collection<T>(name);
   }

@@ -6,7 +6,10 @@ import { ObjectId } from 'mongodb';
 
 export class AuthService {
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    const existingUser = await database.users.findOne({ username: data.username });
+    const existingUser = await database.users.findOne(
+      { username: data.username },
+      { projection: { _id: 1 } }
+    );
     
     if (existingUser) {
       throw new Error('Username already exists');
@@ -71,20 +74,25 @@ export class AuthService {
   }
 
   async initializeAdminUser(): Promise<void> {
-    const existingAdmin = await database.users.findOne({ username: 'admin' });
+    const hashedPassword = await hashPassword('admin123');
     
-    if (!existingAdmin) {
-      const hashedPassword = await hashPassword('admin123');
-      
-      const admin: Omit<User, '_id'> = {
-        username: 'admin',
-        password: hashedPassword,
-        role: 'admin',
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
+    // Use atomic upsert to avoid race conditions on concurrent server startups
+    const result = await database.users.updateOne(
+      { username: 'admin' },
+      {
+        $setOnInsert: {
+          username: 'admin',
+          password: hashedPassword,
+          role: 'admin',
+          created_at: new Date(),
+          updated_at: new Date(),
+        }
+      },
+      { upsert: true }
+    );
 
-      await database.users.insertOne(admin as User);
+    // Only log if we actually created a new admin user
+    if (result.upsertedCount > 0) {
       console.log('✅ Admin user created (username: admin, password: admin123)');
     }
   }

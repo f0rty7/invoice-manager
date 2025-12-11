@@ -1,6 +1,6 @@
 import { MongoClient, Db, Collection, Document } from 'mongodb';
 import { CONFIG } from '../config';
-import type { User, Invoice } from '@pdf-invoice/shared';
+import type { User, Invoice, SavedFilter } from '@pdf-invoice/shared';
 
 class Database {
   private client: MongoClient | null = null;
@@ -40,6 +40,10 @@ class Database {
       await this.db.collection('invoices').createIndex({ items_total: 1 });
       await this.db.collection('invoices').createIndex({ created_at: -1 });
 
+      // Saved filters collection indexes
+      await this.db.collection('saved_filters').createIndex({ user_id: 1, name: 1 }, { unique: true });
+      await this.db.collection('saved_filters').createIndex({ user_id: 1, is_default: 1 });
+
       console.log('✅ Database indexes created');
     } catch (error) {
       console.error('⚠️ Error creating indexes:', error);
@@ -77,6 +81,10 @@ class Database {
 
   get invoices(): Collection<Invoice> {
     return this.collection<Invoice>('invoices');
+  }
+
+  get savedFilters(): Collection<SavedFilter> {
+    return this.collection<SavedFilter>('saved_filters');
   }
 }
 

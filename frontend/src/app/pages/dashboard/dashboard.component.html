@@ -68,8 +68,23 @@
         <!-- Advanced Analytics -->
         <app-advanced-charts></app-advanced-charts>
 
-        <!-- Invoice Table -->
-        <app-invoice-table></app-invoice-table>
+        <!-- Data Tables -->
+        <mat-tab-group class="data-tables" animationDuration="200ms">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>receipt</mat-icon>
+              <span>Invoices ({{ invoicesTotal() }})</span>
+            </ng-template>
+            <app-invoice-table></app-invoice-table>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>inventory_2</mat-icon>
+              <span>Items ({{ itemsTotal() }})</span>
+            </ng-template>
+            <app-item-table></app-item-table>
+          </mat-tab>
+        </mat-tab-group>
       </div>
     </main>
   </div>

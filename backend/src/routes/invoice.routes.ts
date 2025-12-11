@@ -89,7 +89,31 @@ invoiceRouter.get('/', authMiddleware, async (c) => {
       price_min: query.price_min ? parseFloat(query.price_min) : undefined,
       price_max: query.price_max ? parseFloat(query.price_max) : undefined,
       page: query.page ? parseInt(query.page) : 1,
-      limit: query.limit ? parseInt(query.limit) : 20
+      limit: query.limit ? parseInt(query.limit) : 20,
+      // Phase 1: New filters
+      delivery_partner: query.delivery_partner,
+      search: query.search,
+      order_no: query.order_no,
+      invoice_no: query.invoice_no,
+      sort_by: query.sort_by as InvoiceFilters['sort_by'],
+      sort_dir: query.sort_dir as InvoiceFilters['sort_dir'],
+      // Phase 2: Core enhancements
+      categories: query.categories ? query.categories.split(',') : undefined,
+      item_search: query.item_search,
+      item_qty_min: query.item_qty_min ? parseFloat(query.item_qty_min) : undefined,
+      item_qty_max: query.item_qty_max ? parseFloat(query.item_qty_max) : undefined,
+      item_unit_price_min: query.item_unit_price_min ? parseFloat(query.item_unit_price_min) : undefined,
+      item_unit_price_max: query.item_unit_price_max ? parseFloat(query.item_unit_price_max) : undefined,
+      items_count_min: query.items_count_min ? parseInt(query.items_count_min) : undefined,
+      items_count_max: query.items_count_max ? parseInt(query.items_count_max) : undefined,
+      // Phase 3: Time and pattern filters
+      day_of_week: query.day_of_week ? query.day_of_week.split(',').map(Number) : undefined,
+      month: query.month ? parseInt(query.month) : undefined,
+      year: query.year ? parseInt(query.year) : undefined,
+      is_weekend: query.is_weekend === 'true' ? true : query.is_weekend === 'false' ? false : undefined,
+      exclude_categories: query.exclude_categories ? query.exclude_categories.split(',') : undefined,
+      exclude_delivery_partners: query.exclude_delivery_partners ? query.exclude_delivery_partners.split(',') : undefined,
+      spending_pattern: query.spending_pattern as InvoiceFilters['spending_pattern']
     };
 
     const result = await invoiceService.getInvoices(
@@ -150,6 +174,78 @@ invoiceRouter.get('/categories', authMiddleware, async (c) => {
     return c.json({
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch categories'
+    }, 500);
+  }
+});
+
+// Get unique delivery partners (must come before /:id to avoid matching as an ID)
+invoiceRouter.get('/delivery-partners', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    
+    const partners = await invoiceService.getUniqueDeliveryPartners(
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: partners
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch delivery partners'
+    }, 500);
+  }
+});
+
+// Get all items (flattened from invoices) - must come before /:id
+invoiceRouter.get('/items', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    const query = c.req.query();
+    
+    const filters: InvoiceFilters = {
+      user_id: query.user_id,
+      username: query.username,
+      date_from: query.date_from,
+      date_to: query.date_to,
+      category: query.category,
+      price_min: query.price_min ? parseFloat(query.price_min) : undefined,
+      price_max: query.price_max ? parseFloat(query.price_max) : undefined,
+      page: query.page ? parseInt(query.page) : 1,
+      limit: query.limit ? parseInt(query.limit) : 20,
+      delivery_partner: query.delivery_partner,
+      search: query.search,
+      order_no: query.order_no,
+      invoice_no: query.invoice_no,
+      sort_by: query.sort_by as InvoiceFilters['sort_by'],
+      sort_dir: query.sort_dir as InvoiceFilters['sort_dir'],
+      categories: query.categories ? query.categories.split(',') : undefined,
+      item_search: query.item_search,
+      item_qty_min: query.item_qty_min ? parseFloat(query.item_qty_min) : undefined,
+      item_qty_max: query.item_qty_max ? parseFloat(query.item_qty_max) : undefined,
+      item_unit_price_min: query.item_unit_price_min ? parseFloat(query.item_unit_price_min) : undefined,
+      item_unit_price_max: query.item_unit_price_max ? parseFloat(query.item_unit_price_max) : undefined,
+      exclude_categories: query.exclude_categories ? query.exclude_categories.split(',') : undefined,
+      exclude_delivery_partners: query.exclude_delivery_partners ? query.exclude_delivery_partners.split(',') : undefined
+    };
+
+    const result = await invoiceService.getItems(
+      filters,
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch items'
     }, 500);
   }
 });

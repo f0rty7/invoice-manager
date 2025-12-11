@@ -6,12 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
 import { AuthService } from '../../services/auth.service';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { UploadComponent } from '../../components/upload/upload.component';
 import { FilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { StatsCardsComponent } from '../../components/stats-cards/stats-cards.component';
 import { InvoiceTableComponent } from '../../components/invoice-table/invoice-table.component';
+import { ItemTableComponent } from '../../components/item-table/item-table.component';
 import { ChartsComponent } from '../../components/charts/charts.component';
 import { AdvancedChartsComponent } from '../../components/advanced-charts/advanced-charts.component';
 
@@ -25,9 +27,11 @@ import { AdvancedChartsComponent } from '../../components/advanced-charts/advanc
     MatIconModule,
     MatTooltipModule,
     MatDialogModule,
+    MatTabsModule,
     FilterBarComponent,
     StatsCardsComponent,
     InvoiceTableComponent,
+    ItemTableComponent,
     ChartsComponent,
     AdvancedChartsComponent
   ],
@@ -43,6 +47,10 @@ export class DashboardComponent {
 
   currentUser = this.authService.currentUser;
   isAdmin = this.authService.isAdmin;
+  
+  // Counts for tabs
+  invoicesTotal = this.invoiceState.total;
+  itemsTotal = this.invoiceState.itemsTotal;
 
   openUploadDialog(): void {
     const dialogRef = this.dialog.open(UploadComponent, {
@@ -61,8 +69,9 @@ export class DashboardComponent {
   }
 
   onUploadComplete(): void {
-    // Refresh invoice list and stats after upload
+    // Refresh invoice list, items, and stats after upload
     this.invoiceState.refreshInvoices();
+    this.invoiceState.refreshItems();
     this.invoiceState.loadStats();
   }
 

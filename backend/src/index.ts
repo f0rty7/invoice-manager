@@ -8,6 +8,7 @@ import { CONFIG } from './config';
 import { errorHandler } from './middleware/error';
 import { authRouter } from './routes/auth.routes';
 import { invoiceRouter } from './routes/invoice.routes';
+import { filterRouter } from './routes/filter.routes';
 import { authService } from './services/auth.service';
 
 const app = new Hono();
@@ -29,6 +30,7 @@ app.get('/health', (c) => {
 // Routes
 app.route('/api/auth', authRouter);
 app.route('/api/invoices', invoiceRouter);
+app.route('/api/filters', filterRouter);
 
 // 404 handler
 app.notFound((c) => {

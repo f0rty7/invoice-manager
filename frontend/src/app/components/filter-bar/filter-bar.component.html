@@ -10,11 +10,34 @@
   </div>
 
   <form [formGroup]="filterForm" class="filter-form">
+    <!-- Search Section -->
+    <div class="filter-section search-section">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Search</mat-label>
+        <input matInput formControlName="search" placeholder="Order, invoice, item, partner...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
     <!-- Date Range Section -->
     <div class="filter-section">
       <div class="section-label">
         <mat-icon>date_range</mat-icon>
         <span>Date Range</span>
+      </div>
+      
+      <!-- Date Presets -->
+      <div class="date-presets">
+        <button mat-stroked-button type="button" (click)="setDatePreset('today')" matTooltip="Today"
+                [class.active]="activeDatePreset() === 'today'">Today</button>
+        <button mat-stroked-button type="button" (click)="setDatePreset('week')" matTooltip="This Week"
+                [class.active]="activeDatePreset() === 'week'">Week</button>
+        <button mat-stroked-button type="button" (click)="setDatePreset('month')" matTooltip="This Month"
+                [class.active]="activeDatePreset() === 'month'">Month</button>
+        <button mat-stroked-button type="button" (click)="setDatePreset('30days')" matTooltip="Last 30 Days"
+                [class.active]="activeDatePreset() === '30days'">30d</button>
+        <button mat-stroked-button type="button" (click)="setDatePreset('year')" matTooltip="This Year"
+                [class.active]="activeDatePreset() === 'year'">Year</button>
       </div>
       
       <mat-form-field appearance="outline" class="filter-field">
@@ -32,17 +55,34 @@
       </mat-form-field>
     </div>
 
-    <!-- Category Section -->
+    <!-- Delivery Partner Section -->
     <div class="filter-section">
       <div class="section-label">
-        <mat-icon>category</mat-icon>
-        <span>Category</span>
+        <mat-icon>local_shipping</mat-icon>
+        <span>Delivery Partner</span>
       </div>
       
       <mat-form-field appearance="outline" class="filter-field">
-        <mat-label>Select Category</mat-label>
-        <mat-select formControlName="category">
-          <mat-option value="">All Categories</mat-option>
+        <mat-label>Select Partner</mat-label>
+        <mat-select formControlName="delivery_partner">
+          <mat-option value="">All Partners</mat-option>
+          @for (partner of deliveryPartners(); track partner) {
+            <mat-option [value]="partner">{{ partner }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Category Section (Multi-select) -->
+    <div class="filter-section">
+      <div class="section-label">
+        <mat-icon>category</mat-icon>
+        <span>Categories</span>
+      </div>
+      
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Select Categories</mat-label>
+        <mat-select formControlName="categories" multiple>
           @for (category of categories(); track category) {
             <mat-option [value]="category">{{ category }}</mat-option>
           }
@@ -70,6 +110,204 @@
       </mat-form-field>
     </div>
 
+    <!-- Item Filters Section (Collapsible) -->
+    <mat-expansion-panel class="item-filters-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>inventory_2</mat-icon>
+          <span>Item Filters</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="item-filters-content">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Item Search</mat-label>
+          <input matInput formControlName="item_search" placeholder="Search item descriptions">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="range-group">
+          <span class="range-label">Quantity</span>
+          <div class="range-inputs">
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Min</mat-label>
+              <input matInput type="number" formControlName="item_qty_min" placeholder="0">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Max</mat-label>
+              <input matInput type="number" formControlName="item_qty_max" placeholder="100">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="range-group">
+          <span class="range-label">Unit Price</span>
+          <div class="range-inputs">
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Min</mat-label>
+              <input matInput type="number" formControlName="item_unit_price_min" placeholder="0">
+              <span matTextPrefix>₹&nbsp;</span>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Max</mat-label>
+              <input matInput type="number" formControlName="item_unit_price_max" placeholder="1000">
+              <span matTextPrefix>₹&nbsp;</span>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="range-group">
+          <span class="range-label">Items per Invoice</span>
+          <div class="range-inputs">
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Min</mat-label>
+              <input matInput type="number" formControlName="items_count_min" placeholder="1">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Max</mat-label>
+              <input matInput type="number" formControlName="items_count_max" placeholder="50">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Time Filters Section (Collapsible) -->
+    <mat-expansion-panel class="item-filters-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>schedule</mat-icon>
+          <span>Time Filters</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="item-filters-content">
+        <div class="range-group">
+          <span class="range-label">Month & Year</span>
+          <div class="range-inputs">
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Month</mat-label>
+              <mat-select formControlName="month">
+                <mat-option value="">Any</mat-option>
+                @for (m of months; track m.value) {
+                  <mat-option [value]="m.value">{{ m.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="filter-field half">
+              <mat-label>Year</mat-label>
+              <mat-select formControlName="year">
+                <mat-option value="">Any</mat-option>
+                @for (y of years; track y.value) {
+                  <mat-option [value]="y.value">{{ y.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="range-group">
+          <span class="range-label">Day of Week</span>
+          <mat-button-toggle-group formControlName="day_of_week" multiple class="day-toggles" aria-label="Days of week">
+            @for (day of daysOfWeek; track day.value) {
+              <mat-button-toggle [value]="day.value">{{ day.label }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+
+        <div class="range-group">
+          <span class="range-label">Day Type</span>
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Weekend/Weekday</mat-label>
+            <mat-select formControlName="is_weekend">
+              <mat-option value="">All Days</mat-option>
+              <mat-option [value]="true">Weekends Only</mat-option>
+              <mat-option [value]="false">Weekdays Only</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Spending Patterns Section (Collapsible) -->
+    <mat-expansion-panel class="item-filters-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>trending_up</mat-icon>
+          <span>Spending Patterns</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="item-filters-content">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Spending Pattern</mat-label>
+          <mat-select formControlName="spending_pattern">
+            <mat-option value="">All Invoices</mat-option>
+            @for (pattern of spendingPatterns; track pattern.value) {
+              <mat-option [value]="pattern.value">{{ pattern.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Exclusion Filters Section (Collapsible) -->
+    <mat-expansion-panel class="item-filters-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>block</mat-icon>
+          <span>Exclude</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="item-filters-content">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Exclude Categories</mat-label>
+          <mat-select formControlName="exclude_categories" multiple>
+            @for (category of categories(); track category) {
+              <mat-option [value]="category">{{ category }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Exclude Partners</mat-label>
+          <mat-select formControlName="exclude_delivery_partners" multiple>
+            @for (partner of deliveryPartners(); track partner) {
+              <mat-option [value]="partner">{{ partner }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Sort Section -->
+    <div class="filter-section">
+      <div class="section-label">
+        <mat-icon>sort</mat-icon>
+        <span>Sort By</span>
+      </div>
+      
+      <div class="sort-controls">
+        <mat-form-field appearance="outline" class="filter-field sort-field" subscriptSizing="dynamic">
+          <mat-select formControlName="sort_by">
+            @for (option of sortOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-button-toggle-group formControlName="sort_dir" class="sort-direction" aria-label="Sort direction" hideSingleSelectionIndicator>
+          <mat-button-toggle value="desc" matTooltip="Descending">
+            <mat-icon>arrow_downward</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="asc" matTooltip="Ascending">
+            <mat-icon>arrow_upward</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+
     <!-- Username Section (Admin Only) -->
     @if (isAdmin()) {
       <div class="filter-section">
@@ -85,8 +323,57 @@
       </div>
     }
 
-    <!-- Clear Filters Button -->
+    <!-- Saved Filters Section -->
+    @if (savedFilters().length > 0) {
+      <div class="filter-section saved-filters-section">
+        <div class="section-label">
+          <mat-icon>bookmark</mat-icon>
+          <span>Saved Filters</span>
+        </div>
+        
+        <div class="saved-filters-list">
+          @for (filter of savedFilters(); track filter._id) {
+            <div class="saved-filter-item" (click)="loadSavedFilter(filter)">
+              <div class="filter-info">
+                <span class="filter-name">{{ filter.name }}</span>
+                @if (filter.is_default) {
+                  <mat-icon class="default-badge" matTooltip="Default filter">star</mat-icon>
+                }
+              </div>
+              <div class="filter-actions-menu">
+                <button mat-icon-button [matMenuTriggerFor]="filterMenu" (click)="$event.stopPropagation()">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #filterMenu="matMenu">
+                  @if (!filter.is_default) {
+                    <button mat-menu-item (click)="setAsDefaultFilter(filter, $event)">
+                      <mat-icon>star_outline</mat-icon>
+                      <span>Set as default</span>
+                    </button>
+                  }
+                  <button mat-menu-item (click)="deleteSavedFilter(filter, $event)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Filter Actions -->
     <div class="filter-actions">
+      <button 
+        mat-stroked-button 
+        type="button" 
+        (click)="openSaveFilterDialog()"
+        [disabled]="!hasActiveFilters()"
+        class="save-filter-btn">
+        <mat-icon>bookmark_add</mat-icon>
+        Save Filter
+      </button>
       <button 
         mat-raised-button 
         color="primary"
@@ -94,7 +381,7 @@
         (click)="clearFilters()"
         [disabled]="!hasActiveFilters()">
         <mat-icon>clear_all</mat-icon>
-        Clear All Filters
+        Clear All
       </button>
     </div>
   </form>

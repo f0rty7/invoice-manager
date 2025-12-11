@@ -1,21 +1,20 @@
-import { Component, ChangeDetectionStrategy, signal, inject, computed, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { InvoiceStateService } from '../../services/invoice-state.service';
-import type { Invoice } from '@pdf-invoice/shared';
+import type { FlatItem } from '@pdf-invoice/shared';
 
-type SortColumn = 'date' | 'delivery_partner' | 'items_count' | 'total';
+type SortColumn = 'date' | 'delivery_partner' | 'price' | 'qty' | 'unit_price';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
-  selector: 'app-invoice-table',
+  selector: 'app-item-table',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,47 +22,33 @@ type SortDirection = 'asc' | 'desc';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatChipsModule,
     MatProgressSpinnerModule,
     MatCardModule,
     ScrollingModule
   ],
-  templateUrl: './invoice-table.component.html',
-  styleUrls: ['./invoice-table.component.scss'],
+  templateUrl: './item-table.component.html',
+  styleUrls: ['./item-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-export class InvoiceTableComponent {
+export class ItemTableComponent {
   private invoiceState = inject(InvoiceStateService);
 
-  invoices = this.invoiceState.invoices;
-  loading = this.invoiceState.loading;
-  loadingMore = this.invoiceState.loadingMore;
-  error = this.invoiceState.error;
-  total = this.invoiceState.total;
-  hasMore = this.invoiceState.hasMore;
-  filters = this.invoiceState.filters;
-  
-  @Input() showUploader = false;
+  items = this.invoiceState.items;
+  loading = this.invoiceState.itemsLoading;
+  loadingMore = this.invoiceState.itemsLoadingMore;
+  error = this.invoiceState.itemsError;
+  total = this.invoiceState.itemsTotal;
+  hasMore = this.invoiceState.itemsHasMore;
 
-  private readonly baseColumns = ['order_no', 'invoice_no', 'date', 'delivery_partner', 'items_count', 'total'] as const;
-
-  get displayedColumns(): string[] {
-    const cols: string[] = [...this.baseColumns];
-    if (this.showUploader) {
-      cols.push('uploaded_by');
-    }
-    cols.push('actions');
-    return cols;
-  }
+  readonly displayedColumns = ['sr', 'delivery_partner', 'date', 'invoice_no', 'order_no', 'description', 'qty', 'unit_price', 'price'] as const;
 
   private sortState = signal<{ column: SortColumn; direction: SortDirection } | null>({
     column: 'date',
     direction: 'desc'
   });
 
-  readonly sortedInvoices = computed(() => {
-    const data = [...this.invoices()];
+  readonly sortedItems = computed(() => {
+    const data = [...this.items()];
     const sort = this.sortState();
 
     if (!sort) return data;
@@ -78,27 +63,28 @@ export class InvoiceTableComponent {
           return (aDate - bDate) * direction;
         }
         case 'delivery_partner': {
-          const aName = a.delivery_partner?.known_name?.toLowerCase() || '';
-          const bName = b.delivery_partner?.known_name?.toLowerCase() || '';
+          const aName = a.delivery_partner?.toLowerCase() || '';
+          const bName = b.delivery_partner?.toLowerCase() || '';
           return aName.localeCompare(bName) * direction;
         }
-        case 'items_count': {
-          const aCount = a.items?.length || 0;
-          const bCount = b.items?.length || 0;
-          return (aCount - bCount) * direction;
+        case 'price': {
+          const aPrice = a.price ?? 0;
+          const bPrice = b.price ?? 0;
+          return (aPrice - bPrice) * direction;
         }
-        case 'total': {
-          const aTotal = a.items_total ?? 0;
-          const bTotal = b.items_total ?? 0;
-          return (aTotal - bTotal) * direction;
+        case 'qty': {
+          return (a.qty - b.qty) * direction;
+        }
+        case 'unit_price': {
+          const aUnit = a.unit_price ?? 0;
+          const bUnit = b.unit_price ?? 0;
+          return (aUnit - bUnit) * direction;
         }
         default:
           return 0;
       }
     });
   });
-
-  expandedInvoice = signal<string | null>(null);
 
   toggleSort(column: SortColumn): void {
     this.sortState.update(current => {
@@ -108,13 +94,6 @@ export class InvoiceTableComponent {
       }
       return { column, direction: 'asc' };
     });
-  }
-
-  isSorted(column: SortColumn, direction?: SortDirection): boolean {
-    const sort = this.sortState();
-    if (!sort) return false;
-    if (direction) return sort.column === column && sort.direction === direction;
-    return sort.column === column;
   }
 
   getSortIcon(column: SortColumn): string {
@@ -129,27 +108,8 @@ export class InvoiceTableComponent {
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  toggleExpand(invoiceId: string, event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    requestAnimationFrame(() => {
-      document.getElementById(invoiceId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    })
-    if (this.expandedInvoice() === invoiceId) {
-      this.expandedInvoice.set(null);
-    } else {
-      this.expandedInvoice.set(invoiceId);
-    }
-  }
-
-  isExpanded(invoiceId: string): boolean {
-    return this.expandedInvoice() === invoiceId;
-  }
-
   private parseDateMs(dateStr: string | null | undefined): number {
     if (!dateStr) return 0;
-    // Handle both ISO-like and dd-mm-yyyy formats
     if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
       const parsed = Date.parse(dateStr);
       return Number.isNaN(parsed) ? 0 : parsed;
@@ -167,26 +127,16 @@ export class InvoiceTableComponent {
 
   onScroll(event: Event): void {
     const element = event.target as HTMLElement;
-    const threshold = 200; // pixels from bottom to trigger load
+    const threshold = 200;
     const distanceFromBottom = element.scrollHeight - element.scrollTop - element.clientHeight;
     
     if (distanceFromBottom < threshold && this.hasMore() && !this.loadingMore()) {
-      this.invoiceState.loadMoreInvoices();
+      this.invoiceState.loadMoreItems();
     }
   }
 
-  deleteInvoice(invoice: Invoice, event: Event): void {
-    event.stopPropagation();
-    
-    if (confirm(`Delete invoice ${invoice.order_no}?`)) {
-      if (invoice._id) {
-        this.invoiceState.deleteInvoice(invoice._id);
-      }
-    }
-  }
-
-  trackById(index: number, invoice: Invoice): string {
-    return invoice._id || index.toString();
+  trackByItem(index: number, item: FlatItem): string {
+    return `${item.invoice_id}-${item.sr}`;
   }
 
   formatDate(dateStr: string | null): string {
@@ -200,4 +150,3 @@ export class InvoiceTableComponent {
     return orderNo;
   }
 }
-

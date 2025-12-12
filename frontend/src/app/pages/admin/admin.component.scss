@@ -1,13 +1,13 @@
 .admin-container {
-  min-height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--bg-primary);
+  overflow: hidden;
 }
 
 .admin-toolbar {
-  position: sticky;
-  top: 0;
+  flex-shrink: 0;
   z-index: 1000;
   background: var(--bg-card) !important;
   border-bottom: 1px solid var(--border-light);
@@ -105,6 +105,8 @@
 .admin-content {
   flex: 1;
   padding: var(--spacing-xl);
+  overflow-y: auto;
+  overflow-x: hidden;
   
   @media (max-width: 768px) {
     padding: var(--spacing-md);

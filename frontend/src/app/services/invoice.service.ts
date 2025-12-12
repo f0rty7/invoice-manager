@@ -114,6 +114,13 @@ export class InvoiceService {
     if (filters.item_unit_price_max !== undefined) params = params.set('item_unit_price_max', filters.item_unit_price_max.toString());
     if (filters.exclude_categories?.length) params = params.set('exclude_categories', filters.exclude_categories.join(','));
     if (filters.exclude_delivery_partners?.length) params = params.set('exclude_delivery_partners', filters.exclude_delivery_partners.join(','));
+    // Time filters
+    if (filters.day_of_week?.length) params = params.set('day_of_week', filters.day_of_week.join(','));
+    if (filters.month !== undefined) params = params.set('month', filters.month.toString());
+    if (filters.year !== undefined) params = params.set('year', filters.year.toString());
+    if (filters.is_weekend !== undefined) params = params.set('is_weekend', filters.is_weekend.toString());
+    // Spending pattern
+    if (filters.spending_pattern) params = params.set('spending_pattern', filters.spending_pattern);
 
     return this.http.get<ApiResponse<PaginatedResponse<FlatItem>>>(`${this.API_URL}/items`, { params });
   }

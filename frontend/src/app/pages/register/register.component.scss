@@ -2,9 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100dvh;
   background: var(--bg-primary);
   padding: var(--spacing-lg);
+  overflow-y: auto;
 }
 
 .register-card {

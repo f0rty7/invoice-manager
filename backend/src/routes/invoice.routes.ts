@@ -229,7 +229,14 @@ invoiceRouter.get('/items', authMiddleware, async (c) => {
       item_unit_price_min: query.item_unit_price_min ? parseFloat(query.item_unit_price_min) : undefined,
       item_unit_price_max: query.item_unit_price_max ? parseFloat(query.item_unit_price_max) : undefined,
       exclude_categories: query.exclude_categories ? query.exclude_categories.split(',') : undefined,
-      exclude_delivery_partners: query.exclude_delivery_partners ? query.exclude_delivery_partners.split(',') : undefined
+      exclude_delivery_partners: query.exclude_delivery_partners ? query.exclude_delivery_partners.split(',') : undefined,
+      // Time filters
+      day_of_week: query.day_of_week ? query.day_of_week.split(',').map(Number) : undefined,
+      month: query.month ? parseInt(query.month) : undefined,
+      year: query.year ? parseInt(query.year) : undefined,
+      is_weekend: query.is_weekend === 'true' ? true : query.is_weekend === 'false' ? false : undefined,
+      // Spending pattern
+      spending_pattern: query.spending_pattern as InvoiceFilters['spending_pattern']
     };
 
     const result = await invoiceService.getItems(

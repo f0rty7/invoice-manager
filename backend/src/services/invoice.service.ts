@@ -18,6 +18,67 @@ export class InvoiceService {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  // Helper to compute spending pattern thresholds for individual items
+  private async getItemSpendingPatternThreshold(
+    baseQuery: any, 
+    pattern: 'above_avg' | 'below_avg' | 'top_10_pct' | 'bottom_10_pct'
+  ): Promise<{ field: string; operator: string; value: number } | null> {
+    // Build pipeline to get item prices
+    const basePipeline = [
+      { $match: baseQuery },
+      { $unwind: '$items' },
+      { $project: { price: '$items.price' } }
+    ];
+
+    if (pattern === 'above_avg' || pattern === 'below_avg') {
+      // Calculate average item price
+      const avgResult = await database.invoices.aggregate([
+        ...basePipeline,
+        { $group: { _id: null, avg: { $avg: '$price' } } }
+      ]).toArray();
+      
+      const avg = avgResult[0]?.avg || 0;
+      return {
+        field: 'price',
+        operator: pattern === 'above_avg' ? '$gt' : '$lt',
+        value: avg
+      };
+    }
+
+    if (pattern === 'top_10_pct' || pattern === 'bottom_10_pct') {
+      // Get count of items
+      const countResult = await database.invoices.aggregate([
+        ...basePipeline,
+        { $count: 'total' }
+      ]).toArray();
+      
+      const total = countResult[0]?.total || 0;
+      if (total === 0) return null;
+
+      const percentileIndex = Math.floor(total * 0.1);
+      const sortDir = pattern === 'top_10_pct' ? -1 : 1;
+
+      // Get the threshold value at the percentile
+      const thresholdResult = await database.invoices.aggregate([
+        ...basePipeline,
+        { $sort: { price: sortDir } },
+        { $skip: percentileIndex },
+        { $limit: 1 }
+      ]).toArray();
+
+      const threshold = thresholdResult[0]?.price;
+      if (threshold === undefined) return null;
+
+      return {
+        field: 'price',
+        operator: pattern === 'top_10_pct' ? '$gte' : '$lte',
+        value: threshold
+      };
+    }
+
+    return null;
+  }
+
   // Helper to compute spending pattern thresholds
   private async getSpendingPatternMatch(
     baseQuery: any, 
@@ -725,6 +786,84 @@ export class InvoiceService {
 
     if (Object.keys(itemFilters).length > 0) {
       pipeline.push({ $match: itemFilters });
+    }
+
+    // Time-based filters - parse DD-MM-YYYY date format
+    const needsDateParsing = filters.day_of_week?.length || 
+                             filters.month !== undefined || 
+                             filters.year !== undefined || 
+                             filters.is_weekend !== undefined;
+
+    if (needsDateParsing) {
+      // Add parsed date field
+      pipeline.push({
+        $addFields: {
+          _parsed_date: {
+            $dateFromString: {
+              dateString: '$date',
+              format: '%d-%m-%Y',
+              onError: null,
+              onNull: null
+            }
+          }
+        }
+      });
+
+      // Month filter (1-12)
+      if (filters.month !== undefined) {
+        pipeline.push({
+          $match: {
+            $expr: { $eq: [{ $month: '$_parsed_date' }, filters.month] }
+          }
+        });
+      }
+
+      // Year filter
+      if (filters.year !== undefined) {
+        pipeline.push({
+          $match: {
+            $expr: { $eq: [{ $year: '$_parsed_date' }, filters.year] }
+          }
+        });
+      }
+
+      // Weekend filter (Saturday=7, Sunday=1 in MongoDB)
+      if (filters.is_weekend !== undefined) {
+        const weekendDays = [1, 7]; // Sunday and Saturday in MongoDB
+        const weekdayDays = [2, 3, 4, 5, 6]; // Monday to Friday
+        pipeline.push({
+          $match: {
+            $expr: { 
+              $in: [
+                { $dayOfWeek: '$_parsed_date' }, 
+                filters.is_weekend ? weekendDays : weekdayDays
+              ] 
+            }
+          }
+        });
+      }
+
+      // Day of week filter (convert from JS 0=Sun to MongoDB 1=Sun)
+      if (filters.day_of_week?.length) {
+        const mongoDays = filters.day_of_week.map(d => d + 1);
+        pipeline.push({
+          $match: {
+            $expr: { $in: [{ $dayOfWeek: '$_parsed_date' }, mongoDays] }
+          }
+        });
+      }
+    }
+
+    // Spending pattern filter for items (based on individual item prices)
+    if (filters.spending_pattern) {
+      const threshold = await this.getItemSpendingPatternThreshold(query, filters.spending_pattern);
+      if (threshold) {
+        pipeline.push({
+          $match: {
+            [threshold.field]: { [threshold.operator]: threshold.value }
+          }
+        });
+      }
     }
 
     // Add sort, facet for pagination

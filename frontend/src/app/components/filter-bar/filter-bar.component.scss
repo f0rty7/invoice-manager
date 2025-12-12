@@ -277,8 +277,18 @@
   }
 }
 
+// Accordion wrapper for expansion panels
+mat-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
 // Item filters expansion panel
-.item-filters-panel {
+.item-filters-panel,
+.time-filters-panel,
+.spending-pattern-panel,
+.exclusion-panel {
   background: var(--bg-secondary) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: none !important;

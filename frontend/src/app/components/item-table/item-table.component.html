@@ -19,14 +19,6 @@
     } @else {
       <div class="table-container" (scroll)="onScroll($event)">
         <table mat-table [dataSource]="sortedItems()" class="item-table">
-          <!-- Sr No Column -->
-          <ng-container matColumnDef="sr">
-            <th mat-header-cell *matHeaderCellDef>Sr</th>
-            <td mat-cell *matCellDef="let item">
-              <div class="sr-no">{{ item.sr }}</div>
-            </td>
-          </ng-container>
-
           <!-- Delivery Partner Column -->
           <ng-container matColumnDef="delivery_partner">
             <th mat-header-cell *matHeaderCellDef [attr.aria-sort]="getAriaSort('delivery_partner')">
@@ -62,14 +54,6 @@
             </th>
             <td mat-cell *matCellDef="let item">
               {{ formatDate(item.date) }}
-            </td>
-          </ng-container>
-
-          <!-- Invoice Number Column -->
-          <ng-container matColumnDef="invoice_no">
-            <th mat-header-cell *matHeaderCellDef>Invoice No</th>
-            <td mat-cell *matCellDef="let item">
-              <div class="invoice-no">{{ item.invoice_no || 'N/A' }}</div>
             </td>
           </ng-container>
 
@@ -110,22 +94,11 @@
             </td>
           </ng-container>
 
-          <!-- Unit Price Column -->
-          <ng-container matColumnDef="unit_price">
-            <th mat-header-cell *matHeaderCellDef [attr.aria-sort]="getAriaSort('unit_price')">
-              <div 
-                class="sortable-content" 
-                tabindex="0" 
-                role="button" 
-                (click)="toggleSort('unit_price')" 
-                (keydown.enter)="toggleSort('unit_price')" 
-                (keydown.space)="toggleSort('unit_price')">
-                <span>Unit Price</span>
-                <mat-icon>{{ getSortIcon('unit_price') }}</mat-icon>
-              </div>
-            </th>
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
             <td mat-cell *matCellDef="let item">
-              <div class="unit-price">₹{{ (item.unit_price || 0).toFixed(2) }}</div>
+              <div class="category">{{ item.category || 'N/A' }}</div>
             </td>
           </ng-container>
 

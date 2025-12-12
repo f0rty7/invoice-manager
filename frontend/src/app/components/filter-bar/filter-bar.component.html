@@ -112,7 +112,7 @@
 
     <!-- Item Filters Section (Collapsible) -->
     <mat-accordion multi>
-    <mat-expansion-panel class="item-filters-panel">
+    <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>inventory_2</mat-icon>
@@ -174,7 +174,7 @@
     </mat-expansion-panel>
 
     <!-- Time Filters Section (Collapsible) -->
-    <mat-expansion-panel class="item-filters-panel">
+    <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>schedule</mat-icon>
@@ -231,7 +231,7 @@
     </mat-expansion-panel>
 
     <!-- Spending Patterns Section (Collapsible) -->
-    <mat-expansion-panel class="item-filters-panel">
+    <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>trending_up</mat-icon>
@@ -253,7 +253,7 @@
     </mat-expansion-panel>
 
     <!-- Exclusion Filters Section (Collapsible) -->
-    <mat-expansion-panel class="item-filters-panel">
+    <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>block</mat-icon>
@@ -299,7 +299,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-button-toggle-group formControlName="sort_dir" class="sort-direction" aria-label="Sort direction" hideSingleSelectionIndicator>
+        <mat-button-toggle-group formControlName="sort_dir" class="sort-direction-toggle" aria-label="Sort direction" hideSingleSelectionIndicator>
           <mat-button-toggle value="desc" matTooltip="Descending">
             <mat-icon>arrow_downward</mat-icon>
           </mat-button-toggle>

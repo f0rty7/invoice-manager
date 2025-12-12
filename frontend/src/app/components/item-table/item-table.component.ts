@@ -10,7 +10,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import type { FlatItem } from '@pdf-invoice/shared';
 
-type SortColumn = 'date' | 'delivery_partner' | 'price' | 'qty' | 'unit_price';
+type SortColumn = 'date' | 'delivery_partner' | 'price' | 'qty';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
@@ -40,7 +40,7 @@ export class ItemTableComponent {
   total = this.invoiceState.itemsTotal;
   hasMore = this.invoiceState.itemsHasMore;
 
-  readonly displayedColumns = ['sr', 'delivery_partner', 'date', 'invoice_no', 'order_no', 'description', 'qty', 'unit_price', 'price'] as const;
+  readonly displayedColumns = ['delivery_partner', 'date', 'order_no', 'description', 'category', 'qty', 'price'] as const;
 
   private sortState = signal<{ column: SortColumn; direction: SortDirection } | null>({
     column: 'date',
@@ -74,11 +74,6 @@ export class ItemTableComponent {
         }
         case 'qty': {
           return (a.qty - b.qty) * direction;
-        }
-        case 'unit_price': {
-          const aUnit = a.unit_price ?? 0;
-          const bUnit = b.unit_price ?? 0;
-          return (aUnit - bUnit) * direction;
         }
         default:
           return 0;

@@ -129,13 +129,13 @@ filterRouter.put('/:id', authMiddleware, async (c) => {
     // If setting as default, unset other defaults
     if (is_default) {
       await database.savedFilters.updateMany(
-        { user_id: user.userId, is_default: true, _id: { $ne: new ObjectId(id) } },
+        { user_id: user.userId, is_default: true, _id: { $ne: new ObjectId(id) } } as any,
         { $set: { is_default: false } }
       );
     }
 
     const result = await database.savedFilters.findOneAndUpdate(
-      { _id: new ObjectId(id), user_id: user.userId },
+      { _id: new ObjectId(id), user_id: user.userId } as any,
       { $set: updateData },
       { returnDocument: 'after' }
     );
@@ -174,7 +174,7 @@ filterRouter.delete('/:id', authMiddleware, async (c) => {
     const result = await database.savedFilters.deleteOne({
       _id: new ObjectId(id),
       user_id: user.userId
-    });
+    } as any);
 
     if (result.deletedCount === 0) {
       return c.json({
@@ -209,7 +209,7 @@ filterRouter.post('/:id/default', authMiddleware, async (c) => {
 
     // Set this one as default
     const result = await database.savedFilters.findOneAndUpdate(
-      { _id: new ObjectId(id), user_id: user.userId },
+      { _id: new ObjectId(id), user_id: user.userId } as any,
       { $set: { is_default: true, updated_at: new Date() } },
       { returnDocument: 'after' }
     );

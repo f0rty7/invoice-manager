@@ -1,3 +1,7 @@
+// Import shared styles
+@use 'shared-styles' as shared;
+@use 'material-overrides' as matOverrides;
+
 // Custom Material Light Theme
 @use '@angular/material' as mat;
 
@@ -127,125 +131,6 @@ body {
   padding: 0 var(--spacing-lg);
 }
 
-// Material Card Overrides
-.mat-mdc-card {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border-light) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: var(--shadow-sm) !important;
-  transition: box-shadow var(--transition-normal), transform var(--transition-normal) !important;
-  
-  &:hover {
-    box-shadow: var(--shadow-md) !important;
-  }
-}
-
-.mat-mdc-card-header {
-  .mat-mdc-card-title {
-    color: var(--text-primary) !important;
-    font-weight: 600 !important;
-  }
-  
-  .mat-mdc-card-subtitle {
-    color: var(--text-secondary) !important;
-  }
-}
-
-.mat-mdc-card-content {
-  color: var(--text-secondary) !important;
-}
-
-// Material Button Overrides
-.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-stroked-button, .mat-mdc-flat-button {
-  border-radius: var(--radius-md) !important;
-  font-weight: 500 !important;
-  transition: all var(--transition-fast) !important;
-}
-
-.mat-mdc-raised-button.mat-primary {
-  background-color: var(--accent-primary) !important;
-  
-  &:hover:not(:disabled) {
-    background-color: var(--accent-primary-hover) !important;
-  }
-}
-
-// Material Table Overrides
-.mat-mdc-table {
-  background: transparent !important;
-  
-  .mat-mdc-header-cell {
-    color: var(--text-secondary) !important;
-    font-weight: 600 !important;
-    font-size: 12px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    border-bottom: 1px solid var(--border-light) !important;
-    background: var(--bg-secondary) !important;
-  }
-  
-  .mat-mdc-cell {
-    color: var(--text-primary) !important;
-    border-bottom: 1px solid var(--border-light) !important;
-  }
-  
-  .mat-mdc-row {
-    &:hover {
-      background: var(--bg-secondary) !important;
-    }
-  }
-}
-
-// Material Form Field Overrides
-.mat-mdc-form-field {
-  .mat-mdc-text-field-wrapper {
-    background: var(--bg-card) !important;
-    border-radius: var(--radius-md) !important;
-  }
-  
-  .mdc-text-field--outlined .mdc-notched-outline__leading,
-  .mdc-text-field--outlined .mdc-notched-outline__notch,
-  .mdc-text-field--outlined .mdc-notched-outline__trailing {
-    border-color: var(--border-light) !important;
-  }
-  
-  &.mat-focused {
-    .mdc-notched-outline__leading,
-    .mdc-notched-outline__notch,
-    .mdc-notched-outline__trailing {
-      border-color: var(--accent-primary) !important;
-    }
-  }
-  
-  .mat-mdc-form-field-label, .mat-mdc-floating-label {
-    color: var(--text-secondary) !important;
-  }
-  
-  input, textarea {
-    color: var(--text-primary) !important;
-  }
-}
-
-// Material Chip Overrides
-.mat-mdc-chip {
-  background: var(--accent-primary-light) !important;
-  color: var(--accent-primary) !important;
-  border: none !important;
-  font-weight: 500 !important;
-}
-
-// Material Paginator Overrides
-.mat-mdc-paginator {
-  background: var(--bg-card) !important;
-  color: var(--text-secondary) !important;
-  border-top: 1px solid var(--border-light) !important;
-  
-  .mat-mdc-paginator-container { padding: var(--spacing-sm) var(--spacing-md) !important; min-height: 52px !important; }
-  .mat-mdc-paginator-range-label, .mat-mdc-paginator-page-size-label { color: var(--text-muted) !important; font-size: 13px !important; }
-  .mat-mdc-icon-button { color: var(--text-muted) !important; &:hover:not(:disabled) { background: var(--bg-secondary) !important; color: var(--text-primary) !important; } &:disabled { opacity: 0.3; } }
-  .mat-mdc-select { font-size: 13px !important; .mat-mdc-select-value { color: var(--text-primary) !important; } }
-}
-
 // Shared card with header styles
 .card-with-header {
   mat-card-header {
@@ -272,56 +157,6 @@ body {
 
 // Monospace font for codes
 .mono { font-family: 'SF Mono', Monaco, Inconsolata, monospace; }
-
-// Material Dialog Overrides
-.mat-mdc-dialog-container {
-  --mdc-dialog-container-color: var(--bg-card);
-  --mdc-dialog-supporting-text-color: var(--text-secondary);
-  
-  .mat-mdc-dialog-surface {
-    background: var(--bg-card) !important;
-    border-radius: var(--radius-xl) !important;
-    box-shadow: var(--shadow-lg) !important;
-  }
-  
-  .mat-mdc-dialog-title {
-    color: var(--text-primary) !important;
-  }
-  
-  .mat-mdc-dialog-content {
-    color: var(--text-secondary) !important;
-  }
-}
-
-.cdk-overlay-dark-backdrop {
-  background: rgba(15, 23, 42, 0.4) !important;
-}
-
-// Material Select Panel
-.mat-mdc-select-panel {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border-light) !important;
-  border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-lg) !important;
-}
-
-.mat-mdc-option {
-  color: var(--text-primary) !important;
-  
-  &:hover:not(.mat-mdc-option-disabled) {
-    background: var(--bg-secondary) !important;
-  }
-  
-  &.mat-mdc-option-active {
-    background: var(--accent-primary-light) !important;
-  }
-}
-
-// Material Toolbar Override
-.mat-toolbar {
-  background: var(--bg-card) !important;
-  color: var(--text-primary) !important;
-}
 
 // Messages
 .error-message {
@@ -350,11 +185,4 @@ body {
   justify-content: center;
   align-items: center;
   height: 200px;
-}
-
-// Upload Dialog Custom Panel
-.upload-dialog-panel {
-  .mat-mdc-dialog-container {
-    padding: 0 !important;
-  }
 }

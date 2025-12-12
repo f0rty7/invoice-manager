@@ -1,6 +1,7 @@
-import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -49,6 +50,7 @@ import { SaveFilterDialogComponent } from './save-filter-dialog.component';
 })
 export class FilterBarComponent {
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
   private invoiceState = inject(InvoiceStateService);
   private invoiceService = inject(InvoiceService);
   private authService = inject(AuthService);
@@ -145,9 +147,12 @@ export class FilterBarComponent {
     this.loadDeliveryPartners();
     this.loadSavedFilters();
 
-    // Debounce filter changes
+    // FIXED: Add takeUntilDestroyed to prevent subscription leak
     this.filterForm.valueChanges
-      .pipe(debounceTime(300))
+      .pipe(
+        debounceTime(300),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(values => {
         const filters: Partial<InvoiceFilters> = {};
         

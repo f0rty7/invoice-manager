@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import type { 
   Invoice, 
   InvoiceFilters, 
@@ -16,6 +17,10 @@ import type {
 })
 export class InvoiceService {
   private readonly API_URL = '/api/invoices';
+
+  // OPTIMIZED: Cache static data that rarely changes
+  private categoriesCache = signal<string[] | null>(null);
+  private deliveryPartnersCache = signal<string[] | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -80,12 +85,40 @@ export class InvoiceService {
     return this.http.get<ApiResponse<InvoiceStats>>(`${this.API_URL}/stats/summary`);
   }
 
+  // OPTIMIZED: Return cached categories if available
   getCategories(): Observable<ApiResponse<string[]>> {
-    return this.http.get<ApiResponse<string[]>>(`${this.API_URL}/categories`);
+    const cached = this.categoriesCache();
+    if (cached) {
+      return of({ success: true, data: cached });
+    }
+    return this.http.get<ApiResponse<string[]>>(`${this.API_URL}/categories`).pipe(
+      tap(response => {
+        if (response.success && response.data) {
+          this.categoriesCache.set(response.data);
+        }
+      })
+    );
   }
 
+  // OPTIMIZED: Return cached delivery partners if available
   getDeliveryPartners(): Observable<ApiResponse<string[]>> {
-    return this.http.get<ApiResponse<string[]>>(`${this.API_URL}/delivery-partners`);
+    const cached = this.deliveryPartnersCache();
+    if (cached) {
+      return of({ success: true, data: cached });
+    }
+    return this.http.get<ApiResponse<string[]>>(`${this.API_URL}/delivery-partners`).pipe(
+      tap(response => {
+        if (response.success && response.data) {
+          this.deliveryPartnersCache.set(response.data);
+        }
+      })
+    );
+  }
+
+  // Clear caches (call after uploading new invoices that might have new categories)
+  clearCache(): void {
+    this.categoriesCache.set(null);
+    this.deliveryPartnersCache.set(null);
   }
 
   getItems(filters: InvoiceFilters): Observable<ApiResponse<PaginatedResponse<FlatItem>>> {

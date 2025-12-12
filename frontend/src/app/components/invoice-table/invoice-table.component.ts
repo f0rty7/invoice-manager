@@ -9,8 +9,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { InvoiceStateService } from '../../services/invoice-state.service';
-import type { Invoice } from '@pdf-invoice/shared';
+import type { Invoice, InvoiceFilters } from '@pdf-invoice/shared';
 
+// Sort columns that map to server-side sort_by values
 type SortColumn = 'date' | 'delivery_partner' | 'items_count' | 'total';
 type SortDirection = 'asc' | 'desc';
 
@@ -36,6 +37,7 @@ type SortDirection = 'asc' | 'desc';
 export class InvoiceTableComponent {
   private invoiceState = inject(InvoiceStateService);
 
+  // OPTIMIZED: Use server-sorted data directly instead of client-side sorting
   invoices = this.invoiceState.invoices;
   loading = this.invoiceState.loading;
   loadingMore = this.invoiceState.loadingMore;
@@ -57,75 +59,46 @@ export class InvoiceTableComponent {
     return cols;
   }
 
-  private sortState = signal<{ column: SortColumn; direction: SortDirection } | null>({
-    column: 'date',
-    direction: 'desc'
-  });
-
-  readonly sortedInvoices = computed(() => {
-    const data = [...this.invoices()];
-    const sort = this.sortState();
-
-    if (!sort) return data;
-
-    return data.sort((a, b) => {
-      const direction = sort.direction === 'asc' ? 1 : -1;
-
-      switch (sort.column) {
-        case 'date': {
-          const aDate = this.parseDateMs(a.date);
-          const bDate = this.parseDateMs(b.date);
-          return (aDate - bDate) * direction;
-        }
-        case 'delivery_partner': {
-          const aName = a.delivery_partner?.known_name?.toLowerCase() || '';
-          const bName = b.delivery_partner?.known_name?.toLowerCase() || '';
-          return aName.localeCompare(bName) * direction;
-        }
-        case 'items_count': {
-          const aCount = a.items?.length || 0;
-          const bCount = b.items?.length || 0;
-          return (aCount - bCount) * direction;
-        }
-        case 'total': {
-          const aTotal = a.items_total ?? 0;
-          const bTotal = b.items_total ?? 0;
-          return (aTotal - bTotal) * direction;
-        }
-        default:
-          return 0;
-      }
-    });
+  // Track current sort from filters (server-side)
+  readonly currentSort = computed(() => {
+    const f = this.filters();
+    return {
+      column: (f.sort_by || 'date') as SortColumn,
+      direction: (f.sort_dir || 'desc') as SortDirection
+    };
   });
 
   expandedInvoice = signal<string | null>(null);
 
+  // OPTIMIZED: Request server-side sorting instead of client-side
   toggleSort(column: SortColumn): void {
-    this.sortState.update(current => {
-      if (current?.column === column) {
-        const nextDirection: SortDirection = current.direction === 'asc' ? 'desc' : 'asc';
-        return { column, direction: nextDirection };
-      }
-      return { column, direction: 'asc' };
+    const current = this.currentSort();
+    const newDirection: SortDirection = 
+      current.column === column && current.direction === 'asc' ? 'desc' : 'asc';
+    
+    // Update filters to trigger server-side sort
+    this.invoiceState.setFilters({
+      ...this.filters(),
+      sort_by: column,
+      sort_dir: newDirection
     });
   }
 
   isSorted(column: SortColumn, direction?: SortDirection): boolean {
-    const sort = this.sortState();
-    if (!sort) return false;
+    const sort = this.currentSort();
     if (direction) return sort.column === column && sort.direction === direction;
     return sort.column === column;
   }
 
   getSortIcon(column: SortColumn): string {
-    const sort = this.sortState();
-    if (!sort || sort.column !== column) return 'unfold_more';
+    const sort = this.currentSort();
+    if (sort.column !== column) return 'unfold_more';
     return sort.direction === 'asc' ? 'arrow_upward' : 'arrow_downward';
   }
 
   getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {
-    const sort = this.sortState();
-    if (!sort || sort.column !== column) return 'none';
+    const sort = this.currentSort();
+    if (sort.column !== column) return 'none';
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
@@ -135,7 +108,7 @@ export class InvoiceTableComponent {
     }
     requestAnimationFrame(() => {
       document.getElementById(invoiceId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    })
+    });
     if (this.expandedInvoice() === invoiceId) {
       this.expandedInvoice.set(null);
     } else {
@@ -145,24 +118,6 @@ export class InvoiceTableComponent {
 
   isExpanded(invoiceId: string): boolean {
     return this.expandedInvoice() === invoiceId;
-  }
-
-  private parseDateMs(dateStr: string | null | undefined): number {
-    if (!dateStr) return 0;
-    // Handle both ISO-like and dd-mm-yyyy formats
-    if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
-      const parsed = Date.parse(dateStr);
-      return Number.isNaN(parsed) ? 0 : parsed;
-    }
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-      const [dd, mm, yyyy] = parts;
-      const isoLike = `${yyyy}-${mm}-${dd}`;
-      const parsed = Date.parse(isoLike);
-      return Number.isNaN(parsed) ? 0 : parsed;
-    }
-    const fallback = Date.parse(dateStr);
-    return Number.isNaN(fallback) ? 0 : fallback;
   }
 
   onScroll(event: Event): void {
@@ -200,4 +155,3 @@ export class InvoiceTableComponent {
     return orderNo;
   }
 }
-

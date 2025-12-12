@@ -1,12 +1,14 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { outputToObservable } from '@angular/core/rxjs-interop';
+import { take } from 'rxjs/operators';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
 import { AuthService } from '../../services/auth.service';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { UploadComponent } from '../../components/upload/upload.component';
@@ -63,9 +65,10 @@ export class DashboardComponent {
       panelClass: 'upload-dialog-panel'
     });
 
-    dialogRef.componentInstance.uploadComplete.subscribe(() => {
-      this.onUploadComplete();
-    });
+    // FIXED: Convert output() to Observable and use take(1) to prevent leak
+    outputToObservable(dialogRef.componentInstance.uploadComplete)
+      .pipe(take(1))
+      .subscribe(() => this.onUploadComplete());
   }
 
   onUploadComplete(): void {
@@ -73,6 +76,13 @@ export class DashboardComponent {
     this.invoiceState.refreshInvoices();
     this.invoiceState.refreshItems();
     this.invoiceState.loadStats();
+  }
+
+  // FIXED: Load items only when Items tab is active (lazy loading)
+  onTabChange(event: MatTabChangeEvent): void {
+    if (event.index === 1) { // Items tab
+      this.invoiceState.syncItemsWithFilters();
+    }
   }
 
   logout(): void {

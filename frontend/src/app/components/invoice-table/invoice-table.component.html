@@ -18,7 +18,8 @@
       </div>
     } @else {
       <div class="table-container" #scrollContainer (scroll)="onScroll($event)">
-        <table mat-table [dataSource]="sortedInvoices()" multiTemplateDataRows class="invoice-table">
+        <!-- OPTIMIZED: Use server-sorted invoices directly instead of client-side sorting -->
+        <table mat-table [dataSource]="invoices()" multiTemplateDataRows class="invoice-table">
           <!-- Order Number Column -->
           <ng-container matColumnDef="order_no">
             <th mat-header-cell *matHeaderCellDef>Order No</th>

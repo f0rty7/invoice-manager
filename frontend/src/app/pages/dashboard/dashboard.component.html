@@ -62,14 +62,28 @@
         <!-- Statistics Cards -->
         <app-stats-cards></app-stats-cards>
 
-        <!-- Charts -->
-        <app-charts></app-charts>
+        <!-- Charts - Deferred until visible in viewport -->
+        @defer (on viewport) {
+          <app-charts></app-charts>
+        } @placeholder {
+          <div class="chart-placeholder">
+            <mat-icon>bar_chart</mat-icon>
+            <span>Loading charts...</span>
+          </div>
+        }
 
-        <!-- Advanced Analytics -->
-        <app-advanced-charts></app-advanced-charts>
+        <!-- Advanced Analytics - Deferred until visible in viewport -->
+        @defer (on viewport) {
+          <app-advanced-charts></app-advanced-charts>
+        } @placeholder {
+          <div class="chart-placeholder">
+            <mat-icon>analytics</mat-icon>
+            <span>Loading analytics...</span>
+          </div>
+        }
 
         <!-- Data Tables -->
-        <mat-tab-group class="data-tables data-tabs" animationDuration="200ms">
+        <mat-tab-group class="data-tables data-tabs" animationDuration="200ms" (selectedTabChange)="onTabChange($event)">
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon>receipt</mat-icon>

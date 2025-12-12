@@ -118,3 +118,30 @@
 }
 
 .data-tables { margin-top: var(--spacing-xl); }
+
+// Placeholder for deferred charts
+.chart-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-muted);
+  gap: var(--spacing-sm);
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+  }
+  
+  span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

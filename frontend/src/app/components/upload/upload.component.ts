@@ -1,4 +1,4 @@
-import { Component, signal, output, inject } from '@angular/core';
+import { Component, signal, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +29,8 @@ interface FileUploadStatus {
     MatDialogModule
   ],
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.scss']
+  styleUrls: ['./upload.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UploadComponent {
   private invoiceService = inject(InvoiceService);

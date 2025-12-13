@@ -42,10 +42,8 @@ export class ItemTableComponent {
 
   readonly displayedColumns = ['delivery_partner', 'date', 'order_no', 'description', 'category', 'qty', 'price'] as const;
 
-  private sortState = signal<{ column: SortColumn; direction: SortDirection } | null>({
-    column: 'date',
-    direction: 'desc'
-  });
+  // Start with no sort selected (neutral UI). User can click headers to sort locally.
+  private sortState = signal<{ column: SortColumn; direction: SortDirection } | null>(null);
 
   readonly sortedItems = computed(() => {
     const data = [...this.items()];

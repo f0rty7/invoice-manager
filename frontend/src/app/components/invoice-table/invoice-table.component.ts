@@ -59,13 +59,15 @@ export class InvoiceTableComponent {
     return cols;
   }
 
-  // Track current sort from filters (server-side)
-  readonly currentSort = computed(() => {
+  // Track current sort from filters (server-side). If no sort is set, treat as "no sort selected"
+  // so the UI doesn't show a default active sort.
+  readonly currentSort = computed<{ column: SortColumn; direction: SortDirection } | null>(() => {
     const f = this.filters();
-    return {
-      column: (f.sort_by || 'date') as SortColumn,
-      direction: (f.sort_dir || 'desc') as SortDirection
-    };
+    const column = f.sort_by as SortColumn | undefined;
+    const direction = f.sort_dir as SortDirection | undefined;
+
+    if (!column || !direction) return null;
+    return { column, direction };
   });
 
   expandedInvoice = signal<string | null>(null);
@@ -73,8 +75,8 @@ export class InvoiceTableComponent {
   // OPTIMIZED: Request server-side sorting instead of client-side
   toggleSort(column: SortColumn): void {
     const current = this.currentSort();
-    const newDirection: SortDirection = 
-      current.column === column && current.direction === 'asc' ? 'desc' : 'asc';
+    const newDirection: SortDirection =
+      current?.column === column && current.direction === 'asc' ? 'desc' : 'asc';
     
     // Update filters to trigger server-side sort
     this.invoiceState.setFilters({
@@ -86,19 +88,20 @@ export class InvoiceTableComponent {
 
   isSorted(column: SortColumn, direction?: SortDirection): boolean {
     const sort = this.currentSort();
+    if (!sort) return false;
     if (direction) return sort.column === column && sort.direction === direction;
     return sort.column === column;
   }
 
   getSortIcon(column: SortColumn): string {
     const sort = this.currentSort();
-    if (sort.column !== column) return 'unfold_more';
+    if (!sort || sort.column !== column) return 'unfold_more';
     return sort.direction === 'asc' ? 'arrow_upward' : 'arrow_downward';
   }
 
   getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {
     const sort = this.currentSort();
-    if (sort.column !== column) return 'none';
+    if (!sort || sort.column !== column) return 'none';
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 

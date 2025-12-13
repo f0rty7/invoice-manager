@@ -115,8 +115,8 @@ export class FilterBarComponent {
   constructor() {
     this.filterForm = this.fb.group({
       search: [''],
-      date_from: [''],
-      date_to: [''],
+      date_from: [null],
+      date_to: [null],
       categories: [[]],           // Multi-select categories
       delivery_partner: [''],
       price_min: [''],

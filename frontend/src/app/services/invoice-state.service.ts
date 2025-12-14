@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap, tap, debounceTime, catchError, filter, map } from 'rxjs/operators';
+import { switchMap, tap, debounceTime, catchError, filter, map, distinctUntilChanged } from 'rxjs/operators';
 import { of, Subscription } from 'rxjs';
 import { InvoiceService } from '../services/invoice.service';
 import type { Invoice, InvoiceFilters, InvoiceStats, FlatItem } from '@pdf-invoice/shared';
@@ -116,8 +116,9 @@ export class InvoiceStateService {
 
   constructor() {
     // Use toObservable + switchMap for automatic request cancellation
-    // Only tracks invoiceQueryFiltersSignal changes (NOT page changes)
+    // Load data when filters change (including initial empty filters)
     toObservable(this.invoiceQueryFiltersSignal).pipe(
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       debounceTime(50), // Small debounce to batch rapid changes
       tap(() => {
         this.loadingSignal.set(true);
@@ -150,6 +151,7 @@ export class InvoiceStateService {
 
     // Aggregate invoices totals (all filtered rows), cancel on filter changes
     toObservable(this.invoiceQueryFiltersSignal).pipe(
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       debounceTime(100),
       switchMap(queryFilters => {
         const filters: InvoiceFilters = { ...queryFilters };
@@ -169,6 +171,7 @@ export class InvoiceStateService {
     // Aggregate items totals only when Items tab is active (cancel on changes)
     // We map the active tab signal into the stream by reading it in filter() (runs on each emission).
     toObservable(this.itemsQueryFiltersSignal).pipe(
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       debounceTime(100),
       filter(() => this.activeTabSignal() === 'items'),
       switchMap(queryFilters => {

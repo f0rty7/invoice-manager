@@ -9,10 +9,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { map, filter as rxFilter } from 'rxjs/operators';
+import { map, filter as rxFilter, skip } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { InvoiceService } from '../../services/invoice.service';
+import { FilterOptionsService } from '../../services/filter-options.service';
 import { ColumnHeaderMenuComponent } from '../column-header-menu/column-header-menu.component';
 import { ColumnFilterDialogComponent, type SortDir } from '../column-filter-dialog/column-filter-dialog.component';
 import { InvoiceItemsDialogComponent } from '../invoice-items-dialog/invoice-items-dialog.component';
@@ -47,6 +48,7 @@ type SortDirection = 'asc' | 'desc';
 export class InvoiceTableComponent {
   private invoiceState = inject(InvoiceStateService);
   private invoiceService = inject(InvoiceService);
+  private filterOptionsService = inject(FilterOptionsService);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
@@ -58,6 +60,7 @@ export class InvoiceTableComponent {
     // This can appear after initial render (e.g., when loading finishes), so attach here.
     this.viewportSub?.unsubscribe();
     this.viewportSub = vp.renderedRangeStream.pipe(
+      skip(1), // Skip the initial emission to prevent premature loadMore trigger
       map(r => r.end),
       rxFilter(() => this.hasMore() && !this.loadingMore()),
       rxFilter(end => {
@@ -107,22 +110,16 @@ export class InvoiceTableComponent {
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  // Filter options for header dialogs
-  partnerOptions = signal<FilterOption[]>([]);
+  // Filter options for header dialogs (from shared service)
+  partnerOptions = this.filterOptionsService.partners;
 
   readonly rowHeightPx = 56;
   readonly viewportHeightPx = 520;
 
   constructor() {
     this.destroyRef.onDestroy(() => this.viewportSub?.unsubscribe());
-    this.invoiceService.getFilterOptions().subscribe({
-      next: (res) => {
-        if (res.success && res.data) this.partnerOptions.set(res.data.partners);
-      },
-      error: () => {
-        this.partnerOptions.set([]);
-      }
-    });
+    // Load filter options via shared service (prevents duplicate calls)
+    this.filterOptionsService.loadFilterOptions();
   }
 
   isColumnActive(column: SortColumn): boolean {

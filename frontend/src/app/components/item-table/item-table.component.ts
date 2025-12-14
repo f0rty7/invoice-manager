@@ -8,10 +8,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { map, filter as rxFilter } from 'rxjs/operators';
+import { map, filter as rxFilter, skip } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { InvoiceService } from '../../services/invoice.service';
+import { FilterOptionsService } from '../../services/filter-options.service';
 import { ColumnHeaderMenuComponent } from '../column-header-menu/column-header-menu.component';
 import { ColumnFilterDialogComponent, type SortDir } from '../column-filter-dialog/column-filter-dialog.component';
 import type { FlatItem } from '@pdf-invoice/shared';
@@ -42,6 +43,7 @@ type SortDirection = 'asc' | 'desc';
 export class ItemTableComponent {
   private invoiceState = inject(InvoiceStateService);
   private invoiceService = inject(InvoiceService);
+  private filterOptionsService = inject(FilterOptionsService);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
@@ -53,6 +55,7 @@ export class ItemTableComponent {
     // This can appear after initial render (e.g., when loading finishes), so attach here.
     this.viewportSub?.unsubscribe();
     this.viewportSub = vp.renderedRangeStream.pipe(
+      skip(1), // Skip the initial emission to prevent premature loadMore trigger
       map(r => r.end),
       rxFilter(() => this.hasMore() && !this.loadingMore()),
       rxFilter(end => {
@@ -87,23 +90,14 @@ export class ItemTableComponent {
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  partnerOptions = signal<FilterOption[]>([]);
-  categoryOptions = signal<FilterOption[]>([]);
+  // Filter options from shared service
+  partnerOptions = this.filterOptionsService.partners;
+  categoryOptions = this.filterOptionsService.categories;
 
   constructor() {
     this.destroyRef.onDestroy(() => this.viewportSub?.unsubscribe());
-    this.invoiceService.getFilterOptions().subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.partnerOptions.set(res.data.partners);
-          this.categoryOptions.set(res.data.categories);
-        }
-      },
-      error: () => {
-        this.partnerOptions.set([]);
-        this.categoryOptions.set([]);
-      }
-    });
+    // Load filter options via shared service (prevents duplicate calls)
+    this.filterOptionsService.loadFilterOptions();
   }
 
   readonly rowHeightPx = 56;

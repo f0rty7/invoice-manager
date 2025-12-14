@@ -158,6 +158,27 @@ invoiceRouter.post('/search', authMiddleware, async (c) => {
   }
 });
 
+// Aggregate invoices (total amount + count) across all filtered rows
+invoiceRouter.post('/aggregate', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    const filters = (await c.req.json()) as InvoiceFilters;
+
+    const data = await invoiceService.aggregateInvoices(
+      filters,
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({ success: true, data });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to aggregate invoices'
+    }, 500);
+  }
+});
+
 // Get statistics (must come before /:id to avoid matching "stats" as an ID)
 invoiceRouter.get('/stats/summary', authMiddleware, async (c) => {
   try {
@@ -323,6 +344,27 @@ invoiceRouter.post('/items/search', authMiddleware, async (c) => {
     return c.json({
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch items'
+    }, 500);
+  }
+});
+
+// Aggregate items (total price + count) across all filtered rows
+invoiceRouter.post('/items/aggregate', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    const filters = (await c.req.json()) as InvoiceFilters;
+
+    const data = await invoiceService.aggregateItems(
+      filters,
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({ success: true, data });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to aggregate items'
     }, 500);
   }
 });

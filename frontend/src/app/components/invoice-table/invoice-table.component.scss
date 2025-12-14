@@ -14,7 +14,7 @@ mat-card-content { padding: 0 !important; }
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  th { font-weight: 600 !important; color: var(--text-muted) !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; background: var(--bg-secondary) !important; padding: var(--spacing-md) !important; z-index: 10; }
+  th { font-weight: 600 !important; color: var(--text-muted) !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; background: var(--bg-secondary) !important; padding: var(--spacing-md) !important; z-index: 10; text-align: left !important; }
   td { padding: var(--spacing-md) !important; font-size: 14px !important; }
   .invoice-row { &:hover { background: var(--bg-secondary) !important; } }
   .order-no { font-weight: 600; color: var(--accent-primary); font-family: monospace; font-size: 13px; }
@@ -37,6 +37,18 @@ mat-card-content { padding: 0 !important; }
 
 .actions-cell {
   white-space: nowrap;
+}
+
+.table-footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-light);
+  font-size: 13px;
 }
 .loading-more {
   display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); padding: var(--spacing-lg); color: var(--text-secondary); font-size: 14px;

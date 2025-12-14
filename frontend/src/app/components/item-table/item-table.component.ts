@@ -69,6 +69,7 @@ export class ItemTableComponent {
   total = this.invoiceState.itemsTotal;
   hasMore = this.invoiceState.itemsHasMore;
   itemsFilters = this.invoiceState.itemsFilters;
+  aggregate = this.invoiceState.itemsAggregate;
 
   readonly displayedColumns = ['delivery_partner', 'date', 'order_no', 'description', 'category', 'qty', 'price'] as const;
 

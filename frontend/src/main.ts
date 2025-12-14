@@ -23,6 +23,11 @@ Chart.register(
   Title, Tooltip, Legend, Filler                       // Plugins
 );
 
+// PERFORMANCE: Disable animations and throttle resize to reduce lag when dev tools are open
+Chart.defaults.animation = false;
+Chart.defaults.responsive = true;
+Chart.defaults.resizeDelay = 100; // Throttle resize events to 100ms
+
 // Angular 21: Zoneless by default, no need for provideExperimentalZonelessChangeDetection
 bootstrapApplication(AppComponent, {
   providers: [

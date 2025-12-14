@@ -78,6 +78,13 @@ export class InvoiceService {
     return this.http.post<ApiResponse<PaginatedResponse<Invoice>>>(`${this.API_URL}/search`, filters);
   }
 
+  aggregateInvoices(filters: InvoiceFilters): Observable<ApiResponse<{ total_amount: number; total_count: number }>> {
+    return this.http.post<ApiResponse<{ total_amount: number; total_count: number }>>(
+      `${this.API_URL}/aggregate`,
+      filters
+    );
+  }
+
   getInvoiceById(id: string): Observable<ApiResponse<Invoice>> {
     return this.http.get<ApiResponse<Invoice>>(`${this.API_URL}/${id}`);
   }
@@ -165,6 +172,13 @@ export class InvoiceService {
 
   searchItems(filters: InvoiceFilters): Observable<ApiResponse<PaginatedResponse<FlatItem>>> {
     return this.http.post<ApiResponse<PaginatedResponse<FlatItem>>>(`${this.API_URL}/items/search`, filters);
+  }
+
+  aggregateItems(filters: InvoiceFilters): Observable<ApiResponse<{ total_price: number; total_count: number }>> {
+    return this.http.post<ApiResponse<{ total_price: number; total_count: number }>>(
+      `${this.API_URL}/items/aggregate`,
+      filters
+    );
   }
 
   getFilterOptions(): Observable<ApiResponse<FilterOptionsResponse>> {

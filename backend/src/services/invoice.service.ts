@@ -572,6 +572,203 @@ export class InvoiceService {
     };
   }
 
+  async aggregateInvoices(
+    filters: InvoiceFilters,
+    userId: string,
+    isAdmin: boolean
+  ): Promise<{ total_amount: number; total_count: number }> {
+    // Build query (same as getInvoices, but no pagination/sort needed for totals)
+    const query: any = {};
+
+    if (!isAdmin) {
+      query.user_id = userId;
+    } else if (filters.user_id) {
+      query.user_id = filters.user_id;
+    } else if (filters.username) {
+      query.username = filters.username;
+    }
+
+    const dateFromObj = this.parseDDMMYYYY(filters.date_from ?? null);
+    const dateToObj = this.parseDDMMYYYY(filters.date_to ?? null);
+    if (dateFromObj || dateToObj) {
+      query.date_obj = {};
+      if (dateFromObj) query.date_obj.$gte = dateFromObj;
+      if (dateToObj) query.date_obj.$lte = dateToObj;
+    }
+
+    if (filters.categories?.length) {
+      query['items.category'] = { $in: filters.categories };
+    } else if (filters.category) {
+      query['items.category'] = filters.category;
+    }
+
+    if (filters.price_min !== undefined || filters.price_max !== undefined) {
+      query.items_total = {};
+      if (filters.price_min !== undefined) query.items_total.$gte = filters.price_min;
+      if (filters.price_max !== undefined) query.items_total.$lte = filters.price_max;
+    }
+
+    if (filters.delivery_partner) {
+      query['delivery_partner.known_name'] = filters.delivery_partner;
+    }
+    if (filters.delivery_partners?.length) {
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $in: filters.delivery_partners
+      };
+    }
+
+    if (filters.order_no) {
+      query.order_no = { $regex: this.escapeRegex(filters.order_no), $options: 'i' };
+    }
+
+    if (filters.invoice_no) {
+      query.invoice_no = { $regex: this.escapeRegex(filters.invoice_no), $options: 'i' };
+    }
+
+    if (filters.search) {
+      const searchRegex = new RegExp(this.escapeRegex(filters.search), 'i');
+      query.$or = [
+        { order_no: searchRegex },
+        { invoice_no: searchRegex },
+        { 'items.description': searchRegex },
+        { 'delivery_partner.known_name': searchRegex }
+      ];
+    }
+
+    if (filters.item_search) {
+      query['items.description'] = { $regex: this.escapeRegex(filters.item_search), $options: 'i' };
+    }
+
+    const itemMatch: any = {};
+    if (filters.item_qty_min !== undefined) {
+      itemMatch.qty = { ...itemMatch.qty, $gte: filters.item_qty_min };
+    }
+    if (filters.item_qty_max !== undefined) {
+      itemMatch.qty = { ...itemMatch.qty, $lte: filters.item_qty_max };
+    }
+    if (filters.item_unit_price_min !== undefined) {
+      itemMatch.unit_price = { ...itemMatch.unit_price, $gte: filters.item_unit_price_min };
+    }
+    if (filters.item_unit_price_max !== undefined) {
+      itemMatch.unit_price = { ...itemMatch.unit_price, $lte: filters.item_unit_price_max };
+    }
+    if (Object.keys(itemMatch).length > 0) {
+      query.items = { $elemMatch: itemMatch };
+    }
+
+    if (filters.exclude_categories?.length) {
+      if (query['items.category']) {
+        query['items.category'] = { ...query['items.category'], $nin: filters.exclude_categories };
+      } else {
+        query['items.category'] = { $nin: filters.exclude_categories };
+      }
+    }
+
+    if (filters.exclude_delivery_partners?.length) {
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $nin: filters.exclude_delivery_partners
+      };
+    }
+
+    const pipeline: any[] = [{ $match: query }];
+
+    const needsDateFallback = !!dateFromObj || !!dateToObj;
+    if (needsDateFallback) {
+      pipeline.push({
+        $addFields: {
+          _parsed_date: {
+            $dateFromString: {
+              dateString: '$date',
+              format: '%d-%m-%Y',
+              onError: null,
+              onNull: null
+            }
+          },
+          date_obj: { $ifNull: ['$date_obj', '$_parsed_date'] }
+        }
+      });
+    }
+
+    const needsItemsCount =
+      filters.items_count_min !== undefined ||
+      filters.items_count_max !== undefined;
+    if (needsItemsCount) {
+      pipeline.push({ $addFields: { items_count: { $size: '$items' } } });
+      const itemsCountMatch: any = {};
+      if (filters.items_count_min !== undefined) {
+        itemsCountMatch.items_count = { ...itemsCountMatch.items_count, $gte: filters.items_count_min };
+      }
+      if (filters.items_count_max !== undefined) {
+        itemsCountMatch.items_count = { ...itemsCountMatch.items_count, $lte: filters.items_count_max };
+      }
+      pipeline.push({ $match: itemsCountMatch });
+    }
+
+    const needsDateParsing =
+      filters.day_of_week?.length ||
+      filters.month !== undefined ||
+      filters.year !== undefined ||
+      filters.is_weekend !== undefined;
+    if (needsDateParsing) {
+      pipeline.push({
+        $addFields: {
+          _parsed_date: {
+            $dateFromString: {
+              dateString: '$date',
+              format: '%d-%m-%Y',
+              onError: null,
+              onNull: null
+            }
+          }
+        }
+      });
+
+      if (filters.month !== undefined) {
+        pipeline.push({ $match: { $expr: { $eq: [{ $month: '$_parsed_date' }, filters.month] } } });
+      }
+      if (filters.year !== undefined) {
+        pipeline.push({ $match: { $expr: { $eq: [{ $year: '$_parsed_date' }, filters.year] } } });
+      }
+      if (filters.is_weekend !== undefined) {
+        const weekendDays = [1, 7];
+        const weekdayDays = [2, 3, 4, 5, 6];
+        pipeline.push({
+          $match: {
+            $expr: {
+              $in: [
+                { $dayOfWeek: '$_parsed_date' },
+                filters.is_weekend ? weekendDays : weekdayDays
+              ]
+            }
+          }
+        });
+      }
+      if (filters.day_of_week?.length) {
+        const mongoDays = filters.day_of_week.map(d => d + 1);
+        pipeline.push({ $match: { $expr: { $in: [{ $dayOfWeek: '$_parsed_date' }, mongoDays] } } });
+      }
+    }
+
+    if (filters.spending_pattern) {
+      const spendingMatch = await this.getSpendingPatternMatch(query, filters.spending_pattern);
+      if (spendingMatch) pipeline.push({ $match: spendingMatch });
+    }
+
+    pipeline.push({
+      $group: {
+        _id: null,
+        total_amount: { $sum: { $ifNull: ['$items_total', 0] } },
+        total_count: { $sum: 1 }
+      }
+    });
+
+    const res = await database.invoices.aggregate(pipeline).toArray();
+    const row = res[0] || { total_amount: 0, total_count: 0 };
+    return { total_amount: row.total_amount || 0, total_count: row.total_count || 0 };
+  }
+
   async getInvoiceById(id: string, userId: string, isAdmin: boolean): Promise<Invoice | null> {
     const query: any = { _id: new ObjectId(id) };
     
@@ -1023,6 +1220,196 @@ export class InvoiceService {
       limit,
       has_more: skip + data.length < total
     };
+  }
+
+  async aggregateItems(
+    filters: InvoiceFilters,
+    userId: string,
+    isAdmin: boolean
+  ): Promise<{ total_price: number; total_count: number }> {
+    // Base invoice match (same as getItems)
+    const query: any = {};
+    if (!isAdmin) {
+      query.user_id = userId;
+    } else if (filters.user_id) {
+      query.user_id = filters.user_id;
+    } else if (filters.username) {
+      query.username = filters.username;
+    }
+
+    const dateFromObj = this.parseDDMMYYYY(filters.date_from ?? null);
+    const dateToObj = this.parseDDMMYYYY(filters.date_to ?? null);
+    if (dateFromObj || dateToObj) {
+      query.date_obj = {};
+      if (dateFromObj) query.date_obj.$gte = dateFromObj;
+      if (dateToObj) query.date_obj.$lte = dateToObj;
+    }
+
+    if (filters.categories?.length) {
+      query['items.category'] = { $in: filters.categories };
+    } else if (filters.category) {
+      query['items.category'] = filters.category;
+    }
+
+    if (filters.delivery_partner) {
+      query['delivery_partner.known_name'] = filters.delivery_partner;
+    }
+    if (filters.delivery_partners?.length) {
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $in: filters.delivery_partners
+      };
+    }
+
+    if (filters.order_no) {
+      query.order_no = { $regex: this.escapeRegex(filters.order_no), $options: 'i' };
+    }
+    if (filters.invoice_no) {
+      query.invoice_no = { $regex: this.escapeRegex(filters.invoice_no), $options: 'i' };
+    }
+
+    if (filters.search) {
+      const searchRegex = new RegExp(this.escapeRegex(filters.search), 'i');
+      query.$or = [
+        { order_no: searchRegex },
+        { invoice_no: searchRegex },
+        { 'items.description': searchRegex },
+        { 'delivery_partner.known_name': searchRegex }
+      ];
+    }
+
+    if (filters.item_search) {
+      query['items.description'] = { $regex: this.escapeRegex(filters.item_search), $options: 'i' };
+    }
+
+    if (filters.exclude_categories?.length) {
+      if (query['items.category']) {
+        query['items.category'] = { ...query['items.category'], $nin: filters.exclude_categories };
+      } else {
+        query['items.category'] = { $nin: filters.exclude_categories };
+      }
+    }
+
+    if (filters.exclude_delivery_partners?.length) {
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $nin: filters.exclude_delivery_partners
+      };
+    }
+
+    const pipeline: any[] = [
+      { $match: query },
+      { $unwind: '$items' },
+      {
+        $project: {
+          qty: '$items.qty',
+          unit_price: '$items.unit_price',
+          price: '$items.price',
+          category: '$items.category',
+          date: 1,
+          date_obj: 1,
+          delivery_partner: '$delivery_partner.known_name'
+        }
+      }
+    ];
+
+    // Item-level filters after unwind
+    const itemFilters: any = {};
+    if (filters.item_qty_min !== undefined) {
+      itemFilters.qty = { ...itemFilters.qty, $gte: filters.item_qty_min };
+    }
+    if (filters.item_qty_max !== undefined) {
+      itemFilters.qty = { ...itemFilters.qty, $lte: filters.item_qty_max };
+    }
+    if (filters.item_unit_price_min !== undefined) {
+      itemFilters.unit_price = { ...itemFilters.unit_price, $gte: filters.item_unit_price_min };
+    }
+    if (filters.item_unit_price_max !== undefined) {
+      itemFilters.unit_price = { ...itemFilters.unit_price, $lte: filters.item_unit_price_max };
+    }
+    if (filters.price_min !== undefined) {
+      itemFilters.price = { ...itemFilters.price, $gte: filters.price_min };
+    }
+    if (filters.price_max !== undefined) {
+      itemFilters.price = { ...itemFilters.price, $lte: filters.price_max };
+    }
+
+    if (filters.categories?.length) {
+      itemFilters.category = { $in: filters.categories };
+    } else if (filters.category) {
+      itemFilters.category = filters.category;
+    }
+    if (filters.exclude_categories?.length) {
+      itemFilters.category = { ...itemFilters.category, $nin: filters.exclude_categories };
+    }
+
+    if (Object.keys(itemFilters).length > 0) {
+      pipeline.push({ $match: itemFilters });
+    }
+
+    const needsDateParsing =
+      filters.day_of_week?.length ||
+      filters.month !== undefined ||
+      filters.year !== undefined ||
+      filters.is_weekend !== undefined;
+    if (needsDateParsing) {
+      pipeline.push({
+        $addFields: {
+          _parsed_date: {
+            $dateFromString: {
+              dateString: '$date',
+              format: '%d-%m-%Y',
+              onError: null,
+              onNull: null
+            }
+          }
+        }
+      });
+
+      if (filters.month !== undefined) {
+        pipeline.push({ $match: { $expr: { $eq: [{ $month: '$_parsed_date' }, filters.month] } } });
+      }
+      if (filters.year !== undefined) {
+        pipeline.push({ $match: { $expr: { $eq: [{ $year: '$_parsed_date' }, filters.year] } } });
+      }
+      if (filters.is_weekend !== undefined) {
+        const weekendDays = [1, 7];
+        const weekdayDays = [2, 3, 4, 5, 6];
+        pipeline.push({
+          $match: {
+            $expr: {
+              $in: [
+                { $dayOfWeek: '$_parsed_date' },
+                filters.is_weekend ? weekendDays : weekdayDays
+              ]
+            }
+          }
+        });
+      }
+      if (filters.day_of_week?.length) {
+        const mongoDays = filters.day_of_week.map(d => d + 1);
+        pipeline.push({ $match: { $expr: { $in: [{ $dayOfWeek: '$_parsed_date' }, mongoDays] } } });
+      }
+    }
+
+    if (filters.spending_pattern) {
+      const threshold = await this.getItemSpendingPatternThreshold(query, filters.spending_pattern);
+      if (threshold) {
+        pipeline.push({ $match: { [threshold.field]: { [threshold.operator]: threshold.value } } });
+      }
+    }
+
+    pipeline.push({
+      $group: {
+        _id: null,
+        total_price: { $sum: { $ifNull: ['$price', 0] } },
+        total_count: { $sum: 1 }
+      }
+    });
+
+    const res = await database.invoices.aggregate(pipeline).toArray();
+    const row = res[0] || { total_price: 0, total_count: 0 };
+    return { total_price: row.total_price || 0, total_count: row.total_count || 0 };
   }
 }
 

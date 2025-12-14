@@ -70,6 +70,7 @@ export class ChartsComponent {
   monthlyTrendsOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     plugins: {
       legend: {
         display: true,
@@ -189,6 +190,7 @@ export class ChartsComponent {
   topCategoriesOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     indexAxis: 'y',
     plugins: {
       legend: {
@@ -282,6 +284,7 @@ export class ChartsComponent {
   topItemsOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     indexAxis: 'y',
     plugins: {
       legend: {

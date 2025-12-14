@@ -61,6 +61,7 @@ export class AdvancedChartsComponent {
   deliveryPartnerOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     plugins: {
       legend: {
         display: true,
@@ -145,6 +146,7 @@ export class AdvancedChartsComponent {
   avgOrderValueOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     plugins: {
       legend: {
         display: true,
@@ -242,6 +244,7 @@ export class AdvancedChartsComponent {
   itemsCountOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     plugins: {
       legend: {
         display: false
@@ -368,6 +371,7 @@ export class AdvancedChartsComponent {
   categoryMixOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     plugins: {
       legend: {
         display: true,
@@ -502,6 +506,7 @@ export class AdvancedChartsComponent {
   priceRangeOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false, // Disable animations for better dev tools performance
     plugins: {
       legend: {
         display: false

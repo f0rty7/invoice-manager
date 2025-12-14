@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap, tap, debounceTime, catchError } from 'rxjs/operators';
+import { switchMap, tap, debounceTime, catchError, filter, map } from 'rxjs/operators';
 import { of, Subscription } from 'rxjs';
 import { InvoiceService } from '../services/invoice.service';
 import type { Invoice, InvoiceFilters, InvoiceStats, FlatItem } from '@pdf-invoice/shared';
@@ -40,6 +40,10 @@ export class InvoiceStateService {
   private itemsHasMoreSignal = signal(false);
   private itemsLoadedSignal = signal(false); // Track if items have been loaded
 
+  // Aggregates (all filtered rows)
+  private invoiceAggregateSignal = signal<{ total_amount: number; total_count: number } | null>(null);
+  private itemsAggregateSignal = signal<{ total_price: number; total_count: number } | null>(null);
+
   // Computed: Full filters object (combines query + pagination)
   readonly filters = computed<InvoiceFilters>(() => ({
     ...this.invoiceQueryFiltersSignal(),
@@ -69,6 +73,8 @@ export class InvoiceStateService {
   readonly itemsTotal = this.itemsTotalSignal.asReadonly();
   readonly itemsHasMore = this.itemsHasMoreSignal.asReadonly();
   readonly activeTab = this.activeTabSignal.asReadonly();
+  readonly invoiceAggregate = this.invoiceAggregateSignal.asReadonly();
+  readonly itemsAggregate = this.itemsAggregateSignal.asReadonly();
 
   // Angular 21: Computed signals for derived state
   readonly totalAmount = computed(() => {
@@ -109,7 +115,7 @@ export class InvoiceStateService {
   });
 
   constructor() {
-    // FIXED: Use toObservable + switchMap for automatic request cancellation
+    // Use toObservable + switchMap for automatic request cancellation
     // Only tracks invoiceQueryFiltersSignal changes (NOT page changes)
     toObservable(this.invoiceQueryFiltersSignal).pipe(
       debounceTime(50), // Small debounce to batch rapid changes
@@ -140,6 +146,44 @@ export class InvoiceStateService {
         this.hasMoreSignal.set(response.data.has_more);
       }
       this.loadingSignal.set(false);
+    });
+
+    // Aggregate invoices totals (all filtered rows), cancel on filter changes
+    toObservable(this.invoiceQueryFiltersSignal).pipe(
+      debounceTime(100),
+      switchMap(queryFilters => {
+        const filters: InvoiceFilters = { ...queryFilters };
+        return this.invoiceService.aggregateInvoices(filters).pipe(
+          catchError(() => of(null))
+        );
+      }),
+      takeUntilDestroyed()
+    ).subscribe(res => {
+      if (res?.success && res.data) {
+        this.invoiceAggregateSignal.set(res.data);
+      } else {
+        this.invoiceAggregateSignal.set({ total_amount: 0, total_count: 0 });
+      }
+    });
+
+    // Aggregate items totals only when Items tab is active (cancel on changes)
+    // We map the active tab signal into the stream by reading it in filter() (runs on each emission).
+    toObservable(this.itemsQueryFiltersSignal).pipe(
+      debounceTime(100),
+      filter(() => this.activeTabSignal() === 'items'),
+      switchMap(queryFilters => {
+        const filters: InvoiceFilters = { ...queryFilters };
+        return this.invoiceService.aggregateItems(filters).pipe(
+          catchError(() => of(null))
+        );
+      }),
+      takeUntilDestroyed()
+    ).subscribe(res => {
+      if (res?.success && res.data) {
+        this.itemsAggregateSignal.set(res.data);
+      } else {
+        this.itemsAggregateSignal.set({ total_price: 0, total_count: 0 });
+      }
     });
   }
 
@@ -173,6 +217,10 @@ export class InvoiceStateService {
 
   setActiveTab(tab: 'invoices' | 'items'): void {
     this.activeTabSignal.set(tab);
+    if (tab === 'items') {
+      // Trigger totals computation on first switch even if filters didn't change
+      this.itemsQueryFiltersSignal.update(v => ({ ...v }));
+    }
   }
 
   nextPage(): void {

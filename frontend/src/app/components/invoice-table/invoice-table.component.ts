@@ -75,6 +75,7 @@ export class InvoiceTableComponent {
   total = this.invoiceState.total;
   hasMore = this.invoiceState.hasMore;
   filters = this.invoiceState.filters;
+  aggregate = this.invoiceState.invoiceAggregate;
   
   @Input() showUploader = false;
 

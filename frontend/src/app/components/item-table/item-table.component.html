@@ -61,6 +61,15 @@
           </table>
         </cdk-virtual-scroll-viewport>
 
+        <div class="table-footer">
+          <div class="footer-left">
+            Total (filtered): <strong>₹{{ (aggregate()?.total_price || 0).toFixed(2) }}</strong>
+          </div>
+          <div class="footer-right">
+            Count: <strong>{{ aggregate()?.total_count || 0 }}</strong>
+          </div>
+        </div>
+
         @if (loadingMore()) {
           <div class="loading-more">
             <mat-spinner diameter="30"></mat-spinner>

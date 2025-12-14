@@ -36,11 +36,15 @@ export interface Invoice {
   order_no: string | string[] | null;
   invoice_no: string | null;
   date: string | null;
+  // NEW: Parsed Date for correct sorting/filtering (preferred over `date` string)
+  date_obj?: Date | null;
   user_id?: string;
   username?: string;
   delivery_partner: DeliveryPartner | null;
   items: InvoiceItem[];
   items_total: number | null;
+  // NEW: Pre-computed item count for fast filtering/sorting
+  items_count?: number;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -95,10 +99,12 @@ export interface InvoiceFilters {
   limit?: number;
   // Phase 1: Quick Wins
   delivery_partner?: string;
+  // NEW: Multi-select partners (inclusion)
+  delivery_partners?: string[];
   search?: string;              // Combined text search
   order_no?: string;            // Direct order search
   invoice_no?: string;          // Direct invoice search
-  sort_by?: 'date' | 'total' | 'items_count' | 'delivery_partner';
+  sort_by?: 'date' | 'total' | 'items_count' | 'delivery_partner' | 'price' | 'qty' | 'category';
   sort_dir?: 'asc' | 'desc';
   // Phase 2: Core Enhancements
   categories?: string[];        // Multi-select categories
@@ -153,5 +159,16 @@ export interface SavedFilter {
   is_default?: boolean;
   created_at?: Date;
   updated_at?: Date;
+}
+
+// Filter options (for header multi-select menus)
+export interface FilterOption {
+  value: string;
+  count: number;
+}
+
+export interface FilterOptionsResponse {
+  partners: FilterOption[];
+  categories: FilterOption[];
 }
 

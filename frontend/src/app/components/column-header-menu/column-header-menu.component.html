@@ -1,0 +1,15 @@
+<div class="header-menu">
+  <span class="label">{{ label }}</span>
+  <button
+    type="button"
+    mat-icon-button
+    class="icon-btn"
+    [class.active]="active"
+    [matTooltip]="tooltip"
+    (click)="onOpenClick($event)">
+    <mat-icon>{{ active ? 'filter_alt' : 'filter_alt_off' }}</mat-icon>
+  </button>
+</div>
+
+
+

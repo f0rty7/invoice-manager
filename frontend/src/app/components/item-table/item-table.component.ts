@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, inject, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, signal, ViewChild, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,11 +6,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { map, filter as rxFilter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
+import { InvoiceService } from '../../services/invoice.service';
+import { ColumnHeaderMenuComponent } from '../column-header-menu/column-header-menu.component';
+import { ColumnFilterDialogComponent, type SortDir } from '../column-filter-dialog/column-filter-dialog.component';
 import type { FlatItem } from '@pdf-invoice/shared';
+import type { FilterOption, InvoiceFilters } from '@pdf-invoice/shared';
 
-type SortColumn = 'date' | 'delivery_partner' | 'price' | 'qty';
+type SortColumn = 'date' | 'delivery_partner' | 'price' | 'qty' | 'category';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
@@ -24,7 +31,9 @@ type SortDirection = 'asc' | 'desc';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    ScrollingModule
+    ScrollingModule,
+    MatDialogModule,
+    ColumnHeaderMenuComponent
   ],
   templateUrl: './item-table.component.html',
   styleUrls: ['./item-table.component.scss'],
@@ -32,6 +41,26 @@ type SortDirection = 'asc' | 'desc';
 })
 export class ItemTableComponent {
   private invoiceState = inject(InvoiceStateService);
+  private invoiceService = inject(InvoiceService);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
+
+  private viewportSub: Subscription | null = null;
+
+  @ViewChild(CdkVirtualScrollViewport)
+  set viewport(vp: CdkVirtualScrollViewport | undefined) {
+    if (!vp) return;
+    // This can appear after initial render (e.g., when loading finishes), so attach here.
+    this.viewportSub?.unsubscribe();
+    this.viewportSub = vp.renderedRangeStream.pipe(
+      map(r => r.end),
+      rxFilter(() => this.hasMore() && !this.loadingMore()),
+      rxFilter(end => {
+        const len = vp.getDataLength();
+        return len > 0 && end >= len - 10;
+      })
+    ).subscribe(() => this.invoiceState.loadMoreItems());
+  }
 
   items = this.invoiceState.items;
   loading = this.invoiceState.itemsLoading;
@@ -39,94 +68,228 @@ export class ItemTableComponent {
   error = this.invoiceState.itemsError;
   total = this.invoiceState.itemsTotal;
   hasMore = this.invoiceState.itemsHasMore;
+  itemsFilters = this.invoiceState.itemsFilters;
 
   readonly displayedColumns = ['delivery_partner', 'date', 'order_no', 'description', 'category', 'qty', 'price'] as const;
 
-  // Start with no sort selected (neutral UI). User can click headers to sort locally.
-  private sortState = signal<{ column: SortColumn; direction: SortDirection } | null>(null);
-
-  readonly sortedItems = computed(() => {
-    const data = [...this.items()];
-    const sort = this.sortState();
-
-    if (!sort) return data;
-
-    return data.sort((a, b) => {
-      const direction = sort.direction === 'asc' ? 1 : -1;
-
-      switch (sort.column) {
-        case 'date': {
-          const aDate = this.parseDateMs(a.date);
-          const bDate = this.parseDateMs(b.date);
-          return (aDate - bDate) * direction;
-        }
-        case 'delivery_partner': {
-          const aName = a.delivery_partner?.toLowerCase() || '';
-          const bName = b.delivery_partner?.toLowerCase() || '';
-          return aName.localeCompare(bName) * direction;
-        }
-        case 'price': {
-          const aPrice = a.price ?? 0;
-          const bPrice = b.price ?? 0;
-          return (aPrice - bPrice) * direction;
-        }
-        case 'qty': {
-          return (a.qty - b.qty) * direction;
-        }
-        default:
-          return 0;
-      }
-    });
+  readonly currentSort = computed<{ column: SortColumn; direction: SortDirection } | null>(() => {
+    const f = this.itemsFilters();
+    const column = f.sort_by as SortColumn | undefined;
+    const direction = f.sort_dir as SortDirection | undefined;
+    if (!column || !direction) return null;
+    return { column, direction };
   });
 
-  toggleSort(column: SortColumn): void {
-    this.sortState.update(current => {
-      if (current?.column === column) {
-        const nextDirection: SortDirection = current.direction === 'asc' ? 'desc' : 'asc';
-        return { column, direction: nextDirection };
-      }
-      return { column, direction: 'asc' };
-    });
-  }
-
-  getSortIcon(column: SortColumn): string {
-    const sort = this.sortState();
-    if (!sort || sort.column !== column) return 'unfold_more';
-    return sort.direction === 'asc' ? 'arrow_upward' : 'arrow_downward';
-  }
-
   getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {
-    const sort = this.sortState();
+    const sort = this.currentSort();
     if (!sort || sort.column !== column) return 'none';
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  private parseDateMs(dateStr: string | null | undefined): number {
-    if (!dateStr) return 0;
-    if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
-      const parsed = Date.parse(dateStr);
-      return Number.isNaN(parsed) ? 0 : parsed;
-    }
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-      const [dd, mm, yyyy] = parts;
-      const isoLike = `${yyyy}-${mm}-${dd}`;
-      const parsed = Date.parse(isoLike);
-      return Number.isNaN(parsed) ? 0 : parsed;
-    }
-    const fallback = Date.parse(dateStr);
-    return Number.isNaN(fallback) ? 0 : fallback;
+  partnerOptions = signal<FilterOption[]>([]);
+  categoryOptions = signal<FilterOption[]>([]);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.viewportSub?.unsubscribe());
+    this.invoiceService.getFilterOptions().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.partnerOptions.set(res.data.partners);
+          this.categoryOptions.set(res.data.categories);
+        }
+      },
+      error: () => {
+        this.partnerOptions.set([]);
+        this.categoryOptions.set([]);
+      }
+    });
   }
 
-  onScroll(event: Event): void {
-    const element = event.target as HTMLElement;
-    const threshold = 200;
-    const distanceFromBottom = element.scrollHeight - element.scrollTop - element.clientHeight;
-    
-    if (distanceFromBottom < threshold && this.hasMore() && !this.loadingMore()) {
-      this.invoiceState.loadMoreItems();
+  readonly rowHeightPx = 56;
+  readonly viewportHeightPx = 520;
+
+  // loadMore is attached in the @ViewChild setter once the viewport exists.
+
+  isColumnActive(column: SortColumn): boolean {
+    const f = this.itemsFilters();
+    const sort = this.currentSort();
+    const isSorted = sort?.column === column;
+    switch (column) {
+      case 'delivery_partner':
+        return isSorted || !!(f.delivery_partners?.length) || !!f.delivery_partner;
+      case 'category':
+        return isSorted || !!(f.categories?.length);
+      case 'date':
+        return isSorted || !!f.date_from || !!f.date_to;
+      case 'qty':
+        return isSorted || f.item_qty_min !== undefined || f.item_qty_max !== undefined;
+      case 'price':
+        return isSorted || f.price_min !== undefined || f.price_max !== undefined;
+      default:
+        return isSorted;
     }
   }
+
+  private applySortPatch(next: any, sortByForColumn: InvoiceFilters['sort_by'], sortDir: SortDir): void {
+    if (sortDir) {
+      next.sort_by = sortByForColumn;
+      next.sort_dir = sortDir;
+    } else if (next.sort_by === sortByForColumn) {
+      delete next.sort_by;
+      delete next.sort_dir;
+    }
+  }
+
+  openPartnerDialog(): void {
+    const f = this.itemsFilters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'delivery_partner' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Partner',
+        kind: 'multiselect',
+        sortDir,
+        options: this.partnerOptions(),
+        selected: f.delivery_partners ?? (f.delivery_partner ? [f.delivery_partner] : [])
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.itemsFilters() };
+      this.applySortPatch(next, 'delivery_partner', result.sortDir);
+
+      const selected = (result.selected ?? []).filter(Boolean);
+      if (selected.length) next.delivery_partners = selected;
+      else delete next.delivery_partners;
+      delete next.delivery_partner;
+
+      this.invoiceState.setItemsFilters(next);
+    });
+  }
+
+  openCategoryDialog(): void {
+    const f = this.itemsFilters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'category' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Category',
+        kind: 'multiselect',
+        sortDir,
+        options: this.categoryOptions(),
+        selected: f.categories ?? []
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.itemsFilters() };
+      this.applySortPatch(next, 'category', result.sortDir);
+
+      const selected = (result.selected ?? []).filter(Boolean);
+      if (selected.length) next.categories = selected;
+      else delete next.categories;
+
+      this.invoiceState.setItemsFilters(next);
+    });
+  }
+
+  openDateDialog(): void {
+    const f = this.itemsFilters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'date' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Date',
+        kind: 'daterange',
+        sortDir,
+        dateFrom: f.date_from ?? null,
+        dateTo: f.date_to ?? null
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.itemsFilters() };
+      this.applySortPatch(next, 'date', result.sortDir);
+
+      if (result.dateFrom) next.date_from = result.dateFrom;
+      else delete next.date_from;
+      if (result.dateTo) next.date_to = result.dateTo;
+      else delete next.date_to;
+
+      this.invoiceState.setItemsFilters(next);
+    });
+  }
+
+  openQtyDialog(): void {
+    const f = this.itemsFilters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'qty' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Qty',
+        kind: 'numberrange',
+        sortDir,
+        min: (f.item_qty_min ?? null) as any,
+        max: (f.item_qty_max ?? null) as any
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.itemsFilters() };
+      this.applySortPatch(next, 'qty', result.sortDir);
+
+      if (result.min !== null && result.min !== undefined) next.item_qty_min = Number(result.min);
+      else delete next.item_qty_min;
+      if (result.max !== null && result.max !== undefined) next.item_qty_max = Number(result.max);
+      else delete next.item_qty_max;
+
+      this.invoiceState.setItemsFilters(next);
+    });
+  }
+
+  openPriceDialog(): void {
+    const f = this.itemsFilters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'price' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Price',
+        kind: 'numberrange',
+        sortDir,
+        min: (f.price_min ?? null) as any,
+        max: (f.price_max ?? null) as any
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.itemsFilters() };
+      this.applySortPatch(next, 'price', result.sortDir);
+
+      if (result.min !== null && result.min !== undefined) next.price_min = Number(result.min);
+      else delete next.price_min;
+      if (result.max !== null && result.max !== undefined) next.price_max = Number(result.max);
+      else delete next.price_max;
+
+      this.invoiceState.setItemsFilters(next);
+    });
+  }
+
+  // Load-more is triggered via virtual-scroll viewport near-end detection.
 
   trackByItem(index: number, item: FlatItem): string {
     return `${item.invoice_id}-${item.sr}`;

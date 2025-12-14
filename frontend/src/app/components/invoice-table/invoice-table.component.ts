@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, inject, computed, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, Input, ViewChild, DestroyRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,9 +7,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { map, filter as rxFilter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
+import { InvoiceService } from '../../services/invoice.service';
+import { ColumnHeaderMenuComponent } from '../column-header-menu/column-header-menu.component';
+import { ColumnFilterDialogComponent, type SortDir } from '../column-filter-dialog/column-filter-dialog.component';
+import { InvoiceItemsDialogComponent } from '../invoice-items-dialog/invoice-items-dialog.component';
 import type { Invoice, InvoiceFilters } from '@pdf-invoice/shared';
+import type { FilterOption } from '@pdf-invoice/shared';
 
 // Sort columns that map to server-side sort_by values
 type SortColumn = 'date' | 'delivery_partner' | 'items_count' | 'total';
@@ -27,7 +35,9 @@ type SortDirection = 'asc' | 'desc';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    ScrollingModule
+    ScrollingModule,
+    MatDialogModule,
+    ColumnHeaderMenuComponent
   ],
   templateUrl: './invoice-table.component.html',
   styleUrls: ['./invoice-table.component.scss'],
@@ -36,6 +46,26 @@ type SortDirection = 'asc' | 'desc';
 
 export class InvoiceTableComponent {
   private invoiceState = inject(InvoiceStateService);
+  private invoiceService = inject(InvoiceService);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
+
+  private viewportSub: Subscription | null = null;
+
+  @ViewChild(CdkVirtualScrollViewport)
+  set viewport(vp: CdkVirtualScrollViewport | undefined) {
+    if (!vp) return;
+    // This can appear after initial render (e.g., when loading finishes), so attach here.
+    this.viewportSub?.unsubscribe();
+    this.viewportSub = vp.renderedRangeStream.pipe(
+      map(r => r.end),
+      rxFilter(() => this.hasMore() && !this.loadingMore()),
+      rxFilter(end => {
+        const len = vp.getDataLength();
+        return len > 0 && end >= len - 10;
+      })
+    ).subscribe(() => this.invoiceState.loadMoreInvoices());
+  }
 
   // OPTIMIZED: Use server-sorted data directly instead of client-side sorting
   invoices = this.invoiceState.invoices;
@@ -70,67 +100,209 @@ export class InvoiceTableComponent {
     return { column, direction };
   });
 
-  expandedInvoice = signal<string | null>(null);
-
-  // OPTIMIZED: Request server-side sorting instead of client-side
-  toggleSort(column: SortColumn): void {
-    const current = this.currentSort();
-    const newDirection: SortDirection =
-      current?.column === column && current.direction === 'asc' ? 'desc' : 'asc';
-    
-    // Update filters to trigger server-side sort
-    this.invoiceState.setFilters({
-      ...this.filters(),
-      sort_by: column,
-      sort_dir: newDirection
-    });
-  }
-
-  isSorted(column: SortColumn, direction?: SortDirection): boolean {
-    const sort = this.currentSort();
-    if (!sort) return false;
-    if (direction) return sort.column === column && sort.direction === direction;
-    return sort.column === column;
-  }
-
-  getSortIcon(column: SortColumn): string {
-    const sort = this.currentSort();
-    if (!sort || sort.column !== column) return 'unfold_more';
-    return sort.direction === 'asc' ? 'arrow_upward' : 'arrow_downward';
-  }
-
   getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {
     const sort = this.currentSort();
     if (!sort || sort.column !== column) return 'none';
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  toggleExpand(invoiceId: string, event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    requestAnimationFrame(() => {
-      document.getElementById(invoiceId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Filter options for header dialogs
+  partnerOptions = signal<FilterOption[]>([]);
+
+  readonly rowHeightPx = 56;
+  readonly viewportHeightPx = 520;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.viewportSub?.unsubscribe());
+    this.invoiceService.getFilterOptions().subscribe({
+      next: (res) => {
+        if (res.success && res.data) this.partnerOptions.set(res.data.partners);
+      },
+      error: () => {
+        this.partnerOptions.set([]);
+      }
     });
-    if (this.expandedInvoice() === invoiceId) {
-      this.expandedInvoice.set(null);
-    } else {
-      this.expandedInvoice.set(invoiceId);
+  }
+
+  isColumnActive(column: SortColumn): boolean {
+    const f = this.filters();
+    const sort = this.currentSort();
+    const isSorted = sort?.column === column;
+    switch (column) {
+      case 'date':
+        return isSorted || !!f.date_from || !!f.date_to;
+      case 'delivery_partner':
+        return isSorted || !!f.delivery_partner || !!(f.delivery_partners?.length);
+      case 'items_count':
+        return isSorted || f.items_count_min !== undefined || f.items_count_max !== undefined;
+      case 'total':
+        return isSorted || f.price_min !== undefined || f.price_max !== undefined;
+      default:
+        return isSorted;
     }
   }
 
-  isExpanded(invoiceId: string): boolean {
-    return this.expandedInvoice() === invoiceId;
+  openDateDialog(): void {
+    const f = this.filters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'date' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Date',
+        kind: 'daterange',
+        sortDir,
+        dateFrom: f.date_from ?? null,
+        dateTo: f.date_to ?? null
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.filters() };
+
+      // Sort for this column
+      if (result.sortDir) {
+        next.sort_by = 'date';
+        next.sort_dir = result.sortDir;
+      } else if (next.sort_by === 'date') {
+        delete next.sort_by;
+        delete next.sort_dir;
+      }
+
+      // Date range
+      if (result.dateFrom) next.date_from = result.dateFrom;
+      else delete next.date_from;
+      if (result.dateTo) next.date_to = result.dateTo;
+      else delete next.date_to;
+
+      this.invoiceState.setInvoiceFilters(next);
+    });
   }
 
-  onScroll(event: Event): void {
-    const element = event.target as HTMLElement;
-    const threshold = 200; // pixels from bottom to trigger load
-    const distanceFromBottom = element.scrollHeight - element.scrollTop - element.clientHeight;
-    
-    if (distanceFromBottom < threshold && this.hasMore() && !this.loadingMore()) {
-      this.invoiceState.loadMoreInvoices();
-    }
+  openPartnerDialog(): void {
+    const f = this.filters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'delivery_partner' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Partner',
+        kind: 'multiselect',
+        sortDir,
+        options: this.partnerOptions(),
+        selected: f.delivery_partners ?? (f.delivery_partner ? [f.delivery_partner] : [])
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.filters() };
+
+      if (result.sortDir) {
+        next.sort_by = 'delivery_partner';
+        next.sort_dir = result.sortDir;
+      } else if (next.sort_by === 'delivery_partner') {
+        delete next.sort_by;
+        delete next.sort_dir;
+      }
+
+      const selected = (result.selected ?? []).filter(Boolean);
+      if (selected.length) {
+        next.delivery_partners = selected;
+      } else {
+        delete next.delivery_partners;
+      }
+      // Keep legacy single partner cleared when using multiselect
+      delete next.delivery_partner;
+
+      this.invoiceState.setInvoiceFilters(next);
+    });
+  }
+
+  openItemsCountDialog(): void {
+    const f = this.filters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'items_count' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Items',
+        kind: 'numberrange',
+        sortDir,
+        min: (f.items_count_min ?? null) as any,
+        max: (f.items_count_max ?? null) as any
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.filters() };
+
+      if (result.sortDir) {
+        next.sort_by = 'items_count';
+        next.sort_dir = result.sortDir;
+      } else if (next.sort_by === 'items_count') {
+        delete next.sort_by;
+        delete next.sort_dir;
+      }
+
+      if (result.min !== null && result.min !== undefined) next.items_count_min = Number(result.min);
+      else delete next.items_count_min;
+      if (result.max !== null && result.max !== undefined) next.items_count_max = Number(result.max);
+      else delete next.items_count_max;
+
+      this.invoiceState.setInvoiceFilters(next);
+    });
+  }
+
+  openTotalDialog(): void {
+    const f = this.filters();
+    const sort = this.currentSort();
+    const sortDir: SortDir = sort?.column === 'total' ? sort.direction : '';
+
+    const ref = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Total',
+        kind: 'numberrange',
+        sortDir,
+        min: (f.price_min ?? null) as any,
+        max: (f.price_max ?? null) as any
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+      const next: any = { ...this.filters() };
+
+      if (result.sortDir) {
+        next.sort_by = 'total';
+        next.sort_dir = result.sortDir;
+      } else if (next.sort_by === 'total') {
+        delete next.sort_by;
+        delete next.sort_dir;
+      }
+
+      if (result.min !== null && result.min !== undefined) next.price_min = Number(result.min);
+      else delete next.price_min;
+      if (result.max !== null && result.max !== undefined) next.price_max = Number(result.max);
+      else delete next.price_max;
+
+      this.invoiceState.setInvoiceFilters(next);
+    });
+  }
+
+  openInvoiceItems(invoice: Invoice, event?: Event): void {
+    event?.stopPropagation();
+    this.dialog.open(InvoiceItemsDialogComponent, {
+      width: '980px',
+      maxWidth: '95vw',
+      data: { invoice }
+    });
   }
 
   deleteInvoice(invoice: Invoice, event: Event): void {

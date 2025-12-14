@@ -7,15 +7,15 @@ mat-card-content { padding: 0 !important; }
 }
 .error-container mat-icon { color: var(--accent-danger); opacity: 1; }
 .table-container { 
-  overflow: auto; 
-  max-height: calc(100dvh - 300px);
+  overflow: hidden;
   min-height: 400px;
 }
 .item-table {
   width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
   th { font-weight: 600 !important; color: var(--text-muted) !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; background: var(--bg-secondary) !important; padding: var(--spacing-md) !important; z-index: 10; }
   td { padding: var(--spacing-md) !important; font-size: 14px !important; }
-  .sortable-content { cursor: pointer; display: inline-flex; align-items: center; gap: var(--spacing-xs); mat-icon { font-size: 16px; width: 16px; height: 16px; } &:hover mat-icon { color: var(--accent-primary); } }
   .item-row { &:hover { background: var(--bg-secondary) !important; } }
   .sr-no { font-weight: 600; color: var(--accent-primary); font-family: monospace; font-size: 12px; padding: 2px 8px; background: var(--accent-primary-light); border-radius: var(--radius-sm); display: inline-block; }
   .order-no { font-weight: 600; color: var(--accent-primary); font-family: monospace; font-size: 13px; }
@@ -23,6 +23,18 @@ mat-card-content { padding: 0 !important; }
   .item-description { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .unit-price { color: var(--text-secondary); }
   .total-amount { font-weight: 600; color: var(--accent-success); }
+}
+
+.header-table {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.viewport {
+  width: 100%;
+}
+
+.body-table td, .body-table th {
+  border-bottom: 1px solid var(--border-light);
 }
 .loading-more {
   display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); padding: var(--spacing-lg); color: var(--text-secondary); font-size: 14px;

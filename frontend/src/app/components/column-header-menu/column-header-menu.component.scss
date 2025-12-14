@@ -1,0 +1,16 @@
+.header-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+.icon-btn.active mat-icon {
+  color: var(--mat-sys-primary, currentColor);
+}
+
+
+

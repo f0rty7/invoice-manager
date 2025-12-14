@@ -1,0 +1,33 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 720px;
+  max-width: 100%;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.meta-row {
+  display: flex;
+  gap: 8px;
+}
+
+.k {
+  color: rgba(0, 0, 0, 0.6);
+  min-width: 64px;
+}
+
+.v {
+  font-weight: 500;
+}
+
+.items-table {
+  width: 100%;
+}
+
+

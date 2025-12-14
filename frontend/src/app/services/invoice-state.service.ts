@@ -14,10 +14,11 @@ type QueryFilters = Omit<InvoiceFilters, 'page' | 'limit'>;
 export class InvoiceStateService {
   private invoiceService = inject(InvoiceService);
 
-  // FIXED: Separate query filters from pagination to prevent effect/loadMore conflict
-  private queryFiltersSignal = signal<QueryFilters>({});
-  private pageSignal = signal(1);
+  // Separate query filters from pagination (and split invoices vs items)
+  private invoiceQueryFiltersSignal = signal<QueryFilters>({});
+  private invoicePageSignal = signal(1);
   private limitSignal = signal(20);
+  private activeTabSignal = signal<'invoices' | 'items'>('invoices');
 
   // Angular 21: State signals - Invoices
   private invoicesSignal = signal<Invoice[]>([]);
@@ -30,6 +31,7 @@ export class InvoiceStateService {
 
   // Angular 21: State signals - Items
   private itemsSignal = signal<FlatItem[]>([]);
+  private itemsQueryFiltersSignal = signal<QueryFilters>({});
   private itemsPageSignal = signal(1);
   private itemsLoadingSignal = signal(false);
   private itemsLoadingMoreSignal = signal(false);
@@ -40,8 +42,8 @@ export class InvoiceStateService {
 
   // Computed: Full filters object (combines query + pagination)
   readonly filters = computed<InvoiceFilters>(() => ({
-    ...this.queryFiltersSignal(),
-    page: this.pageSignal(),
+    ...this.invoiceQueryFiltersSignal(),
+    page: this.invoicePageSignal(),
     limit: this.limitSignal()
   }));
 
@@ -57,7 +59,7 @@ export class InvoiceStateService {
   // Angular 21: Public readonly signals - Items
   readonly items = this.itemsSignal.asReadonly();
   readonly itemsFilters = computed<InvoiceFilters>(() => ({
-    ...this.queryFiltersSignal(),
+    ...this.itemsQueryFiltersSignal(),
     page: this.itemsPageSignal(),
     limit: this.limitSignal()
   }));
@@ -66,6 +68,7 @@ export class InvoiceStateService {
   readonly itemsError = this.itemsErrorSignal.asReadonly();
   readonly itemsTotal = this.itemsTotalSignal.asReadonly();
   readonly itemsHasMore = this.itemsHasMoreSignal.asReadonly();
+  readonly activeTab = this.activeTabSignal.asReadonly();
 
   // Angular 21: Computed signals for derived state
   readonly totalAmount = computed(() => {
@@ -92,7 +95,7 @@ export class InvoiceStateService {
   // Angular 21: Computed signal for page info
   readonly pageInfo = computed(() => {
     const total = this.totalSignal();
-    const currentPage = this.pageSignal();
+    const currentPage = this.invoicePageSignal();
     const limit = this.limitSignal();
     
     return {
@@ -107,14 +110,13 @@ export class InvoiceStateService {
 
   constructor() {
     // FIXED: Use toObservable + switchMap for automatic request cancellation
-    // Only tracks queryFiltersSignal changes (NOT page changes)
-    toObservable(this.queryFiltersSignal).pipe(
+    // Only tracks invoiceQueryFiltersSignal changes (NOT page changes)
+    toObservable(this.invoiceQueryFiltersSignal).pipe(
       debounceTime(50), // Small debounce to batch rapid changes
       tap(() => {
         this.loadingSignal.set(true);
         this.errorSignal.set(null);
-        this.pageSignal.set(1); // Reset page on filter change
-        this.itemsLoadedSignal.set(false); // Reset items loaded flag
+        this.invoicePageSignal.set(1); // Reset invoice page on invoice filter change
       }),
       switchMap(queryFilters => {
         const fullFilters: InvoiceFilters = {
@@ -122,7 +124,7 @@ export class InvoiceStateService {
           page: 1,
           limit: this.limitSignal()
         };
-        return this.invoiceService.getInvoices(fullFilters).pipe(
+        return this.invoiceService.searchInvoices(fullFilters).pipe(
           catchError(err => {
             this.errorSignal.set(err.error?.error || 'Failed to load invoices');
             this.loadingSignal.set(false);
@@ -142,12 +144,12 @@ export class InvoiceStateService {
   }
 
   // Angular 21: Signal update methods
-  setFilters(filters: Partial<InvoiceFilters>): void {
+  setInvoiceFilters(filters: Partial<InvoiceFilters>): void {
     // Extract page/limit if provided, otherwise use defaults
     const { page, limit, ...queryFilters } = filters;
     
     // Update query filters (this triggers the effect for loading)
-    this.queryFiltersSignal.set(queryFilters);
+    this.invoiceQueryFiltersSignal.set(queryFilters);
     
     // Optionally update limit if provided
     if (limit !== undefined) {
@@ -155,22 +157,35 @@ export class InvoiceStateService {
     }
   }
 
+  // Backward-compatible alias (existing callers use setFilters/resetFilters)
+  setFilters(filters: Partial<InvoiceFilters>): void {
+    this.setInvoiceFilters(filters);
+  }
+
+  resetInvoiceFilters(): void {
+    this.invoiceQueryFiltersSignal.set({});
+    this.invoicePageSignal.set(1);
+  }
+
   resetFilters(): void {
-    this.queryFiltersSignal.set({});
-    this.pageSignal.set(1);
+    this.resetInvoiceFilters();
+  }
+
+  setActiveTab(tab: 'invoices' | 'items'): void {
+    this.activeTabSignal.set(tab);
   }
 
   nextPage(): void {
     if (this.hasMoreSignal()) {
-      this.pageSignal.update(p => p + 1);
+      this.invoicePageSignal.update(p => p + 1);
       this.loadInvoicesForCurrentPage();
     }
   }
 
   previousPage(): void {
-    const currentPage = this.pageSignal();
+    const currentPage = this.invoicePageSignal();
     if (currentPage > 1) {
-      this.pageSignal.update(p => p - 1);
+      this.invoicePageSignal.update(p => p - 1);
       this.loadInvoicesForCurrentPage();
     }
   }
@@ -181,12 +196,12 @@ export class InvoiceStateService {
     this.errorSignal.set(null);
 
     const fullFilters: InvoiceFilters = {
-      ...this.queryFiltersSignal(),
-      page: this.pageSignal(),
+      ...this.invoiceQueryFiltersSignal(),
+      page: this.invoicePageSignal(),
       limit: this.limitSignal()
     };
 
-    this.invoiceService.getInvoices(fullFilters).subscribe({
+    this.invoiceService.searchInvoices(fullFilters).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           this.invoicesSignal.set(response.data.data);
@@ -239,21 +254,21 @@ export class InvoiceStateService {
     if (this.loadingMoreSignal() || !this.hasMoreSignal()) return;
 
     this.loadingMoreSignal.set(true);
-    const nextPage = this.pageSignal() + 1;
+    const nextPage = this.invoicePageSignal() + 1;
 
     const fullFilters: InvoiceFilters = {
-      ...this.queryFiltersSignal(),
+      ...this.invoiceQueryFiltersSignal(),
       page: nextPage,
       limit: this.limitSignal()
     };
 
-    this.invoiceService.getInvoices(fullFilters).subscribe({
+    this.invoiceService.searchInvoices(fullFilters).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           // Append to existing data
           this.invoicesSignal.update(current => [...current, ...response.data!.data]);
           // Update page WITHOUT triggering effect (pageSignal is separate)
-          this.pageSignal.set(nextPage);
+          this.invoicePageSignal.set(nextPage);
           this.hasMoreSignal.set(response.data.has_more);
         }
         this.loadingMoreSignal.set(false);
@@ -273,13 +288,13 @@ export class InvoiceStateService {
 
   setItemsFilters(filters: Partial<InvoiceFilters>): void {
     const { page, limit, ...queryFilters } = filters;
-    // Items use the same query filters as invoices
-    this.queryFiltersSignal.set(queryFilters);
+    this.itemsQueryFiltersSignal.set(queryFilters);
     this.itemsPageSignal.set(1);
     this.loadItems();
   }
 
   resetItemsFilters(): void {
+    this.itemsQueryFiltersSignal.set({});
     this.itemsPageSignal.set(1);
     this.loadItems();
   }
@@ -289,12 +304,12 @@ export class InvoiceStateService {
     this.itemsErrorSignal.set(null);
 
     const fullFilters: InvoiceFilters = {
-      ...this.queryFiltersSignal(),
+      ...this.itemsQueryFiltersSignal(),
       page: this.itemsPageSignal(),
       limit: this.limitSignal()
     };
 
-    this.invoiceService.getItems(fullFilters).subscribe({
+    this.invoiceService.searchItems(fullFilters).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           this.itemsSignal.set(response.data.data);
@@ -318,12 +333,12 @@ export class InvoiceStateService {
     const nextPage = this.itemsPageSignal() + 1;
 
     const fullFilters: InvoiceFilters = {
-      ...this.queryFiltersSignal(),
+      ...this.itemsQueryFiltersSignal(),
       page: nextPage,
       limit: this.limitSignal()
     };
 
-    this.invoiceService.getItems(fullFilters).subscribe({
+    this.invoiceService.searchItems(fullFilters).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           this.itemsSignal.update(current => [...current, ...response.data!.data]);

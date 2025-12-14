@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<div mat-dialog-content class="content">
+  <div class="section">
+    <div class="section-title">Sort</div>
+    <mat-button-toggle-group
+      [value]="sortDir()"
+      (change)="onSortChange($event)"
+      aria-label="Sort direction">
+      <mat-button-toggle value="">None</mat-button-toggle>
+      <mat-button-toggle value="asc">Asc</mat-button-toggle>
+      <mat-button-toggle value="desc">Desc</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Filter</div>
+
+    @if (data.kind === 'multiselect') {
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Search</mat-label>
+        <input matInput [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+        <button mat-icon-button matSuffix type="button" (click)="searchText.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="options">
+        @for (opt of filteredOptions(); track opt.value) {
+          <mat-checkbox
+            [checked]="selectedSet().has(opt.value)"
+            (change)="toggleSelected(opt.value, $event.checked)">
+            {{ opt.value }} @if (opt.count !== undefined) { ({{ opt.count }}) }
+          </mat-checkbox>
+        }
+      </div>
+    }
+
+    @if (data.kind === 'daterange') {
+      <div class="range">
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>From</mat-label>
+          <input matInput [matDatepicker]="fromPicker" [formControl]="form.controls.dateFrom" />
+          <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>To</mat-label>
+          <input matInput [matDatepicker]="toPicker" [formControl]="form.controls.dateTo" />
+          <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      @if (isRangeInvalid()) {
+        <div class="error">From date must be before To date.</div>
+      }
+    }
+
+    @if (data.kind === 'numberrange') {
+      <div class="range">
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>Min</mat-label>
+          <input matInput type="number" [formControl]="form.controls.min" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>Max</mat-label>
+          <input matInput type="number" [formControl]="form.controls.max" />
+        </mat-form-field>
+      </div>
+      @if (isRangeInvalid()) {
+        <div class="error">Min must be less than or equal to Max.</div>
+      }
+    }
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="clearAll()">Clear all</button>
+  <button mat-button type="button" (click)="close()">Close</button>
+  <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="isRangeInvalid()">
+    Submit
+  </button>
+</div>

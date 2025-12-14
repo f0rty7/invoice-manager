@@ -134,6 +134,30 @@ invoiceRouter.get('/', authMiddleware, async (c) => {
   }
 });
 
+// Search invoices with filters (POST body)
+invoiceRouter.post('/search', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    const filters = (await c.req.json()) as InvoiceFilters;
+
+    const result = await invoiceService.getInvoices(
+      filters,
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch invoices'
+    }, 500);
+  }
+});
+
 // Get statistics (must come before /:id to avoid matching "stats" as an ID)
 invoiceRouter.get('/stats/summary', authMiddleware, async (c) => {
   try {
@@ -200,6 +224,28 @@ invoiceRouter.get('/delivery-partners', authMiddleware, async (c) => {
   }
 });
 
+// Get filter options (partners/categories with counts) for header multi-select menus
+invoiceRouter.get('/filter-options', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+
+    const options = await invoiceService.getFilterOptions(
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: options
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch filter options'
+    }, 500);
+  }
+});
+
 // Get all items (flattened from invoices) - must come before /:id
 invoiceRouter.get('/items', authMiddleware, async (c) => {
   try {
@@ -238,6 +284,30 @@ invoiceRouter.get('/items', authMiddleware, async (c) => {
       // Spending pattern
       spending_pattern: query.spending_pattern as InvoiceFilters['spending_pattern']
     };
+
+    const result = await invoiceService.getItems(
+      filters,
+      user.userId,
+      user.role === 'admin'
+    );
+
+    return c.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch items'
+    }, 500);
+  }
+});
+
+// Search items with filters (POST body) - must come before /:id
+invoiceRouter.post('/items/search', authMiddleware, async (c) => {
+  try {
+    const user = c.get('user') as JwtPayload;
+    const filters = (await c.req.json()) as InvoiceFilters;
 
     const result = await invoiceService.getItems(
       filters,

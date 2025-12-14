@@ -1,5 +1,5 @@
 import { database } from '../db/connection';
-import type { Invoice, InvoiceFilters, InvoiceStats, PaginatedResponse, FlatItem } from '@pdf-invoice/shared';
+import type { Invoice, InvoiceFilters, InvoiceStats, PaginatedResponse, FlatItem, FilterOptionsResponse } from '@pdf-invoice/shared';
 import { ObjectId } from 'mongodb';
 
 // Cache entry interface for stats
@@ -12,6 +12,24 @@ export class InvoiceService {
   // In-memory cache for stats with TTL
   private statsCache: Map<string, StatsCacheEntry> = new Map();
   private readonly STATS_CACHE_TTL = 60000; // 60 seconds
+
+  // Parse DD-MM-YYYY (e.g. "14-12-2025") into a real Date (UTC midnight).
+  // Returns null for empty/invalid inputs.
+  private parseDDMMYYYY(dateStr: string | null | undefined): Date | null {
+    if (!dateStr) return null;
+    const m = /^(\d{2})-(\d{2})-(\d{4})$/.exec(dateStr.trim());
+    if (!m) return null;
+    const dd = Number(m[1]);
+    const mm = Number(m[2]);
+    const yyyy = Number(m[3]);
+    if (!Number.isFinite(dd) || !Number.isFinite(mm) || !Number.isFinite(yyyy)) return null;
+    if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return null;
+    // Construct UTC date to avoid local TZ shifts.
+    const d = new Date(Date.UTC(yyyy, mm - 1, dd));
+    // Validate round-trip (catches invalid dates like 31-02-2025).
+    if (d.getUTCFullYear() !== yyyy || d.getUTCMonth() !== mm - 1 || d.getUTCDate() !== dd) return null;
+    return d;
+  }
 
   // Helper to escape special regex characters
   private escapeRegex(str: string): string {
@@ -176,6 +194,9 @@ export class InvoiceService {
       const compositeKey = `${invoice.order_no}|${invoice.invoice_no}`;
       const existing = existingMap.get(compositeKey);
 
+      const date_obj = this.parseDDMMYYYY(invoice.date ?? null);
+      const items_count = (invoice.items?.length ?? 0);
+
       if (existing) {
         // Check if this is a duplicate with same totals
         const sameTotals =
@@ -198,6 +219,8 @@ export class InvoiceService {
                 username,
                 items: invoice.items,
                 items_total: invoice.items_total,
+                date_obj,
+                items_count,
                 updated_at: now
               },
               $setOnInsert: {
@@ -217,6 +240,8 @@ export class InvoiceService {
                 ...invoice,
                 user_id: userId,
                 username,
+                date_obj,
+                items_count,
                 created_at: now,
                 updated_at: now
               }
@@ -268,15 +293,13 @@ export class InvoiceService {
       query.username = filters.username;
     }
 
-    // Date range filter
-    if (filters.date_from || filters.date_to) {
-      query.date = {};
-      if (filters.date_from) {
-        query.date.$gte = filters.date_from;
-      }
-      if (filters.date_to) {
-        query.date.$lte = filters.date_to;
-      }
+    // Date range filter (prefer date_obj for correctness)
+    const dateFromObj = this.parseDDMMYYYY(filters.date_from ?? null);
+    const dateToObj = this.parseDDMMYYYY(filters.date_to ?? null);
+    if (dateFromObj || dateToObj) {
+      query.date_obj = {};
+      if (dateFromObj) query.date_obj.$gte = dateFromObj;
+      if (dateToObj) query.date_obj.$lte = dateToObj;
     }
 
     // Category filter - supports both single and multi-select
@@ -300,6 +323,13 @@ export class InvoiceService {
     // Delivery partner filter
     if (filters.delivery_partner) {
       query['delivery_partner.known_name'] = filters.delivery_partner;
+    }
+    // Multi-select delivery partners (inclusion)
+    if (filters.delivery_partners?.length) {
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $in: filters.delivery_partners
+      };
     }
 
     // Direct order_no filter
@@ -357,19 +387,47 @@ export class InvoiceService {
     }
 
     if (filters.exclude_delivery_partners?.length) {
-      query['delivery_partner.known_name'] = { $nin: filters.exclude_delivery_partners };
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $nin: filters.exclude_delivery_partners
+      };
     }
 
-    // Determine sort field and direction
-    const sortField = filters.sort_by === 'total' ? 'items_total' : 
-                      filters.sort_by === 'items_count' ? 'items_count' :
-                      filters.sort_by === 'delivery_partner' ? 'delivery_partner.known_name' : 'date';
-    const sortDir = filters.sort_dir === 'asc' ? 1 : -1;
+    const hasExplicitSort = !!filters.sort_by && !!filters.sort_dir;
+
+    // Determine sort field and direction (use date_obj; do not default silently to date)
+    const sortField = !hasExplicitSort
+      ? 'created_at'
+      : (filters.sort_by === 'total' ? 'items_total' :
+        filters.sort_by === 'items_count' ? 'items_count' :
+        filters.sort_by === 'delivery_partner' ? 'delivery_partner.known_name' :
+        filters.sort_by === 'date' ? 'date_obj' :
+        'created_at');
+    const sortDir = !hasExplicitSort ? -1 : (filters.sort_dir === 'asc' ? 1 : -1);
 
     // Use aggregation with $facet to get data and count in a single query
     const pipeline: any[] = [
       { $match: query },
     ];
+
+    // Temporary fallback for older docs (or before backfill): if date range or date sort requested,
+    // parse the string `date` and coalesce into date_obj.
+    const needsDateFallback = (!!dateFromObj || !!dateToObj) || (hasExplicitSort && filters.sort_by === 'date');
+    if (needsDateFallback) {
+      pipeline.push({
+        $addFields: {
+          _parsed_date: {
+            $dateFromString: {
+              dateString: '$date',
+              format: '%d-%m-%Y',
+              onError: null,
+              onNull: null
+            }
+          },
+          date_obj: { $ifNull: ['$date_obj', '$_parsed_date'] }
+        }
+      });
+    }
 
     // Add items_count field for filtering or sorting
     const needsItemsCount = filters.sort_by === 'items_count' || 
@@ -480,8 +538,12 @@ export class InvoiceService {
       }
     }
 
+    const stableTieBreak = !hasExplicitSort
+      ? { _id: -1 }
+      : { created_at: -1, _id: -1 };
+
     pipeline.push(
-      { $sort: { [sortField]: sortDir, created_at: -1 } },
+      { $sort: { [sortField]: sortDir, ...stableTieBreak } },
       {
         $facet: {
           data: [
@@ -645,6 +707,33 @@ export class InvoiceService {
     return partners.filter(Boolean).sort();
   }
 
+  async getFilterOptions(userId: string, isAdmin: boolean): Promise<FilterOptionsResponse> {
+    const match: any = isAdmin ? {} : { user_id: userId };
+
+    const [partners, categories] = await Promise.all([
+      database.invoices.aggregate([
+        { $match: match },
+        { $group: { _id: '$delivery_partner.known_name', count: { $sum: 1 } } },
+        { $match: { _id: { $ne: null } } },
+        { $sort: { count: -1, _id: 1 } },
+        { $project: { _id: 0, value: '$_id', count: 1 } }
+      ]).toArray(),
+      database.invoices.aggregate([
+        { $match: match },
+        { $unwind: '$items' },
+        { $group: { _id: '$items.category', count: { $sum: 1 } } },
+        { $match: { _id: { $ne: null } } },
+        { $sort: { count: -1, _id: 1 } },
+        { $project: { _id: 0, value: '$_id', count: 1 } }
+      ]).toArray()
+    ]);
+
+    return {
+      partners: partners as any,
+      categories: categories as any
+    };
+  }
+
   async getItems(filters: InvoiceFilters, userId: string, isAdmin: boolean): Promise<PaginatedResponse<FlatItem>> {
     const page = filters.page || 1;
     const limit = filters.limit || 20;
@@ -662,15 +751,13 @@ export class InvoiceService {
       query.username = filters.username;
     }
 
-    // Date range filter
-    if (filters.date_from || filters.date_to) {
-      query.date = {};
-      if (filters.date_from) {
-        query.date.$gte = filters.date_from;
-      }
-      if (filters.date_to) {
-        query.date.$lte = filters.date_to;
-      }
+    // Date range filter (prefer date_obj for correctness)
+    const dateFromObj = this.parseDDMMYYYY(filters.date_from ?? null);
+    const dateToObj = this.parseDDMMYYYY(filters.date_to ?? null);
+    if (dateFromObj || dateToObj) {
+      query.date_obj = {};
+      if (dateFromObj) query.date_obj.$gte = dateFromObj;
+      if (dateToObj) query.date_obj.$lte = dateToObj;
     }
 
     // Category filter - supports both single and multi-select
@@ -683,6 +770,13 @@ export class InvoiceService {
     // Delivery partner filter
     if (filters.delivery_partner) {
       query['delivery_partner.known_name'] = filters.delivery_partner;
+    }
+    // Multi-select delivery partners (inclusion)
+    if (filters.delivery_partners?.length) {
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $in: filters.delivery_partners
+      };
     }
 
     // Direct order_no filter
@@ -721,14 +815,25 @@ export class InvoiceService {
     }
 
     if (filters.exclude_delivery_partners?.length) {
-      query['delivery_partner.known_name'] = { $nin: filters.exclude_delivery_partners };
+      query['delivery_partner.known_name'] = {
+        ...(query['delivery_partner.known_name'] ?? {}),
+        $nin: filters.exclude_delivery_partners
+      };
     }
 
-    // Determine sort field and direction for items
-    const sortField = filters.sort_by === 'date' ? 'date' : 
-                      filters.sort_by === 'total' ? 'price' :
-                      filters.sort_by === 'delivery_partner' ? 'delivery_partner' : 'date';
-    const sortDir = filters.sort_dir === 'asc' ? 1 : -1;
+    const hasExplicitSort = !!filters.sort_by && !!filters.sort_dir;
+
+    // Determine sort field and direction for items (server-side, stable default when none selected)
+    const sortField = !hasExplicitSort
+      ? 'invoice_id'
+      : (filters.sort_by === 'date' ? '_invoice_date' :
+        filters.sort_by === 'total' ? 'price' :
+        filters.sort_by === 'price' ? 'price' :
+        filters.sort_by === 'qty' ? 'qty' :
+        filters.sort_by === 'category' ? 'category' :
+        filters.sort_by === 'delivery_partner' ? 'delivery_partner' :
+        'invoice_id');
+    const sortDir = !hasExplicitSort ? -1 : (filters.sort_dir === 'asc' ? 1 : -1);
 
     // Build aggregation pipeline with $unwind
     const pipeline: any[] = [
@@ -751,6 +856,29 @@ export class InvoiceService {
         }
       }
     ];
+
+    // Temporary fallback: parse `date` string into a real date for correct date sorting.
+    // Also coalesce in case the invoice doc already has date_obj.
+    const needsDateSort = hasExplicitSort && filters.sort_by === 'date';
+    if (needsDateSort) {
+      pipeline.push({
+        $addFields: {
+          _invoice_date: {
+            $ifNull: [
+              '$date_obj',
+              {
+                $dateFromString: {
+                  dateString: '$date',
+                  format: '%d-%m-%Y',
+                  onError: null,
+                  onNull: null
+                }
+              }
+            ]
+          }
+        }
+      });
+    }
 
     // Add item-level filters after $unwind
     const itemFilters: any = {};

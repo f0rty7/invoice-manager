@@ -1,0 +1,39 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 360px;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.full {
+  width: 100%;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.range {
+  display: flex;
+  gap: 12px;
+}
+
+.half {
+  width: 50%;
+}
+
+.error {
+  margin-top: 8px;
+  color: var(--mat-sys-error, #b00020);
+  font-size: 12px;
+}

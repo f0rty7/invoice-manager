@@ -9,7 +9,8 @@ import type {
   ApiResponse, 
   PaginatedResponse,
   SavedFilter,
-  FlatItem
+  FlatItem,
+  FilterOptionsResponse
 } from '@pdf-invoice/shared';
 
 @Injectable({
@@ -71,6 +72,10 @@ export class InvoiceService {
     if (filters.spending_pattern) params = params.set('spending_pattern', filters.spending_pattern);
 
     return this.http.get<ApiResponse<PaginatedResponse<Invoice>>>(this.API_URL, { params });
+  }
+
+  searchInvoices(filters: InvoiceFilters): Observable<ApiResponse<PaginatedResponse<Invoice>>> {
+    return this.http.post<ApiResponse<PaginatedResponse<Invoice>>>(`${this.API_URL}/search`, filters);
   }
 
   getInvoiceById(id: string): Observable<ApiResponse<Invoice>> {
@@ -156,6 +161,14 @@ export class InvoiceService {
     if (filters.spending_pattern) params = params.set('spending_pattern', filters.spending_pattern);
 
     return this.http.get<ApiResponse<PaginatedResponse<FlatItem>>>(`${this.API_URL}/items`, { params });
+  }
+
+  searchItems(filters: InvoiceFilters): Observable<ApiResponse<PaginatedResponse<FlatItem>>> {
+    return this.http.post<ApiResponse<PaginatedResponse<FlatItem>>>(`${this.API_URL}/items/search`, filters);
+  }
+
+  getFilterOptions(): Observable<ApiResponse<FilterOptionsResponse>> {
+    return this.http.get<ApiResponse<FilterOptionsResponse>>(`${this.API_URL}/filter-options`);
   }
 
   // Saved Filters API (Phase 4)

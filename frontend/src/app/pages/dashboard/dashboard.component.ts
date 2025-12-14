@@ -80,6 +80,7 @@ export class DashboardComponent {
 
   // FIXED: Load items only when Items tab is active (lazy loading)
   onTabChange(event: MatTabChangeEvent): void {
+    this.invoiceState.setActiveTab(event.index === 1 ? 'items' : 'invoices');
     if (event.index === 1) { // Items tab
       this.invoiceState.syncItemsWithFilters();
     }

@@ -40,6 +40,14 @@ class Database {
       await this.db.collection('invoices').createIndex({ items_total: 1 });
       await this.db.collection('invoices').createIndex({ created_at: -1 });
 
+      // New indexes to support header filters + stable default sort
+      await this.db.collection('invoices').createIndex({ user_id: 1, created_at: -1 });
+      await this.db.collection('invoices').createIndex({ user_id: 1, date_obj: -1, created_at: -1 });
+      await this.db.collection('invoices').createIndex({ user_id: 1, 'delivery_partner.known_name': 1, created_at: -1 });
+      await this.db.collection('invoices').createIndex({ user_id: 1, items_total: 1, created_at: -1 });
+      await this.db.collection('invoices').createIndex({ user_id: 1, items_count: 1, created_at: -1 });
+      await this.db.collection('invoices').createIndex({ user_id: 1, 'items.category': 1, created_at: -1 });
+
       // Saved filters collection indexes
       await this.db.collection('saved_filters').createIndex({ user_id: 1, name: 1 }, { unique: true });
       await this.db.collection('saved_filters').createIndex({ user_id: 1, is_default: 1 });

@@ -82,6 +82,23 @@ export class ColumnFilterDialogComponent {
     return opts.filter(o => o.value.toLowerCase().includes(q));
   });
 
+  private readonly allOptionValues = computed(() => (this.data.options ?? []).map(o => o.value));
+
+  readonly allSelected = computed(() => {
+    const all = this.allOptionValues();
+    if (all.length === 0) return false;
+    const selected = this.selectedSet();
+    return all.every(v => selected.has(v));
+  });
+
+  readonly someSelected = computed(() => {
+    const all = this.allOptionValues();
+    if (all.length === 0) return false;
+    const selected = this.selectedSet();
+    const any = all.some(v => selected.has(v));
+    return any && !this.allSelected();
+  });
+
   // Date + number inputs
   readonly form = this.fb.group({
     dateFrom: [this.parseDate(this.data.dateFrom ?? null)],
@@ -138,6 +155,18 @@ export class ColumnFilterDialogComponent {
     if (checked) next.add(value);
     else next.delete(value);
     this.selectedSet.set(next);
+  }
+
+  toggleSelectAll(): void {
+    const all = this.allOptionValues();
+    if (all.length === 0) return;
+
+    if (this.allSelected()) {
+      this.selectedSet.set(new Set());
+      return;
+    }
+
+    this.selectedSet.set(new Set(all));
   }
 
   submit(): void {

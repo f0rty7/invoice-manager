@@ -25,6 +25,13 @@
         </button>
       </mat-form-field>
 
+      <mat-checkbox
+        [checked]="allSelected()"
+        [indeterminate]="someSelected()"
+        (change)="toggleSelectAll()">
+        Select all
+      </mat-checkbox>
+
       <div class="options">
         @for (opt of filteredOptions(); track opt.value) {
           <mat-checkbox

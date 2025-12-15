@@ -27,7 +27,7 @@
       "qty": 1,
       "unit_price": 12,
       "price": 12,
-      "category": "Charges"
+      "category": "Charges & Fees"
     },
     {
       "sr": 3,
@@ -126,7 +126,7 @@
       "qty": 1,
       "unit_price": 18,
       "price": 18,
-      "category": "Charges"
+      "category": "Charges & Fees"
     },
     {
       "sr": 6,
@@ -217,7 +217,7 @@
       "qty": 2,
       "unit_price": 35,
       "price": 70,
-      "category": "Dairy & Eggs"
+      "category": "Beverages & Drinks"
     },
     {
       "sr": 4,
@@ -225,7 +225,7 @@
       "qty": 1,
       "unit_price": 18,
       "price": 18,
-      "category": "Charges"
+      "category": "Charges & Fees"
     }
   ],
   "items_total": 396,
@@ -260,7 +260,7 @@
       "qty": 1,
       "unit_price": 699,
       "price": 699,
-      "category": "Others"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 2,
@@ -268,7 +268,7 @@
       "qty": 1,
       "unit_price": 12,
       "price": 12,
-      "category": "Charges"
+      "category": "Charges & Fees"
     },
     {
       "sr": 3,
@@ -276,7 +276,7 @@
       "qty": 1,
       "unit_price": 185,
       "price": 185,
-      "category": "Others"
+      "category": "Household, Personal Care & Miscellaneous"
     }
   ],
   "items_total": 896,
@@ -319,7 +319,7 @@
       "qty": 1,
       "unit_price": 54,
       "price": 54,
-      "category": "Others"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 3,
@@ -327,7 +327,7 @@
       "qty": 1,
       "unit_price": 12,
       "price": 12,
-      "category": "Charges"
+      "category": "Charges & Fees"
     },
     {
       "sr": 4,
@@ -394,7 +394,7 @@
       "qty": 1,
       "unit_price": 18,
       "price": 18,
-      "category": "Charges"
+      "category": "Charges & Fees"
     },
     {
       "sr": 4,
@@ -410,7 +410,7 @@
       "qty": 1,
       "unit_price": 20,
       "price": 20,
-      "category": "Spices, Condiments & Cooking Essentials"
+      "category": "Snacks & Salty Snacks"
     }
   ],
   "items_total": 248,
@@ -453,7 +453,7 @@
       "qty": 1,
       "unit_price": 12,
       "price": 12,
-      "category": "Charges"
+      "category": "Charges & Fees"
     }
   ],
   "items_total": 401,
@@ -504,7 +504,7 @@
       "qty": 1,
       "unit_price": 18,
       "price": 18,
-      "category": "Charges"
+      "category": "Charges & Fees"
     }
   ],
   "items_total": 219,
@@ -539,7 +539,7 @@
       "qty": 1,
       "unit_price": 170,
       "price": 170,
-      "category": "Others"
+      "category": "Tobacco & Related"
     },
     {
       "sr": 2,
@@ -547,7 +547,7 @@
       "qty": 1,
       "unit_price": 18,
       "price": 18,
-      "category": "Charges"
+      "category": "Charges & Fees"
     },
     {
       "sr": 3,
@@ -657,7 +657,7 @@
       "qty": 1,
       "unit_price": 91.42,
       "price": 91,
-      "category": "Beverages & Drinks"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 5,
@@ -697,7 +697,7 @@
       "qty": 1,
       "unit_price": 64,
       "price": 39,
-      "category": "Others"
+      "category": "Fresh Produce – Vegetables & Herbs"
     },
     {
       "sr": 10,
@@ -922,7 +922,7 @@
       "qty": 2,
       "unit_price": 38.1,
       "price": 72,
-      "category": "Dairy & Eggs"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 7,
@@ -930,7 +930,7 @@
       "qty": 1,
       "unit_price": 38.1,
       "price": 33,
-      "category": "Confectionery & Sweet Tooth"
+      "category": "Frozen & Refrigerated Items"
     }
   ],
   "items_total": 411,
@@ -965,7 +965,7 @@
       "qty": 1,
       "unit_price": 26,
       "price": 18,
-      "category": "Others"
+      "category": "Fresh Produce – Vegetables & Herbs"
     },
     {
       "sr": 2,
@@ -1072,7 +1072,7 @@
       "qty": 1,
       "unit_price": 33.33,
       "price": 30,
-      "category": "Others"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 2,
@@ -1080,7 +1080,7 @@
       "qty": 1,
       "unit_price": 38.1,
       "price": 36,
-      "category": "Dairy & Eggs"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 3,
@@ -1088,7 +1088,7 @@
       "qty": 1,
       "unit_price": 38.1,
       "price": 33,
-      "category": "Confectionery & Sweet Tooth"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 4,
@@ -1096,7 +1096,7 @@
       "qty": 2,
       "unit_price": 42.85,
       "price": 42,
-      "category": "Snacks & Salty Snacks"
+      "category": "Confectionery & Sweet Tooth"
     },
     {
       "sr": 5,
@@ -1112,7 +1112,7 @@
       "qty": 1,
       "unit_price": 57.14,
       "price": 54,
-      "category": "Dairy & Eggs"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 7,
@@ -1120,7 +1120,7 @@
       "qty": 1,
       "unit_price": 38.1,
       "price": 36,
-      "category": "Dairy & Eggs"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 8,
@@ -1128,7 +1128,7 @@
       "qty": 2,
       "unit_price": 42.86,
       "price": 38,
-      "category": "Snacks & Salty Snacks"
+      "category": "Confectionery & Sweet Tooth"
     },
     {
       "sr": 9,
@@ -1492,7 +1492,7 @@
       "qty": 2,
       "unit_price": 37,
       "price": 50,
-      "category": "Others"
+      "category": "Fresh Produce – Vegetables & Herbs"
     },
     {
       "sr": 9,
@@ -1607,7 +1607,7 @@
       "qty": 1,
       "unit_price": 128.99,
       "price": 65,
-      "category": "Others"
+      "category": "Fresh Produce – Vegetables & Herbs"
     },
     {
       "sr": 9,
@@ -1682,7 +1682,7 @@
       "qty": 1,
       "unit_price": 108.56,
       "price": 81,
-      "category": "Others"
+      "category": "Staples & Pantry"
     },
     {
       "sr": 3,
@@ -1690,7 +1690,7 @@
       "qty": 2,
       "unit_price": 45.76,
       "price": 98,
-      "category": "Others"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 4,
@@ -1698,7 +1698,7 @@
       "qty": 1,
       "unit_price": 76.19,
       "price": 51,
-      "category": "Others"
+      "category": "Staples & Pantry"
     },
     {
       "sr": 5,
@@ -1714,7 +1714,7 @@
       "qty": 1,
       "unit_price": 75.23,
       "price": 56,
-      "category": "Others"
+      "category": "Staples & Pantry"
     },
     {
       "sr": 7,
@@ -1789,7 +1789,7 @@
       "qty": 1,
       "unit_price": 62.85,
       "price": 56,
-      "category": "Bakery & Bread"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 5,
@@ -1797,7 +1797,7 @@
       "qty": 1,
       "unit_price": 210.99,
       "price": 150,
-      "category": "Bakery & Bread"
+      "category": "Household, Personal Care & Miscellaneous"
     }
   ],
   "items_total": 585,
@@ -1840,7 +1840,7 @@
       "qty": 1,
       "unit_price": 47.62,
       "price": 43,
-      "category": "Others"
+      "category": "Confectionery & Sweet Tooth"
     },
     {
       "sr": 3,
@@ -1848,7 +1848,7 @@
       "qty": 1,
       "unit_price": 75.41,
       "price": 78,
-      "category": "Others"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 4,
@@ -1947,7 +1947,7 @@
       "qty": 1,
       "unit_price": 25,
       "price": 18,
-      "category": "Others"
+      "category": "Fresh Produce – Vegetables & Herbs"
     },
     {
       "sr": 9,
@@ -2046,7 +2046,7 @@
       "qty": 1,
       "unit_price": 114.29,
       "price": 105,
-      "category": "Snacks & Salty Snacks"
+      "category": "Confectionery & Sweet Tooth"
     },
     {
       "sr": 3,
@@ -2054,7 +2054,7 @@
       "qty": 1,
       "unit_price": 185.71,
       "price": 162,
-      "category": "Dairy & Eggs"
+      "category": "Confectionery & Sweet Tooth"
     },
     {
       "sr": 4,
@@ -2121,7 +2121,7 @@
       "qty": 1,
       "unit_price": 95.24,
       "price": 85,
-      "category": "Snacks & Salty Snacks"
+      "category": "Confectionery & Sweet Tooth"
     },
     {
       "sr": 4,
@@ -2153,7 +2153,7 @@
       "qty": 2,
       "unit_price": 38.09,
       "price": 60,
-      "category": "Dairy & Eggs"
+      "category": "Frozen & Refrigerated Items"
     },
     {
       "sr": 8,
@@ -2239,7 +2239,7 @@
       "qty": 1,
       "unit_price": 66.95,
       "price": 48,
-      "category": "Others"
+      "category": "Household, Personal Care & Miscellaneous"
     },
     {
       "sr": 2,

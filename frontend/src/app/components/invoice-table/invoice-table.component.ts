@@ -53,14 +53,28 @@ export class InvoiceTableComponent {
   private destroyRef = inject(DestroyRef);
 
   private viewportSub: Subscription | null = null;
+  private currentViewport: CdkVirtualScrollViewport | null = null;
+  private hasSkippedInitialEmission = false;
 
   @ViewChild(CdkVirtualScrollViewport)
   set viewport(vp: CdkVirtualScrollViewport | undefined) {
     if (!vp) return;
-    // This can appear after initial render (e.g., when loading finishes), so attach here.
+    // Only resubscribe if this is a different viewport instance
+    if (this.currentViewport === vp) return;
+    
+    this.currentViewport = vp;
     this.viewportSub?.unsubscribe();
+    
+    // Keep the trigger consistent with ItemTable (this is reliable when itemSize matches row height).
     this.viewportSub = vp.renderedRangeStream.pipe(
-      skip(1), // Skip the initial emission to prevent premature loadMore trigger
+      rxFilter(() => {
+        // Skip the very first emission globally (not per subscription)
+        if (!this.hasSkippedInitialEmission) {
+          this.hasSkippedInitialEmission = true;
+          return false;
+        }
+        return true;
+      }),
       map(r => r.end),
       rxFilter(() => this.hasMore() && !this.loadingMore()),
       rxFilter(end => {

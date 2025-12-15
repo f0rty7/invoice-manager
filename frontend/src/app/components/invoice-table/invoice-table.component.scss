@@ -23,6 +23,32 @@ mat-card-content { padding: 0 !important; }
   button[color="warn"]:hover { background: var(--accent-danger-light) !important; }
 }
 
+.body-table {
+  // CDK virtual scroll requires fixed-size rows. If invoice cell content wraps,
+  // the actual row height becomes > itemSize and the viewport may never reach the end,
+  // so load-more won't trigger. Keep rows single-line with ellipsis.
+  .invoice-row {
+    height: 56px;
+  }
+
+  td {
+    height: 56px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .order-no,
+  .invoice-no,
+  .partner-name,
+  .total-amount {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .header-table {
   border-bottom: 1px solid var(--border-light);
 }

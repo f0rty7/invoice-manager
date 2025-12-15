@@ -1,0 +1,29 @@
+[{
+  "_id": {
+    "$oid": "69375ed147cb9edb783a408d"
+  },
+  "username": "admin",
+  "password": "$2a$10$b1Kchv2glfBCtNLY18ZVpuXX2px0hHyZLPn4VNrUrINzQOduSOjJe",
+  "role": "admin",
+  "created_at": {
+    "$date": "2025-12-08T23:27:13.438Z"
+  },
+  "updated_at": {
+    "$date": "2025-12-08T23:27:13.438Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69375f3c47cb9edb783a408e"
+  },
+  "username": "hem",
+  "password": "$2a$10$yMAmMwHN56UolmT9vHWmGuKtmunfrczsruSK7oVn2vTWjysbKnV3K",
+  "email": "hemsunder47@gmail.com",
+  "role": "user",
+  "created_at": {
+    "$date": "2025-12-08T23:29:00.299Z"
+  },
+  "updated_at": {
+    "$date": "2025-12-08T23:29:00.299Z"
+  }
+}]

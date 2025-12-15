@@ -1,0 +1,2287 @@
+[{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba9281d"
+  },
+  "invoice_no": "C144501T25220757",
+  "order_no": "1495817490",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.591Z"
+  },
+  "date": "19-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Nuovi BOPP Tape Brown 42 Microns (Brown, 65 m)",
+      "qty": 1,
+      "unit_price": 109,
+      "price": 109,
+      "category": "Household, Personal Care & Miscellaneous"
+    },
+    {
+      "sr": 2,
+      "description": "Handling charge",
+      "qty": 1,
+      "unit_price": 12,
+      "price": 12,
+      "category": "Charges"
+    },
+    {
+      "sr": 3,
+      "description": "Britannia Treat Croissant Triple Choco(Packet)",
+      "qty": 1,
+      "unit_price": 25,
+      "price": 25,
+      "category": "Bakery & Bread"
+    },
+    {
+      "sr": 4,
+      "description": "Britannia Treat Croissant - Cocoa Crme(Pack)",
+      "qty": 1,
+      "unit_price": 18,
+      "price": 18,
+      "category": "Bakery & Bread"
+    },
+    {
+      "sr": 5,
+      "description": "Bauli Moonfils Chocolate Crme Soft Croissant (Eggless)(Pack)",
+      "qty": 1,
+      "unit_price": 21,
+      "price": 21,
+      "category": "Bakery & Bread"
+    },
+    {
+      "sr": 6,
+      "description": "Bauli Moonfils Strawberry Crme Soft Croissant (Eggless)(Pack)",
+      "qty": 1,
+      "unit_price": 21,
+      "price": 21,
+      "category": "Bakery & Bread"
+    }
+  ],
+  "items_total": 206,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.591Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-19T00:00:00.000Z"
+  },
+  "items_count": 6
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba9281e"
+  },
+  "invoice_no": "C360138T25111935, C27150T250219929, C18757T250173628, C17716T250184634",
+  "order_no": "1462889921",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.689Z"
+  },
+  "date": "08-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Heritage Daily Health Toned Milk(Pack)",
+      "qty": 2,
+      "unit_price": 26,
+      "price": 52,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 2,
+      "description": "Marlboro Gold Lights(Packet)",
+      "qty": 1,
+      "unit_price": 170,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 3,
+      "description": "Amul Pure Ghee(Pack)",
+      "qty": 1,
+      "unit_price": 557,
+      "price": 557,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 4,
+      "description": "Tata Sampann High In Fibre Thick Poha(Pouch)",
+      "qty": 1,
+      "unit_price": 52,
+      "price": 52,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 5,
+      "description": "Convenience charge",
+      "qty": 1,
+      "unit_price": 18,
+      "price": 18,
+      "category": "Charges"
+    },
+    {
+      "sr": 6,
+      "description": "The Health Factory Zero Maida Whole Wheat Bread(Packet)",
+      "qty": 1,
+      "unit_price": 54,
+      "price": 54,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 7,
+      "description": "Amul Salted Butter(Pack)",
+      "qty": 1,
+      "unit_price": 58,
+      "price": 58,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 8,
+      "description": "Fortune Sunlite Refined Sunflower Oil (800 g)(Pack)",
+      "qty": 2,
+      "unit_price": 134,
+      "price": 268,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 9,
+      "description": "Organically Grown Ginger - 100 g(Wrap)",
+      "qty": 1,
+      "unit_price": 33,
+      "price": 33,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 10,
+      "description": "Daawat Raw Sonamasuri Rice (Medium Grain)",
+      "qty": 1,
+      "unit_price": 359,
+      "price": 359,
+      "category": "Staples & Pantry"
+    }
+  ],
+  "items_total": 1621,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.689Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-08T00:00:00.000Z"
+  },
+  "items_count": 10
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba9281f"
+  },
+  "order_no": "1458470472",
+  "invoice_no": "C360138T25110184, C27150T250219604, C18757T250173225",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.739Z"
+  },
+  "date": "06-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Tender Coconut (300+ ml)(Pack)",
+      "qty": 2,
+      "unit_price": 69,
+      "price": 138,
+      "category": "Fresh Produce – Fruits"
+    },
+    {
+      "sr": 2,
+      "description": "Gold Flake Mixpod(Packet)",
+      "qty": 1,
+      "unit_price": 170,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 3,
+      "description": "Amul Kool Cafe Milk 'n' Coffee Flavoured Milk (Can)(Can)",
+      "qty": 2,
+      "unit_price": 35,
+      "price": 70,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 4,
+      "description": "Convenience charge",
+      "qty": 1,
+      "unit_price": 18,
+      "price": 18,
+      "category": "Charges"
+    }
+  ],
+  "items_total": 396,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.739Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-06T00:00:00.000Z"
+  },
+  "items_count": 4
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba92820"
+  },
+  "invoice_no": "C17716T250219715",
+  "order_no": "1532126969",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.765Z"
+  },
+  "date": "02-12-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "O3+ Shine & Glow Facial Kit(Carton)",
+      "qty": 1,
+      "unit_price": 699,
+      "price": 699,
+      "category": "Others"
+    },
+    {
+      "sr": 2,
+      "description": "Handling charge",
+      "qty": 1,
+      "unit_price": 12,
+      "price": 12,
+      "category": "Charges"
+    },
+    {
+      "sr": 3,
+      "description": "Aroma Magic Bridal Glow Facial Kit - Single use",
+      "qty": 1,
+      "unit_price": 185,
+      "price": 185,
+      "category": "Others"
+    }
+  ],
+  "items_total": 896,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.765Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-02T00:00:00.000Z"
+  },
+  "items_count": 3
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba92821"
+  },
+  "order_no": "1509063903",
+  "invoice_no": "C360138T25129195, C17716T250208560",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.820Z"
+  },
+  "date": "24-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "iD Idli & Dosa Batter - 1 kg(Pack)",
+      "qty": 1,
+      "unit_price": 95,
+      "price": 95,
+      "category": "Instant & Ready-to-Cook Foods"
+    },
+    {
+      "sr": 2,
+      "description": "Mangaldeep Treya 3 in 1 Incense Sticks / Agarbatti(Pack)",
+      "qty": 1,
+      "unit_price": 54,
+      "price": 54,
+      "category": "Others"
+    },
+    {
+      "sr": 3,
+      "description": "Handling charge",
+      "qty": 1,
+      "unit_price": 12,
+      "price": 12,
+      "category": "Charges"
+    },
+    {
+      "sr": 4,
+      "description": "Varikatri Brinjal(Pack)",
+      "qty": 1,
+      "unit_price": 16,
+      "price": 16,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Fortune Premium Kachi Ghani Pure Mustard Oil (910 g)(PET Bottle)",
+      "qty": 1,
+      "unit_price": 191,
+      "price": 191,
+      "category": "Staples & Pantry"
+    }
+  ],
+  "items_total": 368,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.820Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-24T00:00:00.000Z"
+  },
+  "items_count": 5
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba92822"
+  },
+  "invoice_no": "C27150T250222349, C17716T250204069",
+  "order_no": "1499722511",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.850Z"
+  },
+  "date": "21-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Gold Flake Mixpod(Packet)",
+      "qty": 1,
+      "unit_price": 170,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 2,
+      "description": "Kurkure Chilli Chatka Crisps(Pack)",
+      "qty": 1,
+      "unit_price": 20,
+      "price": 20,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 3,
+      "description": "Convenience charge",
+      "qty": 1,
+      "unit_price": 18,
+      "price": 18,
+      "category": "Charges"
+    },
+    {
+      "sr": 4,
+      "description": "Lay's India's Magic Masala Potato Chips(Packet)",
+      "qty": 1,
+      "unit_price": 20,
+      "price": 20,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Kurkure Masala Munch Crisps(Pack)",
+      "qty": 1,
+      "unit_price": 20,
+      "price": 20,
+      "category": "Spices, Condiments & Cooking Essentials"
+    }
+  ],
+  "items_total": 248,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.850Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-21T00:00:00.000Z"
+  },
+  "items_count": 5
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba92823"
+  },
+  "order_no": "1534880823",
+  "invoice_no": "C360138T25138456",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.867Z"
+  },
+  "date": "03-12-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "FNP - Pink & Purple Blossom Elegance Orchid & Daisy Mini Bouquet(Box)",
+      "qty": 1,
+      "unit_price": 389,
+      "price": 389,
+      "category": "Household, Personal Care & Miscellaneous"
+    },
+    {
+      "sr": 2,
+      "description": "Handling charge",
+      "qty": 1,
+      "unit_price": 12,
+      "price": 12,
+      "category": "Charges"
+    }
+  ],
+  "items_total": 401,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.867Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-03T00:00:00.000Z"
+  },
+  "items_count": 2
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba92824"
+  },
+  "invoice_no": "C27150T250223208, C17716T250210144",
+  "order_no": "1512362526",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.893Z"
+  },
+  "date": "25-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Gold Flake Mixpod(Packet)",
+      "qty": 1,
+      "unit_price": 170,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 2,
+      "description": "Whole Farm Premium Rice Flour/Rice Atta(Packet)",
+      "qty": 1,
+      "unit_price": 31,
+      "price": 31,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 3,
+      "description": "Convenience charge",
+      "qty": 1,
+      "unit_price": 18,
+      "price": 18,
+      "category": "Charges"
+    }
+  ],
+  "items_total": 219,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.893Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-25T00:00:00.000Z"
+  },
+  "items_count": 3
+},
+{
+  "_id": {
+    "$oid": "6939b3feee0356ec7ba92825"
+  },
+  "order_no": "1501197808",
+  "invoice_no": "C27150T250222439",
+  "created_at": {
+    "$date": "2025-12-10T17:55:10.912Z"
+  },
+  "date": "21-11-2025",
+  "delivery_partner": {
+    "registered_name": "Blink Commerce Private Limited (formerly known as Grofers India Private Limited)",
+    "known_name": "Blinkit"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Classic Refined Taste (Ultra Mild) (Pack)",
+      "qty": 1,
+      "unit_price": 170,
+      "price": 170,
+      "category": "Others"
+    },
+    {
+      "sr": 2,
+      "description": "Convenience charge",
+      "qty": 1,
+      "unit_price": 18,
+      "price": 18,
+      "category": "Charges"
+    },
+    {
+      "sr": 3,
+      "description": "Gold Flake Mixpod(Packet)",
+      "qty": 1,
+      "unit_price": 170,
+      "price": 170,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 358,
+  "updated_at": {
+    "$date": "2025-12-10T17:55:10.912Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-21T00:00:00.000Z"
+  },
+  "items_count": 3
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92826"
+  },
+  "invoice_no": "251129G001016932",
+  "order_no": "HPVJQBKSF34114A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.767Z"
+  },
+  "date": "04-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Stellar Define Paan Mix 1 pack (20 pcs)",
+      "qty": 1,
+      "unit_price": 71.1,
+      "price": 200,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 2,
+      "description": "Tender Coconut Orange(King Coconut) 1 pc",
+      "qty": 1,
+      "unit_price": 100,
+      "price": 57,
+      "category": "Fresh Produce – Fruits"
+    }
+  ],
+  "items_total": 257,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.767Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-04T00:00:00.000Z"
+  },
+  "items_count": 2
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92827"
+  },
+  "invoice_no": "251129G001435824",
+  "order_no": "JILTQBKSN48992A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.811Z"
+  },
+  "date": "05-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Fresh Onion 1 Pack / 900 - 1000 gm",
+      "qty": 2,
+      "unit_price": 50.99,
+      "price": 60,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 2,
+      "description": "Coriander leaves 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 19,
+      "price": 12,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 3,
+      "description": "Heritage Special Long Life Toned Milk (Pouch) 1 pack (500 ml)",
+      "qty": 2,
+      "unit_price": 34,
+      "price": 64,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 4,
+      "description": "Continental Xtra Instant Coffee 1 pack (48 x 1.8 g)",
+      "qty": 1,
+      "unit_price": 91.42,
+      "price": 91,
+      "category": "Beverages & Drinks"
+    },
+    {
+      "sr": 5,
+      "description": "Stellar Define 1 pack (20 pcs)",
+      "qty": 1,
+      "unit_price": 71.1,
+      "price": 200,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 6,
+      "description": "Milky Mist Paneer 1 pack (200 g)",
+      "qty": 2,
+      "unit_price": 125,
+      "price": 180,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 7,
+      "description": "Amul Salted Butter 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 59.05,
+      "price": 55,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 8,
+      "description": "Cabbage 1 pc",
+      "qty": 1,
+      "unit_price": 38.99,
+      "price": 27,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 9,
+      "description": "Beetroot 500 g",
+      "qty": 1,
+      "unit_price": 64,
+      "price": 39,
+      "category": "Others"
+    },
+    {
+      "sr": 10,
+      "description": "Cauliflower 1 pc",
+      "qty": 1,
+      "unit_price": 76.99,
+      "price": 42,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 11,
+      "description": "Chilli Green 100 g",
+      "qty": 2,
+      "unit_price": 32,
+      "price": 38,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 12,
+      "description": "Fresh Potato 1 pack (900 g - 1 kg)",
+      "qty": 2,
+      "unit_price": 61,
+      "price": 74,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 13,
+      "description": "Carrot Local 500 g",
+      "qty": 1,
+      "unit_price": 75.99,
+      "price": 49,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 14,
+      "description": "Smith & Jones Ginger Garlic Paste, India's No.1 Cooking Paste, Thick & Coarse Paste 1 pack (200 g)",
+      "qty": 1,
+      "unit_price": 47.61,
+      "price": 35,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 15,
+      "description": "Tomato Local 500 g",
+      "qty": 4,
+      "unit_price": 32,
+      "price": 88,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 16,
+      "description": "Mushroom Button 200 g",
+      "qty": 2,
+      "unit_price": 81,
+      "price": 130,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 17,
+      "description": "Beans Haricot 250 g",
+      "qty": 1,
+      "unit_price": 48.99,
+      "price": 29,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    }
+  ],
+  "items_total": 1213,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.811Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-05T00:00:00.000Z"
+  },
+  "items_count": 17
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92828"
+  },
+  "order_no": "PMNMPBKSL72775A",
+  "invoice_no": "251129G002656749",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.829Z"
+  },
+  "date": "09-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Tender Coconut 1 pc",
+      "qty": 2,
+      "unit_price": 86.99,
+      "price": 100,
+      "category": "Fresh Produce – Fruits"
+    },
+    {
+      "sr": 2,
+      "description": "Gold Flake Twinpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 3,
+      "description": "Classic Refined Taste Cigarette (Ultra Mild) 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 440,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.829Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-09T00:00:00.000Z"
+  },
+  "items_count": 3
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92829"
+  },
+  "invoice_no": "251129G003392212",
+  "order_no": "SNKQPBKSS20449A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.841Z"
+  },
+  "date": "11-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Stellar Define Paan Mix 1 pack (20 pcs)",
+      "qty": 1,
+      "unit_price": 71.1,
+      "price": 200,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 200,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.841Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-11T00:00:00.000Z"
+  },
+  "items_count": 1
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba9282b"
+  },
+  "order_no": "HSMKQBKSI78442A",
+  "invoice_no": "251129G004151552",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.875Z"
+  },
+  "date": "14-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Bingo! Original Style Chilli Sprinkled - Flat Cut Spicy Potato Chips Pack for Snacks 1 pack (85 g)",
+      "qty": 1,
+      "unit_price": 47.62,
+      "price": 30,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 2,
+      "description": "Akshayakalpa Organic Probiotic Curd Pouch 1 pc (500 g)",
+      "qty": 1,
+      "unit_price": 52.38,
+      "price": 44,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 3,
+      "description": "Lay's India's Magic Masala Potato Chips 1 pack (48 g)",
+      "qty": 2,
+      "unit_price": 19.05,
+      "price": 32,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 4,
+      "description": "Gold flake Mixpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 5,
+      "description": "Uncle Chips Plain Salted 1 pack (80 g)",
+      "qty": 1,
+      "unit_price": 47.62,
+      "price": 30,
+      "category": "Snacks & Salty Snacks"
+    },
+    {
+      "sr": 6,
+      "description": "Dairy Day Blackcurrant Ice Cream Cone 1 pc (120 ml)",
+      "qty": 2,
+      "unit_price": 38.1,
+      "price": 72,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 7,
+      "description": "Kwality Wall's Cornetto Double Chocolate Cone 1 pc (105 ml)",
+      "qty": 1,
+      "unit_price": 38.1,
+      "price": 33,
+      "category": "Confectionery & Sweet Tooth"
+    }
+  ],
+  "items_total": 411,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.875Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-14T00:00:00.000Z"
+  },
+  "items_count": 7
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba9282d"
+  },
+  "invoice_no": "251129G004231935",
+  "order_no": "HSMKQBKSN78994A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.907Z"
+  },
+  "date": "14-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Lemon 200 g",
+      "qty": 1,
+      "unit_price": 26,
+      "price": 18,
+      "category": "Others"
+    },
+    {
+      "sr": 2,
+      "description": "iD Fresh Mallige Idli Batter 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 61.9,
+      "price": 62,
+      "category": "Instant & Ready-to-Cook Foods"
+    },
+    {
+      "sr": 3,
+      "description": "Coriander leaves 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 20,
+      "price": 11,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 4,
+      "description": "Spinach - Cleaned, without roots 1 pack (250 g)",
+      "qty": 1,
+      "unit_price": 46.99,
+      "price": 29,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Cauliflower 1 pc",
+      "qty": 1,
+      "unit_price": 57,
+      "price": 41,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 6,
+      "description": "Milky Mist Paneer 1 pack (200 g)",
+      "qty": 1,
+      "unit_price": 125,
+      "price": 91,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 7,
+      "description": "Ginger 200 g",
+      "qty": 1,
+      "unit_price": 32,
+      "price": 21,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 8,
+      "description": "Farmland Green Peas | No Added Colours 1 pack (1 kg)",
+      "qty": 1,
+      "unit_price": 320,
+      "price": 132,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 9,
+      "description": "Chilli Green 100 g",
+      "qty": 2,
+      "unit_price": 30,
+      "price": 42,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 10,
+      "description": "Garlic 200 g",
+      "qty": 1,
+      "unit_price": 45,
+      "price": 30,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    }
+  ],
+  "items_total": 477,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.907Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-14T00:00:00.000Z"
+  },
+  "items_count": 10
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba9282e"
+  },
+  "order_no": "JKSUQBKSH00331A",
+  "invoice_no": "251129G004477291",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.925Z"
+  },
+  "date": "15-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Hangyo Black Current Cone 1 pc (110 ml)",
+      "qty": 1,
+      "unit_price": 33.33,
+      "price": 30,
+      "category": "Others"
+    },
+    {
+      "sr": 2,
+      "description": "Dairy Day Butterscotch Ice Cream Cone 1 pc (120 ml)",
+      "qty": 1,
+      "unit_price": 38.1,
+      "price": 36,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 3,
+      "description": "Kwality Walls Cornetto Strawberry Vanilla Cone 1 pc (105 ml)",
+      "qty": 1,
+      "unit_price": 38.1,
+      "price": 33,
+      "category": "Confectionery & Sweet Tooth"
+    },
+    {
+      "sr": 4,
+      "description": "Dukes Waffy Vanilla Flavoured Wafers 1 pc (55 g)",
+      "qty": 2,
+      "unit_price": 42.85,
+      "price": 42,
+      "category": "Snacks & Salty Snacks"
+    },
+    {
+      "sr": 5,
+      "description": "Gold Flake King's Blue Cigarette (Gold Flake Lights) 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 6,
+      "description": "Cream Bell Maxxum Choco Brownie Cone 1 pc (110 ml)",
+      "qty": 1,
+      "unit_price": 57.14,
+      "price": 54,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 7,
+      "description": "Dairy Day Blackcurrant Ice Cream Cone 1 pc (120 ml)",
+      "qty": 1,
+      "unit_price": 38.1,
+      "price": 36,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 8,
+      "description": "Dukes Waffy Chocolate Wafers 1 pack (55 g)",
+      "qty": 2,
+      "unit_price": 42.86,
+      "price": 38,
+      "category": "Snacks & Salty Snacks"
+    },
+    {
+      "sr": 9,
+      "description": "Britannia Treat Rich Creme Orange Flavoured Wafers 1 pc (55 g)",
+      "qty": 2,
+      "unit_price": 42.86,
+      "price": 40,
+      "category": "Fresh Produce – Fruits"
+    }
+  ],
+  "items_total": 479,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.925Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-15T00:00:00.000Z"
+  },
+  "items_count": 9
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba9282f"
+  },
+  "invoice_no": "251129G004537542",
+  "order_no": "JKSUQBKSL07770A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.937Z"
+  },
+  "date": "15-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Mint Leaves 100 g",
+      "qty": 1,
+      "unit_price": 14,
+      "price": 11,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 2,
+      "description": "Mango Totapuri Raw 1 kg (4 - 5 pcs)",
+      "qty": 1,
+      "unit_price": 130,
+      "price": 91,
+      "category": "Fresh Produce – Fruits"
+    },
+    {
+      "sr": 3,
+      "description": "Tender Coconut 1 pc",
+      "qty": 2,
+      "unit_price": 83.99,
+      "price": 98,
+      "category": "Fresh Produce – Fruits"
+    },
+    {
+      "sr": 4,
+      "description": "Gold flake Mixpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 5,
+      "description": "Coriander leaves 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 20,
+      "price": 11,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 6,
+      "description": "Priya Cut Mango Pickle 1 pc (300 g)",
+      "qty": 1,
+      "unit_price": 98.08,
+      "price": 93,
+      "category": "Fresh Produce – Fruits"
+    }
+  ],
+  "items_total": 474,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.937Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-15T00:00:00.000Z"
+  },
+  "items_count": 6
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92830"
+  },
+  "order_no": "KTJOQBKSJ51553A",
+  "invoice_no": "251129G004867128",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.947Z"
+  },
+  "date": "16-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Marlboro Vista Double Fusion 1 pack (20 pcs)",
+      "qty": 1,
+      "unit_price": 132.07,
+      "price": 300,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 300,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.947Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-16T00:00:00.000Z"
+  },
+  "items_count": 1
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92831"
+  },
+  "invoice_no": "251129G007117365",
+  "order_no": "MMRQBKSI40442A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.980Z"
+  },
+  "date": "23-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Daawat Premium Sona Masuri Rice | Medium Grain 1 pack (5 kg)",
+      "qty": 1,
+      "unit_price": 447.57,
+      "price": 344,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 2,
+      "description": "Fresh Potato 1 pack (900 g - 1 kg)",
+      "qty": 3,
+      "unit_price": 60.99,
+      "price": 126,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 3,
+      "description": "Chilli Green 100 g",
+      "qty": 2,
+      "unit_price": 29,
+      "price": 32,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 4,
+      "description": "iD Fresh Idli & Dosa Batter 1 pack (1 kg)",
+      "qty": 1,
+      "unit_price": 90.47,
+      "price": 68,
+      "category": "Instant & Ready-to-Cook Foods"
+    },
+    {
+      "sr": 5,
+      "description": "Milky Mist Paneer 1 pack (200 g)",
+      "qty": 2,
+      "unit_price": 130,
+      "price": 182,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 6,
+      "description": "Freedom Refined Sunflower Oil 1 pack (1 L)",
+      "qty": 1,
+      "unit_price": 164.74,
+      "price": 152,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 7,
+      "description": "Fenugreek (Methi) 250 g",
+      "qty": 2,
+      "unit_price": 36,
+      "price": 64,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 8,
+      "description": "Lady Finger 500 g",
+      "qty": 1,
+      "unit_price": 67.99,
+      "price": 37,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 9,
+      "description": "Cabbage 1 pc",
+      "qty": 1,
+      "unit_price": 43,
+      "price": 30,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 10,
+      "description": "Gold flake Mixpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 11,
+      "description": "Tomato Local 500 g",
+      "qty": 4,
+      "unit_price": 62,
+      "price": 132,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 12,
+      "description": "Coriander leaves 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 13,
+      "price": 10,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 13,
+      "description": "Tata Tea Gold Care Cardamom and Ginger Black Tea 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 319.02,
+      "price": 239,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 14,
+      "description": "Spinach - Cleaned, without roots 1 pack (250 g)",
+      "qty": 1,
+      "unit_price": 35,
+      "price": 22,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 15,
+      "description": "Cauliflower 1 pc",
+      "qty": 1,
+      "unit_price": 52,
+      "price": 34,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 16,
+      "description": "Beans Haricot 250 g",
+      "qty": 1,
+      "unit_price": 24,
+      "price": 14,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    }
+  ],
+  "items_total": 1656,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.980Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-23T00:00:00.000Z"
+  },
+  "items_count": 16
+},
+{
+  "_id": {
+    "$oid": "6939b4e7ee0356ec7ba92832"
+  },
+  "order_no": "MOHJQBKSQ06220A",
+  "invoice_no": "251129G008529170",
+  "created_at": {
+    "$date": "2025-12-10T17:59:03.995Z"
+  },
+  "date": "27-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "iD Fresh Idli & Dosa Batter 1 pack (1 kg)",
+      "qty": 1,
+      "unit_price": 90.47,
+      "price": 68,
+      "category": "Instant & Ready-to-Cook Foods"
+    },
+    {
+      "sr": 2,
+      "description": "Carrot Local 500 g",
+      "qty": 1,
+      "unit_price": 66,
+      "price": 42,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 3,
+      "description": "Cauliflower 1 pc",
+      "qty": 1,
+      "unit_price": 46.99,
+      "price": 34,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 4,
+      "description": "Fresh Potato 1 pack (900 g - 1 kg)",
+      "qty": 1,
+      "unit_price": 55,
+      "price": 36,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Spinach - Cleaned, without roots 1 pack (250 g)",
+      "qty": 1,
+      "unit_price": 34,
+      "price": 22,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 6,
+      "description": "Heritage Special Long Life Toned Milk (Pouch) 1 pack (500 ml)",
+      "qty": 2,
+      "unit_price": 33,
+      "price": 62,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 7,
+      "description": "Ginger 200 g",
+      "qty": 1,
+      "unit_price": 28,
+      "price": 19,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 8,
+      "description": "Organically Grown Lemon 200 g",
+      "qty": 2,
+      "unit_price": 37,
+      "price": 50,
+      "category": "Others"
+    },
+    {
+      "sr": 9,
+      "description": "Gold flake Mixpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 10,
+      "description": "Tata Sampann High in Fibre Poha 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 54.29,
+      "price": 41,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 11,
+      "description": "Beans Haricot 250 g",
+      "qty": 1,
+      "unit_price": 27,
+      "price": 20,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    }
+  ],
+  "items_total": 564,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:03.995Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-27T00:00:00.000Z"
+  },
+  "items_count": 11
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92833"
+  },
+  "invoice_no": "251129G005322042",
+  "order_no": "MLQIQBKSQ24220A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.015Z"
+  },
+  "date": "17-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Cauliflower 1 pc",
+      "qty": 1,
+      "unit_price": 55.99,
+      "price": 32,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 2,
+      "description": "Fortune Xpert Pro Immunity Oil 1 pack (1 L)",
+      "qty": 1,
+      "unit_price": 180.94,
+      "price": 154,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 3,
+      "description": "Heritage Special Long Life Toned Milk (Pouch) 1 pack (500 ml)",
+      "qty": 1,
+      "unit_price": 33.5,
+      "price": 32,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 4,
+      "description": "Fresh Onion 1 Pack / 900 - 1000 gm",
+      "qty": 2,
+      "unit_price": 48,
+      "price": 48,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Catch Garlic Paste 1 pack (200 g)",
+      "qty": 1,
+      "unit_price": 44.76,
+      "price": 25,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 6,
+      "description": "Beans Haricot 250 g",
+      "qty": 1,
+      "unit_price": 31,
+      "price": 18,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 7,
+      "description": "Fresh Potato 1 pack (900 g - 1 kg)",
+      "qty": 2,
+      "unit_price": 60,
+      "price": 60,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 8,
+      "description": "Drumsticks 4 pcs",
+      "qty": 1,
+      "unit_price": 128.99,
+      "price": 65,
+      "category": "Others"
+    },
+    {
+      "sr": 9,
+      "description": "Chilli Green 100 g",
+      "qty": 1,
+      "unit_price": 32,
+      "price": 18,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 10,
+      "description": "Tata Sampann Unpolished Toor Dal- Arhar Dal 1 pack (1 kg)",
+      "qty": 1,
+      "unit_price": 189.52,
+      "price": 145,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 11,
+      "description": "Lady Finger 500 g",
+      "qty": 1,
+      "unit_price": 61,
+      "price": 35,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 12,
+      "description": "Tomato Local 500 g",
+      "qty": 1,
+      "unit_price": 48,
+      "price": 27,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    }
+  ],
+  "items_total": 659,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.015Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-17T00:00:00.000Z"
+  },
+  "items_count": 12
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92834"
+  },
+  "order_no": "PMRLHBKSO88005A",
+  "invoice_no": "251229G003008291",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.029Z"
+  },
+  "date": "09-12-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Nandini Thick Curd Pouch 1 pack (500 g)",
+      "qty": 2,
+      "unit_price": 26.67,
+      "price": 56,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 2,
+      "description": "Tata Sampann Unpolished Kabuli Chana 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 108.56,
+      "price": 81,
+      "category": "Others"
+    },
+    {
+      "sr": 3,
+      "description": "Ezee Small Garbage Bags 17 x 19 Inch 1 pack (30 pcs)",
+      "qty": 2,
+      "unit_price": 45.76,
+      "price": 98,
+      "category": "Others"
+    },
+    {
+      "sr": 4,
+      "description": "Tata Sampann Fine Besan 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 76.19,
+      "price": 51,
+      "category": "Others"
+    },
+    {
+      "sr": 5,
+      "description": "Fortune Sunlite Refined Sunflower Oil | Pouch 1 pack (800 g)",
+      "qty": 1,
+      "unit_price": 176.17,
+      "price": 135,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 6,
+      "description": "Tata Sampann Kala Chana 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 75.23,
+      "price": 56,
+      "category": "Others"
+    },
+    {
+      "sr": 7,
+      "description": "Ezee Premium Large Size Garbage Bag With Detachable Tie Tape 1 pack (15 pcs)",
+      "qty": 2,
+      "unit_price": 68.64,
+      "price": 128,
+      "category": "Household, Personal Care & Miscellaneous"
+    },
+    {
+      "sr": 8,
+      "description": "iD Fresh Idli & Dosa Batter 1 pack (2 kg)",
+      "qty": 1,
+      "unit_price": 157.13,
+      "price": 156,
+      "category": "Instant & Ready-to-Cook Foods"
+    }
+  ],
+  "items_total": 761,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.029Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-09T00:00:00.000Z"
+  },
+  "items_count": 8
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92835"
+  },
+  "invoice_no": "251229G002312832",
+  "order_no": "MJNGIBKSN49994A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.053Z"
+  },
+  "date": "07-12-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "True Elements 9 in 1 Super seeds & Nut Mix - For Weight Loss, Healthy Snack 1 pack (125 g)",
+      "qty": 1,
+      "unit_price": 133.33,
+      "price": 109,
+      "category": "Snacks & Salty Snacks"
+    },
+    {
+      "sr": 2,
+      "description": "Tender Coconut 1 pc",
+      "qty": 2,
+      "unit_price": 74,
+      "price": 100,
+      "category": "Fresh Produce – Fruits"
+    },
+    {
+      "sr": 3,
+      "description": "Gold flake Mixpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    },
+    {
+      "sr": 4,
+      "description": "Amrutanjan Faster Relaxation Roll-On 1 pc (10 ml)",
+      "qty": 1,
+      "unit_price": 62.85,
+      "price": 56,
+      "category": "Bakery & Bread"
+    },
+    {
+      "sr": 5,
+      "description": "Nivea Natural Glow Even- toned & Smooth Skin 72h Protection Roll On 1 pc (50 ml)",
+      "qty": 1,
+      "unit_price": 210.99,
+      "price": 150,
+      "category": "Bakery & Bread"
+    }
+  ],
+  "items_total": 585,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.053Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-07T00:00:00.000Z"
+  },
+  "items_count": 5
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92836"
+  },
+  "order_no": "HSOIBKSO80003A",
+  "invoice_no": "251229G000891839",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.066Z"
+  },
+  "date": "03-12-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Tata Sampann High in Fibre Poha 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 54.29,
+      "price": 41,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 2,
+      "description": "Boomer Krunch Strawberry Flavour Bubble Gum Tube 1 pack (28.8 g)",
+      "qty": 1,
+      "unit_price": 47.62,
+      "price": 43,
+      "category": "Others"
+    },
+    {
+      "sr": 3,
+      "description": "Se7en Heavy Duty Reusable Household Hand Gloves(Colour May Vary) 1 pair",
+      "qty": 1,
+      "unit_price": 75.41,
+      "price": 78,
+      "category": "Others"
+    },
+    {
+      "sr": 4,
+      "description": "Gold flake Mixpod 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 332,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.066Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-03T00:00:00.000Z"
+  },
+  "items_count": 4
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92837"
+  },
+  "invoice_no": "251229G000231263",
+  "order_no": "SLHOHBKSO88003A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.085Z"
+  },
+  "date": "01-12-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Chilli Green 100 g",
+      "qty": 1,
+      "unit_price": 27,
+      "price": 14,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 2,
+      "description": "Lady Finger 500 g",
+      "qty": 1,
+      "unit_price": 64.99,
+      "price": 36,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 3,
+      "description": "Godrej Jersey Toned Milk 1 pack (500 ml)",
+      "qty": 1,
+      "unit_price": 31,
+      "price": 30,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 4,
+      "description": "Beans Haricot 250 g",
+      "qty": 2,
+      "unit_price": 28,
+      "price": 36,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Popular Essentials Pink Rock Salt | Sendha Namak 1 pack (500 g)",
+      "qty": 1,
+      "unit_price": 59.99,
+      "price": 41,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 6,
+      "description": "iD Fresh Idli & Dosa Batter 1 pack (1 kg)",
+      "qty": 1,
+      "unit_price": 90.47,
+      "price": 68,
+      "category": "Instant & Ready-to-Cook Foods"
+    },
+    {
+      "sr": 7,
+      "description": "Cauliflower 1 pc",
+      "qty": 1,
+      "unit_price": 46,
+      "price": 30,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 8,
+      "description": "Lemon 200 g",
+      "qty": 1,
+      "unit_price": 25,
+      "price": 18,
+      "category": "Others"
+    },
+    {
+      "sr": 9,
+      "description": "Tomato Hybrid 500 g",
+      "qty": 4,
+      "unit_price": 59,
+      "price": 120,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 10,
+      "description": "Coriander leaves 1 pack (100 g)",
+      "qty": 2,
+      "unit_price": 13,
+      "price": 20,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 11,
+      "description": "Catch Sabzi Masala 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 68.57,
+      "price": 49,
+      "category": "Spices, Condiments & Cooking Essentials"
+    },
+    {
+      "sr": 12,
+      "description": "Fresh Potato 1 pack (900 g - 1 kg)",
+      "qty": 2,
+      "unit_price": 51,
+      "price": 72,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 13,
+      "description": "Heritage Special Long Life Toned Milk (Pouch) 1 pack (450 ml)",
+      "qty": 1,
+      "unit_price": 33.5,
+      "price": 32,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 14,
+      "description": "Tata Salt, Free Flowing and Iodised Namak, Vacuum Evaporated, Salt in Fresh 1 pack (1 kg)",
+      "qty": 1,
+      "unit_price": 30,
+      "price": 27,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 15,
+      "description": "Fresh Onion 1 Pack / 900 - 1000 gm",
+      "qty": 2,
+      "unit_price": 57,
+      "price": 54,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    }
+  ],
+  "items_total": 647,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.085Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-01T00:00:00.000Z"
+  },
+  "items_count": 15
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92838"
+  },
+  "order_no": "RJSIPBKSP94114A",
+  "invoice_no": "251129G009563650",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.099Z"
+  },
+  "date": "30-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Wok Tok By Veeba Green Chilli Sauce + Red Chilli Sauce + Soya Sauce Combo 625 g",
+      "qty": 1,
+      "unit_price": 171.41,
+      "price": 139,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 2,
+      "description": "Nestle KitKat Minis Choco Coated Wafer Bar | Share Bag | Miniature Pouch 1 pack ( 18 x 7.4 g or 16 x 7.4 g)",
+      "qty": 1,
+      "unit_price": 114.29,
+      "price": 105,
+      "category": "Snacks & Salty Snacks"
+    },
+    {
+      "sr": 3,
+      "description": "Lindt Lindor Smooth Melting Milk Chocolate Cornet Trio Pack 1 pack (37.5 g)",
+      "qty": 1,
+      "unit_price": 185.71,
+      "price": 162,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 4,
+      "description": "Capsicum Green 2 pcs",
+      "qty": 2,
+      "unit_price": 38,
+      "price": 48,
+      "category": "Fresh Produce – Vegetables & Herbs"
+    },
+    {
+      "sr": 5,
+      "description": "Magnate Magic Switch King Size - 5 Flavours In A Pack 1 pack (20 pcs)",
+      "qty": 1,
+      "unit_price": 162.56,
+      "price": 350,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 804,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.099Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-30T00:00:00.000Z"
+  },
+  "items_count": 5
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba92839"
+  },
+  "invoice_no": "251129G008798733",
+  "order_no": "OIUUPBKSO06003A",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.114Z"
+  },
+  "date": "28-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Stayfree Secure Nights XXL Sanitary Pads 1 pack (40 pcs)",
+      "qty": 1,
+      "unit_price": 329.99,
+      "price": 273,
+      "category": "Household, Personal Care & Miscellaneous"
+    },
+    {
+      "sr": 2,
+      "description": "Stayfree Secure Regular Sanitary Pads 1 pack (6 pcs)",
+      "qty": 1,
+      "unit_price": 37,
+      "price": 34,
+      "category": "Household, Personal Care & Miscellaneous"
+    },
+    {
+      "sr": 3,
+      "description": "Nestle Munch Choco Coated Wafer Bar - Sharebag 1 pack (17 x 8.7 g)",
+      "qty": 1,
+      "unit_price": 95.24,
+      "price": 85,
+      "category": "Snacks & Salty Snacks"
+    },
+    {
+      "sr": 4,
+      "description": "Amul Salted Butter 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 55.24,
+      "price": 55,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 5,
+      "description": "Kinley Soda 1 pc (750 ml)",
+      "qty": 1,
+      "unit_price": 17.14,
+      "price": 16,
+      "category": "Beverages & Drinks"
+    },
+    {
+      "sr": 6,
+      "description": "MAGGI 2- Minute Instant Noodles | Masala Noodles | Made With Quality Spices 8 x 70 g",
+      "qty": 1,
+      "unit_price": 110.47,
+      "price": 99,
+      "category": "Spices, Condiments & Cooking Essentials"
+    },
+    {
+      "sr": 7,
+      "description": "Dairy Day Blackcurrant Ice Cream Cone 1 pc (120 ml)",
+      "qty": 2,
+      "unit_price": 38.09,
+      "price": 60,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 8,
+      "description": "Maggi Masala-ae- Magic Sabzi Masala 1 pack (72 g)",
+      "qty": 1,
+      "unit_price": 57.14,
+      "price": 53,
+      "category": "Spices, Condiments & Cooking Essentials"
+    }
+  ],
+  "items_total": 675,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.114Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-28T00:00:00.000Z"
+  },
+  "items_count": 8
+},
+{
+  "_id": {
+    "$oid": "6939b4e8ee0356ec7ba9283a"
+  },
+  "order_no": "HOPQBKSE06003A",
+  "invoice_no": "251129G000715291",
+  "created_at": {
+    "$date": "2025-12-10T17:59:04.123Z"
+  },
+  "date": "03-11-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Monster Energy Ultra Zero Sugar 1 pc (350 ml)",
+      "qty": 1,
+      "unit_price": 89.29,
+      "price": 84,
+      "category": "Staples & Pantry"
+    },
+    {
+      "sr": 2,
+      "description": "Gold Flake King's Blue Cigarette (Gold Flake Lights) 1 pack (10 pcs)",
+      "qty": 1,
+      "unit_price": 78.23,
+      "price": 170,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 254,
+  "updated_at": {
+    "$date": "2025-12-10T17:59:04.123Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-11-03T00:00:00.000Z"
+  },
+  "items_count": 2
+},
+{
+  "_id": {
+    "$oid": "6939b5fdee0356ec7ba9283b"
+  },
+  "invoice_no": "251229G003351953",
+  "order_no": "QVHVHBKSO24008A",
+  "created_at": {
+    "$date": "2025-12-10T18:03:41.034Z"
+  },
+  "date": "10-12-2025",
+  "delivery_partner": {
+    "registered_name": "Zepto Private Limited",
+    "known_name": "Zepto"
+  },
+  "items": [
+    {
+      "sr": 1,
+      "description": "Gebi Bottle Brush With Sponge | Assorted 1 pack",
+      "qty": 1,
+      "unit_price": 66.95,
+      "price": 48,
+      "category": "Others"
+    },
+    {
+      "sr": 2,
+      "description": "Amul Salted Butter 1 pack (100 g)",
+      "qty": 1,
+      "unit_price": 55.23,
+      "price": 56,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 3,
+      "description": "Amul Processed Cheese Cubes 1 pack (200 g)",
+      "qty": 1,
+      "unit_price": 123.8,
+      "price": 123,
+      "category": "Dairy & Eggs"
+    },
+    {
+      "sr": 4,
+      "description": "MAGGI 2- Minute Instant Noodles | Masala Noodles | Made With Quality Spices 8 x 70 g",
+      "qty": 1,
+      "unit_price": 110.47,
+      "price": 99,
+      "category": "Spices, Condiments & Cooking Essentials"
+    },
+    {
+      "sr": 5,
+      "description": "Magnate Magic Switch King Size - 5 Flavours In A Pack 1 pack (20 pcs)",
+      "qty": 1,
+      "unit_price": 162.56,
+      "price": 350,
+      "category": "Tobacco & Related"
+    }
+  ],
+  "items_total": 676,
+  "updated_at": {
+    "$date": "2025-12-10T18:03:41.034Z"
+  },
+  "user_id": "69375f3c47cb9edb783a408e",
+  "username": "hem",
+  "date_obj": {
+    "$date": "2025-12-10T00:00:00.000Z"
+  },
+  "items_count": 5
+}]

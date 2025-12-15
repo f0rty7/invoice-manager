@@ -8,7 +8,7 @@ export interface PDFParser {
 export const CATEGORIES = [
   {
     // Fresh fruits (fresh produce)
-    regex: /\b(apple|banana|mango|orange|grape|berry|berries|watermelon|papaya|pineapple|kiwi|melon|pomegranate|coconut|tender\s*coconut|fruit|fruits)\b/i,
+    regex: /\b(apple|banana|mango|orange|grape|berry|berries|watermelon|papaya|pineapple|kiwi|melon|pomegranate|guava|coconut|tender\s*coconut|fruit|fruits)\b/i,
     category: 'Fresh Produce – Fruits'
   },
   {
@@ -18,12 +18,12 @@ export const CATEGORIES = [
   },
   {
     // Staples: rice, flour/atta/sooji/poha/pulses/grains, cooking essentials like cooking oil
-    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
+    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|peanut|groundnut|singdana|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
     category: 'Staples & Pantry'
   },
   {
     // Spices, condiments, sauces, pickles, masalas, cooking flavour / condiments
-    regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|masala|masalas|salt|pepper|seasoning|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
+    regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|spices|jeera|cumin|masala|masalas|salt|pepper|seasoning|manchurian|gravy\s*mix|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
     category: 'Spices, Condiments & Cooking Essentials'
   },
   {
@@ -34,7 +34,7 @@ export const CATEGORIES = [
   },
   {
     // Bakery and bread goods: bread, buns, croissants, bakery items
-    regex: /\b(bread|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll(?![-\s]*on)\b|rolls)\b/i,
+    regex: /\b(bread|pav|paav|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll(?![-\s]*on)\b|rolls)\b/i,
     category: 'Bakery & Bread'
   },
   {
@@ -72,7 +72,7 @@ export const CATEGORIES = [
   },
   {
     // Non-food: household items, personal care, gift items, non-edible products — includes other misc items
-    regex: /\b(bouquet|flower|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous|incense|agarbatti|mangaldeep|facial|o3\+|aroma\s*magic|bottle\s*brush|sponge|gloves?|garbage\s*bags?|roll[-\s]*on|instant\s*coffee|coffee\s*powder)\b/i,
+    regex: /\b(bouquet|flowers?|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous|incense|agarbatti|mangaldeep|facial|o3\+|aroma\s*magic|bottle\s*brush|sponge|gloves?|garbage\s*bags?|science\s*kit|roll[-\s]*on|instant\s*coffee|coffee\s*powder)\b/i,
     category: 'Household, Personal Care & Miscellaneous'
   },
   {

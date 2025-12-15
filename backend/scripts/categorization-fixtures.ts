@@ -8,6 +8,35 @@ export type CategorizationFixture = {
 // Canonical fixtures from the user list.
 // Note: #15 and #24 were duplicates, so included once.
 export const categorizationFixtures: CategorizationFixture[] = [
+  // Regression fixtures for previously-misclassified real descriptions
+  {
+    description: 'Thai Guava(Pack)',
+    expected: 'Fresh Produce – Fruits'
+  },
+  {
+    description: 'Britannia Pav 1 pack (200 g)',
+    expected: 'Bakery & Bread'
+  },
+  {
+    description: 'Daily Good Raw Peanut / Singdana 1 pack (500 g)',
+    expected: 'Staples & Pantry'
+  },
+  {
+    description: 'Tata Sampann Cumin Seed (Jeera) | Whole Spices, Natural Oils with Rich Aroma 1 pack (100 g)',
+    expected: 'Spices, Condiments & Cooking Essentials'
+  },
+  {
+    description: 'Knorr Chinese Manchurian Gravy Mix 1 pack (55 g)',
+    expected: 'Spices, Condiments & Cooking Essentials'
+  },
+  {
+    description: 'Purple Chrysanthemum Flowers',
+    expected: 'Household, Personal Care & Miscellaneous'
+  },
+  {
+    description: 'Smartivity My First Science Kit[SMRT1276]',
+    expected: 'Household, Personal Care & Miscellaneous'
+  },
   {
     description: 'Lemon',
     expected: 'Fresh Produce – Vegetables & Herbs'

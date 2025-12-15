@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, computed, Input, ViewChild, DestroyRef, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, Input, ViewChild, DestroyRef, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -64,6 +64,12 @@ export class InvoiceTableComponent {
     
     this.currentViewport = vp;
     this.viewportSub?.unsubscribe();
+
+    // If the viewport is created while this tab is active (e.g. after a loading branch),
+    // force a re-measure so the first paint is correct.
+    if (this.invoiceState.activeTab() === 'invoices') {
+      requestAnimationFrame(() => this.currentViewport?.checkViewportSize());
+    }
     
     // Keep the trigger consistent with ItemTable (this is reliable when itemSize matches row height).
     this.viewportSub = vp.renderedRangeStream.pipe(
@@ -127,13 +133,20 @@ export class InvoiceTableComponent {
   // Filter options for header dialogs (from shared service)
   partnerOptions = this.filterOptionsService.partners;
 
-  readonly rowHeightPx = 56;
+  readonly rowHeightPx = 73;
   readonly viewportHeightPx = 520;
 
   constructor() {
     this.destroyRef.onDestroy(() => this.viewportSub?.unsubscribe());
     // Load filter options via shared service (prevents duplicate calls)
     this.filterOptionsService.loadFilterOptions();
+
+    // FIX: When switching back to this tab, the viewport was hidden (display:none),
+    // so CDK virtual scroll may not recalculate until the user scrolls.
+    effect(() => {
+      if (this.invoiceState.activeTab() !== 'invoices') return;
+      requestAnimationFrame(() => this.currentViewport?.checkViewportSize());
+    });
   }
 
   isColumnActive(column: SortColumn): boolean {

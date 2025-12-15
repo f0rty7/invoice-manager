@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, computed, signal, ViewChild, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, signal, ViewChild, DestroyRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,10 +48,13 @@ export class ItemTableComponent {
   private destroyRef = inject(DestroyRef);
 
   private viewportSub: Subscription | null = null;
+  private currentViewport: CdkVirtualScrollViewport | null = null;
 
   @ViewChild(CdkVirtualScrollViewport)
   set viewport(vp: CdkVirtualScrollViewport | undefined) {
     if (!vp) return;
+    if (this.currentViewport === vp) return;
+    this.currentViewport = vp;
     // This can appear after initial render (e.g., when loading finishes), so attach here.
     this.viewportSub?.unsubscribe();
     this.viewportSub = vp.renderedRangeStream.pipe(
@@ -63,6 +66,12 @@ export class ItemTableComponent {
         return len > 0 && end >= len - 10;
       })
     ).subscribe(() => this.invoiceState.loadMoreItems());
+
+    // If the viewport is created while this tab is active (e.g. after a loading branch),
+    // force a re-measure so the first paint is correct.
+    if (this.invoiceState.activeTab() === 'items') {
+      requestAnimationFrame(() => this.currentViewport?.checkViewportSize());
+    }
   }
 
   items = this.invoiceState.items;
@@ -98,9 +107,16 @@ export class ItemTableComponent {
     this.destroyRef.onDestroy(() => this.viewportSub?.unsubscribe());
     // Load filter options via shared service (prevents duplicate calls)
     this.filterOptionsService.loadFilterOptions();
+
+    // FIX: When switching back to this tab, the viewport was hidden (display:none),
+    // so CDK virtual scroll may not recalculate until the user scrolls.
+    effect(() => {
+      if (this.invoiceState.activeTab() !== 'items') return;
+      requestAnimationFrame(() => this.currentViewport?.checkViewportSize());
+    });
   }
 
-  readonly rowHeightPx = 56;
+  readonly rowHeightPx = 50;
   readonly viewportHeightPx = 520;
 
   // loadMore is attached in the @ViewChild setter once the viewport exists.

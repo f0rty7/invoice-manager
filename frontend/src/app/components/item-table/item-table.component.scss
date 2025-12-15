@@ -21,6 +21,7 @@ mat-card-content { padding: 0 !important; }
   .order-no { font-weight: 600; color: var(--accent-primary); font-family: monospace; font-size: 13px; }
   .invoice-no { font-weight: 500; color: var(--text-secondary); font-family: monospace; font-size: 12px; }
   .item-description { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .category { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .unit-price { color: var(--text-secondary); }
   .total-amount { font-weight: 600; color: var(--accent-success); }
 }

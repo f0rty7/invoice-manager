@@ -168,13 +168,19 @@ export class InvoiceStateService {
       }
     });
 
-    // Aggregate items totals only when Items tab is active (cancel on changes)
-    // We map the active tab signal into the stream by reading it in filter() (runs on each emission).
-    toObservable(this.itemsQueryFiltersSignal).pipe(
+    // Aggregate items totals when Items tab is active.
+    // IMPORTANT: include tab in the observed value so switching tabs triggers a recompute
+    // even if filters remain unchanged.
+    toObservable(
+      computed(() => ({
+        tab: this.activeTabSignal(),
+        queryFilters: this.itemsQueryFiltersSignal()
+      }))
+    ).pipe(
       distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       debounceTime(100),
-      filter(() => this.activeTabSignal() === 'items'),
-      switchMap(queryFilters => {
+      filter(v => v.tab === 'items'),
+      switchMap(({ queryFilters }) => {
         const filters: InvoiceFilters = { ...queryFilters };
         return this.invoiceService.aggregateItems(filters).pipe(
           catchError(() => of(null))
@@ -220,10 +226,6 @@ export class InvoiceStateService {
 
   setActiveTab(tab: 'invoices' | 'items'): void {
     this.activeTabSignal.set(tab);
-    if (tab === 'items') {
-      // Trigger totals computation on first switch even if filters didn't change
-      this.itemsQueryFiltersSignal.update(v => ({ ...v }));
-    }
   }
 
   nextPage(): void {

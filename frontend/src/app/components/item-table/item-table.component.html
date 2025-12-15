@@ -19,6 +19,15 @@
     } @else {
       <div class="table-container">
         <table class="item-table header-table">
+          <colgroup>
+            <col class="col-partner" />
+            <col class="col-date" />
+            <col class="col-order-no" />
+            <col class="col-description" />
+            <col class="col-category" />
+            <col class="col-qty" />
+            <col class="col-price" />
+          </colgroup>
           <thead>
             <tr>
               <th [attr.aria-sort]="getAriaSort('delivery_partner')">
@@ -47,6 +56,15 @@
           [itemSize]="rowHeightPx"
           [style.height.px]="viewportHeightPx">
           <table class="item-table body-table">
+            <colgroup>
+              <col class="col-partner" />
+              <col class="col-date" />
+              <col class="col-order-no" />
+              <col class="col-description" />
+              <col class="col-category" />
+              <col class="col-qty" />
+              <col class="col-price" />
+            </colgroup>
             <tbody>
               <tr *cdkVirtualFor="let item of items(); trackBy: trackByItem" class="item-row">
                 <td><div class="partner-name">{{ item.delivery_partner || 'N/A' }}</div></td>

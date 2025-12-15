@@ -1,5 +1,16 @@
 mat-card { margin-top: var(--spacing-xl); overflow: hidden; @media (max-width: 768px) { margin-top: var(--spacing-lg); } }
 mat-card-content { padding: 0 !important; }
+:host {
+  // Column widths (override these from a parent if needed, e.g. `app-invoice-table { --invoice-col-order-no: 180px; }`)
+  --invoice-col-order-no: auto;
+  --invoice-col-invoice-no: auto;
+  --invoice-col-date: auto;
+  --invoice-col-partner: auto; // flex column
+  --invoice-col-items: auto;
+  --invoice-col-total: auto;
+  --invoice-col-uploaded-by: auto;
+  --invoice-col-actions: auto;
+}
 .loading-container, .error-container, .empty-container {
   display: flex; flex-direction: column; align-items: center; padding: var(--spacing-2xl) var(--spacing-lg); text-align: center;
   mat-icon { font-size: 56px; width: 56px; height: 56px; margin-bottom: var(--spacing-md); color: var(--text-muted); opacity: 0.5; }
@@ -14,6 +25,14 @@ mat-card-content { padding: 0 !important; }
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
+  col.col-order-no { width: var(--invoice-col-order-no); }
+  col.col-invoice-no { width: var(--invoice-col-invoice-no); }
+  col.col-date { width: var(--invoice-col-date); }
+  col.col-partner { width: var(--invoice-col-partner); }
+  col.col-items { width: var(--invoice-col-items); }
+  col.col-total { width: var(--invoice-col-total); }
+  col.col-uploaded-by { width: var(--invoice-col-uploaded-by); }
+  col.col-actions { width: var(--invoice-col-actions); }
   th { font-weight: 600 !important; color: var(--text-muted) !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; background: var(--bg-secondary) !important; padding: var(--spacing-md) !important; z-index: 10; text-align: left !important; }
   td { padding: var(--spacing-md) !important; font-size: 14px !important; }
   .invoice-row { &:hover { background: var(--bg-secondary) !important; } }

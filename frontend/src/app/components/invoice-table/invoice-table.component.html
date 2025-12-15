@@ -20,6 +20,18 @@
       <div class="table-container">
         <!-- Header table (kept outside viewport so it doesn't get transformed) -->
         <table class="invoice-table header-table">
+          <colgroup>
+            <col class="col-order-no" />
+            <col class="col-invoice-no" />
+            <col class="col-date" />
+            <col class="col-partner" />
+            <col class="col-items" />
+            <col class="col-total" />
+            @if (showUploader) {
+              <col class="col-uploaded-by" />
+            }
+            <col class="col-actions" />
+          </colgroup>
           <thead>
             <tr>
               <th>Order No</th>
@@ -49,6 +61,18 @@
           [itemSize]="rowHeightPx"
           [style.height.px]="viewportHeightPx">
           <table class="invoice-table body-table">
+            <colgroup>
+              <col class="col-order-no" />
+              <col class="col-invoice-no" />
+              <col class="col-date" />
+              <col class="col-partner" />
+              <col class="col-items" />
+              <col class="col-total" />
+              @if (showUploader) {
+                <col class="col-uploaded-by" />
+              }
+              <col class="col-actions" />
+            </colgroup>
             <tbody>
               <tr *cdkVirtualFor="let invoice of invoices(); trackBy: trackById" class="invoice-row">
                 <td><div class="order-no">{{ getOrderNoDisplay(invoice.order_no) }}</div></td>

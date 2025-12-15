@@ -14,42 +14,45 @@ const RULES: Rule[] = [
   },
   {
     label: 'Fresh vegetables and herbs',
-    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|brinjal|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|leaves|herb|herbs)\b/i,
+    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|brinjal|lemon|drumsticks?|beetroot|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|leaves|herb|herbs)\b/i,
     category: 'Fresh Produce – Vegetables & Herbs'
   },
   {
     label: 'Staples and pantry items',
-    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|pulse|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
+    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
     category: 'Staples & Pantry'
   },
   {
     label: 'Spices, condiments and cooking essentials',
-    regex: /\b(spice|masala|masalas|salt|pepper|seasoning|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
+    regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|masala|masalas|salt|pepper|seasoning|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
     category: 'Spices, Condiments & Cooking Essentials'
   },
   {
     label: 'Dairy and eggs',
-    regex: /\b(milk|dairy|curd|yogurt|yoghurt|paneer|cheese|butter|cream|ghee|dahi|lassi|buttermilk|condensed\s*milk|milk\s*powder)\b/i,
+    regex:
+      /^(?!.*\b(ice\s*cream|ice-cream|icecream|cornetto|popsicle|frozen\s*dessert|frozen|cone|choco|chocolate|wafer|lindt|lindor|kitkat|munch|dukes|waffy|flavoured\s*milk|kool|cafe|coffee)\b).*?\b(milk|dairy|curd|yogurt|yoghurt|paneer|cheese|butter|cream|ghee|dahi|lassi|buttermilk|condensed\s*milk|milk\s*powder)\b/i,
     category: 'Dairy & Eggs'
   },
   {
     label: 'Bakery and bread',
-    regex: /\b(bread|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll|rolls)\b/i,
+    regex: /\b(bread|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll(?![-\s]*on)\b|rolls)\b/i,
     category: 'Bakery & Bread'
   },
   {
     label: 'Snacks and salty snacks',
-    regex: /\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
+    regex:
+      /^(?!.*\b(choco|chocolate|wafer\s*bar|choco\s*coated|lindt|lindor|kitkat|dukes|waffy)\b).*?\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
     category: 'Snacks & Salty Snacks'
   },
   {
     label: 'Confectionery and sweet tooth',
-    regex: /\b(chocolate|chocolates|candy|sweets?|dessert|ice\s*cream|ice\-cream|icecream|cornetto|popsicle|frozen\s*dessert|cookie|cookies|biscuit|biscuits|wafer|waffle|croissant|cake|sweet\s*snack|sweet)\b/i,
+    regex:
+      /^(?!.*\b(cone)\b).*?\b(choco|chocolate|chocolates|candy|bubble\s*gum|gum|sweets?|dessert|lindt|lindor|kitkat|nestle\s*munch|dukes|waffy|cookie|cookies|biscuit|biscuits|wafer|wafers|waffle|croissant|cake|sweet\s*snack|sweet)\b/i,
     category: 'Confectionery & Sweet Tooth'
   },
   {
     label: 'Frozen and refrigerated items',
-    regex: /\b(ice\s*cream|frozen|frozen\s*food|icecream|cornetto|popsicle)\b/i,
+    regex: /\b(ice\s*cream|ice\-cream|icecream|cornetto|popsicle|frozen\s*dessert|frozen|frozen\s*food|cone)\b/i,
     category: 'Frozen & Refrigerated Items'
   },
   {
@@ -59,17 +62,18 @@ const RULES: Rule[] = [
   },
   {
     label: 'Beverages and drinks',
-    regex: /\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|coffee\s*powder|tea\s*bag|milk\s*drink|health\s*drink)\b/i,
+    regex:
+      /^(?!.*\b(instant\s*coffee|coffee\s*powder)\b).*?\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink)\b/i,
     category: 'Beverages & Drinks'
   },
   {
     label: 'Tobacco and related products',
-    regex: /\b(cigarette|tobacco|cigar|pan|paan|supari|smoke|hookah|chewing\s*tobacco|rolling\s*paper|lighter|\bGold\s*Flake\b|\bMarlboro\b|\bWills\b|\bPlayers\b|\bStellar\s*Define\b|\bMagnate\b|\bMagic\s*Switch\b)\b/i,
+    regex: /\b(cigarette|tobacco|cigar|pan|paan|supari|smoke|hookah|chewing\s*tobacco|rolling\s*paper|lighter|classic\s*(?:refined\s*taste|ultra\s*mild)|\bGold\s*Flake\b|\bMarlboro\b|\bWills\b|\bPlayers\b|\bStellar\s*Define\b|\bMagnate\b|\bMagic\s*Switch\b)\b/i,
     category: 'Tobacco & Related'
   },
   {
     label: 'Household, personal care and miscellaneous',
-    regex: /\b(bouquet|flower|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous)\b/i,
+    regex: /\b(bouquet|flower|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous|incense|agarbatti|mangaldeep|facial|o3\+|aroma\s*magic|bottle\s*brush|sponge|gloves?|garbage\s*bags?|roll[-\s]*on|instant\s*coffee|coffee\s*powder)\b/i,
     category: 'Household, Personal Care & Miscellaneous'
   },
   {
@@ -85,7 +89,12 @@ async function run(): Promise<void> {
 
   const results: { label: string; matched: number; modified: number }[] = [];
 
-  for (const rule of RULES) {
+  // IMPORTANT:
+  // `categorizeDescription()` is first-match-wins (top-to-bottom).
+  // This script uses sequential updates, so later updates overwrite earlier ones.
+  // To match the parser, apply rules bottom-to-top so the earliest (highest priority)
+  // rule in RULES is the last one applied.
+  for (const rule of [...RULES].reverse()) {
     const res = await invoices.updateMany(
       { 'items.description': rule.regex },
       {

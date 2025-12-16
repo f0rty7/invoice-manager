@@ -5,7 +5,11 @@
         <mat-icon>receipt_long</mat-icon>
       </div>
       <div class="stat-details">
-        <div class="stat-value">{{ totalInvoices() }}</div>
+        @if (totalInvoices() !== null) {
+          <div class="stat-value">{{ totalInvoices() }}</div>
+        } @else {
+          <div class="stat-value placeholder">—</div>
+        }
         <div class="stat-label">Total Invoices</div>
       </div>
     </mat-card-content>
@@ -17,7 +21,11 @@
         <mat-icon>currency_rupee</mat-icon>
       </div>
       <div class="stat-details">
-        <div class="stat-value">₹{{ totalAmount().toFixed(2) }}</div>
+        @if (totalAmount() !== null) {
+          <div class="stat-value">₹{{ totalAmount()!.toFixed(2) }}</div>
+        } @else {
+          <div class="stat-value placeholder">—</div>
+        }
         <div class="stat-label">Total Amount</div>
       </div>
     </mat-card-content>
@@ -30,7 +38,9 @@
       </div>
       <div class="stat-details">
         <div class="stat-label">Top Categories</div>
-        @if (topCategories().length > 0) {
+        @if (!stats()) {
+          <div class="no-data">Loading...</div>
+        } @else if (topCategories().length > 0) {
           <div class="category-list">
             @for (cat of topCategories(); track cat.category) {
               <div class="category-item">
@@ -45,28 +55,5 @@
       </div>
     </mat-card-content>
   </mat-card>
-
-  @if (stats()) {
-    <mat-card class="stat-card global-stats">
-      <mat-card-content>
-        <div class="stat-icon">
-          <mat-icon>insights</mat-icon>
-        </div>
-        <div class="stat-details">
-          <div class="stat-label">All-Time Stats</div>
-          <div class="global-stats-grid">
-            <div class="global-stat-item">
-              <span class="label">Invoices:</span>
-              <span class="value">{{ stats()!.total_invoices }}</span>
-            </div>
-            <div class="global-stat-item">
-              <span class="label">Total:</span>
-              <span class="value">₹{{ stats()!.total_amount.toFixed(2) }}</span>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  }
 </div>
 

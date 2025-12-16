@@ -15,28 +15,23 @@ import { InvoiceStateService } from '../../services/invoice-state.service';
 export class StatsCardsComponent {
   private invoiceState = inject(InvoiceStateService);
 
-  stats = this.invoiceState.stats;
-  invoices = this.invoiceState.invoices;
-  
-  // Computed stats from current view
-  totalInvoices = computed(() => this.invoices().length);
-  totalAmount = computed(() => 
-    this.invoices().reduce((sum, inv) => sum + (inv.items_total || 0), 0)
-  );
-  
-  topCategories = computed(() => {
-    const categoryTotals: Record<string, number> = {};
-    
-    this.invoices().forEach(inv => {
-      inv.items.forEach(item => {
-        categoryTotals[item.category] = (categoryTotals[item.category] || 0) + (item.price || 0);
-      });
-    });
-    
-    return Object.entries(categoryTotals)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 3)
-      .map(([category, total]) => ({ category, total }));
+  readonly stats = this.invoiceState.stats;
+
+  // All-time stats (server-provided), independent of pagination/scroll
+  readonly totalInvoices = computed<number | null>(() => this.stats()?.total_invoices ?? null);
+  readonly totalAmount = computed<number | null>(() => this.stats()?.total_amount ?? null);
+
+  readonly topCategories = computed(() => {
+    const byCategory = this.stats()?.by_category ?? {};
+
+    return Object.entries(byCategory)
+      .filter(([category, row]) => !!category && !!row)
+      .map(([category, row]) => ({
+        category,
+        total: row.total ?? 0
+      }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 3);
   });
 
   constructor() {

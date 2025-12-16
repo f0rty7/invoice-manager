@@ -75,6 +75,20 @@
                 <td>{{ item.qty }}</td>
                 <td><div class="total-amount">₹{{ (item.price || 0).toFixed(2) }}</div></td>
               </tr>
+              <tr>
+                <td colspan="7">
+                  @if (loadingMore()) {
+                    <div class="loading-more">
+                      <mat-spinner diameter="30"></mat-spinner>
+                      <span>Loading more...</span>
+                    </div>
+                  } @else if (!hasMore() && items().length > 0) {
+                    <div class="end-of-list">
+                      <span>All {{ total() }} items loaded</span>
+                    </div>
+                  }
+                </td>
+              </tr>
             </tbody>
           </table>
         </cdk-virtual-scroll-viewport>
@@ -87,19 +101,6 @@
             Count: <strong>{{ aggregate()?.total_count || 0 }}</strong>
           </div>
         </div>
-
-        @if (loadingMore()) {
-          <div class="loading-more">
-            <mat-spinner diameter="30"></mat-spinner>
-            <span>Loading more...</span>
-          </div>
-        }
-
-        @if (!hasMore() && items().length > 0) {
-          <div class="end-of-list">
-            <span>All {{ total() }} items loaded</span>
-          </div>
-        }
       </div>
     }
   </mat-card-content>

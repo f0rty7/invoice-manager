@@ -40,15 +40,15 @@ export class AdvancedChartsComponent {
         label: 'Spending',
         data: totals,
         backgroundColor: [
-          'rgba(255, 193, 7, 0.8)',   // Amber
           'rgba(156, 39, 176, 0.8)',   // Purple
+          'rgba(255, 193, 7, 0.8)',   // Amber
           'rgba(158, 158, 158, 0.8)',  // Gray
           'rgba(76, 175, 80, 0.8)',    // Green
           'rgba(33, 150, 243, 0.8)'    // Blue
         ],
         borderColor: [
-          'rgb(255, 193, 7)',
           'rgb(156, 39, 176)',
+          'rgb(255, 193, 7)',
           'rgb(158, 158, 158)',
           'rgb(76, 175, 80)',
           'rgb(33, 150, 243)'

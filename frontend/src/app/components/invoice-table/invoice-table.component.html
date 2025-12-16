@@ -93,6 +93,20 @@
                   </button>
                 </td>
               </tr>
+              <tr>
+                <td [attr.colspan]="showUploader ? 8 : 7">
+                  @if (loadingMore()) {
+                    <div class="loading-more">
+                      <mat-spinner diameter="30"></mat-spinner>
+                      <span>Loading more...</span>
+                    </div>
+                  } @else if (!hasMore() && invoices().length > 0) {
+                    <div class="end-of-list">
+                      <span>All {{ total() }} invoices loaded</span>
+                    </div>
+                  }
+                </td>
+              </tr>
             </tbody>
           </table>
         </cdk-virtual-scroll-viewport>
@@ -105,19 +119,6 @@
             Count: <strong>{{ aggregate()?.total_count || 0 }}</strong>
           </div>
         </div>
-
-        @if (loadingMore()) {
-          <div class="loading-more">
-            <mat-spinner diameter="30"></mat-spinner>
-            <span>Loading more...</span>
-          </div>
-        }
-
-        @if (!hasMore() && invoices().length > 0) {
-          <div class="end-of-list">
-            <span>All {{ total() }} invoices loaded</span>
-          </div>
-        }
       </div>
     }
   </mat-card-content>

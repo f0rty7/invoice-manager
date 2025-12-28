@@ -62,25 +62,62 @@
         <!-- Statistics Cards -->
         <app-stats-cards></app-stats-cards>
 
-        <!-- Charts - Deferred until visible in viewport -->
-        @defer (on viewport) {
-          <app-charts></app-charts>
-        } @placeholder {
-          <div class="chart-placeholder">
-            <mat-icon>bar_chart</mat-icon>
-            <span>Loading charts...</span>
-          </div>
-        }
+        <!-- Analytics accordion (collapsed by default) -->
+        <mat-accordion class="analytics-accordion">
+          <mat-expansion-panel (opened)="onAnalyticsOpened()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>analytics</mat-icon>
+                Analytics & Insights
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-        <!-- Advanced Analytics - Deferred until visible in viewport -->
-        @defer (on viewport) {
-          <app-advanced-charts></app-advanced-charts>
-        } @placeholder {
-          <div class="chart-placeholder">
-            <mat-icon>analytics</mat-icon>
-            <span>Loading analytics...</span>
-          </div>
-        }
+            <ng-template matExpansionPanelContent>
+              @if (invoiceLoading()) {
+                <div class="chart-placeholder">
+                  <mat-icon>bar_chart</mat-icon>
+                  <span>Loading charts...</span>
+                </div>
+              } @else {
+                @defer (when analyticsPanelLoaded()) {
+                  <app-charts></app-charts>
+                } @placeholder {
+                  <div class="chart-placeholder">
+                    <mat-icon>bar_chart</mat-icon>
+                    <span>Loading charts...</span>
+                  </div>
+                }
+              }
+            </ng-template>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel (opened)="onAdvancedAnalyticsOpened()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>insights</mat-icon>
+                Advanced Analytics
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <ng-template matExpansionPanelContent>
+              @if (invoiceLoading()) {
+                <div class="chart-placeholder">
+                  <mat-icon>analytics</mat-icon>
+                  <span>Loading analytics...</span>
+                </div>
+              } @else {
+                @defer (when advancedPanelLoaded()) {
+                  <app-advanced-charts></app-advanced-charts>
+                } @placeholder {
+                  <div class="chart-placeholder">
+                    <mat-icon>analytics</mat-icon>
+                    <span>Loading analytics...</span>
+                  </div>
+                }
+              }
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
 
         <!-- Data Tables -->
         <mat-tab-group class="data-tables data-tabs" animationDuration="200ms" (selectedTabChange)="onTabChange($event)">

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { outputToObservable } from '@angular/core/rxjs-interop';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { AuthService } from '../../services/auth.service';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { UploadComponent } from '../../components/upload/upload.component';
@@ -30,6 +31,7 @@ import { AdvancedChartsComponent } from '../../components/advanced-charts/advanc
     MatTooltipModule,
     MatDialogModule,
     MatTabsModule,
+    MatExpansionModule,
     FilterBarComponent,
     StatsCardsComponent,
     InvoiceTableComponent,
@@ -53,6 +55,21 @@ export class DashboardComponent {
   // Counts for tabs
   invoicesTotal = this.invoiceState.total;
   itemsTotal = this.invoiceState.itemsTotal;
+
+  // Analytics accordion
+  readonly analyticsPanelLoaded = signal(false);
+  readonly advancedPanelLoaded = signal(false);
+  readonly invoiceLoading = this.invoiceState.loading;
+
+  onAnalyticsOpened(): void {
+    this.analyticsPanelLoaded.set(true);
+    this.invoiceState.refreshInvoices();
+  }
+
+  onAdvancedAnalyticsOpened(): void {
+    this.advancedPanelLoaded.set(true);
+    this.invoiceState.refreshInvoices();
+  }
 
   openUploadDialog(): void {
     const dialogRef = this.dialog.open(UploadComponent, {

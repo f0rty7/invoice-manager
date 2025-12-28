@@ -13,19 +13,32 @@ const RULES: Rule[] = [
     category: 'Fresh Produce – Fruits'
   },
   {
-    label: 'Fresh vegetables and herbs',
-    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|brinjal|lemon|drumsticks?|beetroot|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|leaves|herb|herbs)\b/i,
-    category: 'Fresh Produce – Vegetables & Herbs'
+    label: 'Staples and pantry items',
+    regex: /\b(rice|sona\s*masoori|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|peanut|groundnut|singdana|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
+    category: 'Staples & Pantry'
   },
   {
-    label: 'Staples and pantry items',
-    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|peanut|groundnut|singdana|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
-    category: 'Staples & Pantry'
+    label: 'Snacks and salty snacks',
+    // IMPORTANT: Keep this before vegetables so "potato chips" doesn't get classified as vegetables.
+    regex:
+      /^(?!.*\b(choco|chocolate|wafer\s*bar|choco\s*coated|lindt|lindor|kitkat|dukes|waffy)\b).*?\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
+    category: 'Snacks & Salty Snacks'
+  },
+  {
+    label: 'Fresh vegetables and herbs',
+    // NOTE: Avoid generic "leaves" so non-produce like "rolling paper 32 leaves" isn't misclassified.
+    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|brinjal|lemon|drumsticks?|beetroot|radish|mooli|bay\s*leaf|tej\s*patta|tejpatta|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|herb|herbs|curry\s*leaves)\b/i,
+    category: 'Fresh Produce – Vegetables & Herbs'
   },
   {
     label: 'Spices, condiments and cooking essentials',
     regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|spices|jeera|cumin|masala|masalas|salt|pepper|seasoning|manchurian|gravy\s*mix|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
     category: 'Spices, Condiments & Cooking Essentials'
+  },
+  {
+    label: 'Personal care tan-remover / detan creams',
+    regex: /\b(raaga|de-?\s*tan|detan|tan\s*remover)\b/i,
+    category: 'Household, Personal Care & Miscellaneous'
   },
   {
     label: 'Dairy and eggs',
@@ -37,12 +50,6 @@ const RULES: Rule[] = [
     label: 'Bakery and bread',
     regex: /\b(bread|pav|paav|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll(?![-\s]*on)\b|rolls)\b/i,
     category: 'Bakery & Bread'
-  },
-  {
-    label: 'Snacks and salty snacks',
-    regex:
-      /^(?!.*\b(choco|chocolate|wafer\s*bar|choco\s*coated|lindt|lindor|kitkat|dukes|waffy)\b).*?\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
-    category: 'Snacks & Salty Snacks'
   },
   {
     label: 'Confectionery and sweet tooth',
@@ -63,7 +70,7 @@ const RULES: Rule[] = [
   {
     label: 'Beverages and drinks',
     regex:
-      /^(?!.*\b(instant\s*coffee|coffee\s*powder)\b).*?\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink)\b/i,
+      /^(?!.*\b(instant\s*coffee|coffee\s*powder)\b).*?\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink|daily\s*good.*\btaj\b)\b/i,
     category: 'Beverages & Drinks'
   },
   {

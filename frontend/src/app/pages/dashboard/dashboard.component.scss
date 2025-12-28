@@ -119,6 +119,12 @@
 
 .data-tables { margin-top: var(--spacing-xl); }
 
+// Analytics accordion
+.analytics-accordion {
+  display: block;
+  margin-bottom: var(--spacing-lg);
+}
+
 // Placeholder for deferred charts
 .chart-placeholder {
   display: flex;

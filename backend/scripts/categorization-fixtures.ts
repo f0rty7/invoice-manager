@@ -128,5 +128,39 @@ export const categorizationFixtures: CategorizationFixture[] = [
   {
     description: 'Dukes Waffy Chocolate Wafers',
     expected: 'Confectionery & Sweet Tooth'
+  },
+
+  // User-requested category corrections
+  {
+    description: "Bingo! Original Style Chilli Sprinkled | Flat Cut Spicy Potato Chips Pack for Snacks 1 pack (43 g)",
+    expected: 'Snacks & Salty Snacks'
+  },
+  {
+    description: "Lay's India's Magic Masala Potato Chips | Crunchy & Enjoyable 1 pack (48 g)",
+    expected: 'Snacks & Salty Snacks'
+  },
+  {
+    description: 'Brown Ripper Rolling Paper 32 Leaves + 32 Roaches - Stash Pro(Pack)',
+    expected: 'Tobacco & Related'
+  },
+  {
+    description: 'Raaga Professional Detan - Tan Remover Cream(Jar)',
+    expected: 'Household, Personal Care & Miscellaneous'
+  },
+  {
+    description: 'Radish White (Mooli) 250 g',
+    expected: 'Fresh Produce – Vegetables & Herbs'
+  },
+  {
+    description: 'Fortune Sona Masoori Regular 1 pack (5 kg)',
+    expected: 'Staples & Pantry'
+  },
+  {
+    description: 'Daily Good Cassia - Taj 1 pack (50 g)',
+    expected: 'Beverages & Drinks'
+  },
+  {
+    description: 'Daily Good Bay Leaf / Tejpatta 1 pack (50 g)',
+    expected: 'Fresh Produce – Vegetables & Herbs'
   }
 ];

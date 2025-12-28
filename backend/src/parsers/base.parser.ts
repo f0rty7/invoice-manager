@@ -12,19 +12,32 @@ export const CATEGORIES = [
     category: 'Fresh Produce – Fruits'
   },
   {
-    // Fresh vegetables, herbs, fresh produce, root-veg, leafy, etc.
-    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|brinjal|lemon|drumsticks?|beetroot|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|leaves|herb|herbs)\b/i,
-    category: 'Fresh Produce – Vegetables & Herbs'
+    // Staples: rice, flour/atta/sooji/poha/pulses/grains, cooking essentials like cooking oil
+    regex: /\b(rice|sona\s*masoori|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|peanut|groundnut|singdana|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
+    category: 'Staples & Pantry'
   },
   {
-    // Staples: rice, flour/atta/sooji/poha/pulses/grains, cooking essentials like cooking oil
-    regex: /\b(rice|sonamasuri|poha|atta|flour|sooji|maida|dal|lentil|pulses|grain|grains|cereal|wheat|rice\s*flour|gram\s*flour|kabuli\s*chana|kala\s*chana|chana|besan|pulse|peanut|groundnut|singdana|oil|sunflower\s*oil|refined\s*oil|groundnut\s*oil|edible\s*oil|ghee|sugar|salt|jaggery)\b/i,
-    category: 'Staples & Pantry'
+    // Snacks — salty / savoury snacks (chips, namkeen, crackers, salted snacks)
+    // IMPORTANT: Keep this before "Fresh vegetables" so items like "potato chips" don't get classified as vegetables.
+    regex:
+      /^(?!.*\b(choco|chocolate|wafer\s*bar|choco\s*coated|lindt|lindor|kitkat|dukes|waffy)\b).*?\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
+    category: 'Snacks & Salty Snacks'
+  },
+  {
+    // Fresh vegetables, herbs, fresh produce, root-veg, leafy, etc.
+    // NOTE: Avoid generic "leaves" to prevent misclassifying non-produce like "rolling paper 32 leaves".
+    regex: /\b(onion|tomato|potato|carrot|capsicum|bell\s*pepper|cabbage|cauliflower|spinach|palak|methi|fenugreek|beans|beans\s*haricot|okra|lady\s*finger|pea|peas|ginger|garlic|chilli|green\s*chilli|chilli\s*green|mushroom|brinjal|lemon|drumsticks?|beetroot|radish|mooli|bay\s*leaf|tej\s*patta|tejpatta|fresh\s*produce|vegetable|vegetables|leafy\s*vegetable|herb|herbs|curry\s*leaves)\b/i,
+    category: 'Fresh Produce – Vegetables & Herbs'
   },
   {
     // Spices, condiments, sauces, pickles, masalas, cooking flavour / condiments
     regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|spices|jeera|cumin|masala|masalas|salt|pepper|seasoning|manchurian|gravy\s*mix|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
     category: 'Spices, Condiments & Cooking Essentials'
+  },
+  {
+    // Personal care: detan / tan-remover creams should not be classified as dairy due to "cream" keyword.
+    regex: /\b(raaga|de-?\s*tan|detan|tan\s*remover)\b/i,
+    category: 'Household, Personal Care & Miscellaneous'
   },
   {
     // Dairy products & eggs & related — milk, butter, yogurt/curd, paneer/cheese, cream, ghee etc.
@@ -36,12 +49,6 @@ export const CATEGORIES = [
     // Bakery and bread goods: bread, buns, croissants, bakery items
     regex: /\b(bread|pav|paav|bun|buns|croissant|bagel|bun\s*mask(a)?|pastry|bakery|loaf|roll(?![-\s]*on)\b|rolls)\b/i,
     category: 'Bakery & Bread'
-  },
-  {
-    // Snacks — salty / savoury snacks (chips, namkeen, crackers, salted snacks)
-    regex:
-      /^(?!.*\b(choco|chocolate|wafer\s*bar|choco\s*coated|lindt|lindor|kitkat|dukes|waffy)\b).*?\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b/i,
-    category: 'Snacks & Salty Snacks'
   },
   {
     // Confectionery, sweets, chocolates, desserts, biscuity sweet snacks
@@ -62,7 +69,7 @@ export const CATEGORIES = [
   {
     // Beverages: soft drinks, soda, energy drinks, tea/coffee, bottled / canned drinks
     regex:
-      /^(?!.*\b(instant\s*coffee|coffee\s*powder)\b).*?\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink)\b/i,
+      /^(?!.*\b(instant\s*coffee|coffee\s*powder)\b).*?\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink|daily\s*good.*\btaj\b)\b/i,
     category: 'Beverages & Drinks'
   },
   {

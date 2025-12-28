@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { InvoiceStateService } from '../../services/invoice-state.service';
+import { provideCharts } from 'ng2-charts';
+import { ChartBootstrapService } from '../../services/chart-bootstrap.service';
 import type { Invoice } from '@pdf-invoice/shared';
 
 @Component({
@@ -13,12 +15,18 @@ import type { Invoice } from '@pdf-invoice/shared';
   imports: [CommonModule, MatCardModule, MatIconModule, BaseChartDirective],
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCharts()]
 })
 export class ChartsComponent {
   private invoiceState = inject(InvoiceStateService);
+  private chartBootstrap = inject(ChartBootstrapService);
   
   invoices = this.invoiceState.invoices;
+
+  constructor() {
+    void this.chartBootstrap.ensureRegistered();
+  }
 
   // Monthly Spending Trends Chart
   monthlyTrendsData = computed(() => {

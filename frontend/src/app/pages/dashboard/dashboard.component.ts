@@ -12,6 +12,7 @@ import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AuthService } from '../../services/auth.service';
 import { InvoiceStateService } from '../../services/invoice-state.service';
+import { ChartBootstrapService } from '../../services/chart-bootstrap.service';
 import { UploadComponent } from '../../components/upload/upload.component';
 import { FilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { StatsCardsComponent } from '../../components/stats-cards/stats-cards.component';
@@ -48,6 +49,7 @@ export class DashboardComponent {
   private invoiceState = inject(InvoiceStateService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private chartBootstrap = inject(ChartBootstrapService);
 
   currentUser = this.authService.currentUser;
   isAdmin = this.authService.isAdmin;
@@ -61,14 +63,20 @@ export class DashboardComponent {
   readonly advancedPanelLoaded = signal(false);
   readonly invoiceLoading = this.invoiceState.loading;
 
-  onAnalyticsOpened(): void {
-    this.analyticsPanelLoaded.set(true);
+  async onAnalyticsOpened(): Promise<void> {
+    if (this.analyticsPanelLoaded()) return;
+
     this.invoiceState.refreshInvoices();
+    await this.chartBootstrap.ensureRegistered();
+    this.analyticsPanelLoaded.set(true);
   }
 
-  onAdvancedAnalyticsOpened(): void {
-    this.advancedPanelLoaded.set(true);
+  async onAdvancedAnalyticsOpened(): Promise<void> {
+    if (this.advancedPanelLoaded()) return;
+
     this.invoiceState.refreshInvoices();
+    await this.chartBootstrap.ensureRegistered();
+    this.advancedPanelLoaded.set(true);
   }
 
   openUploadDialog(): void {

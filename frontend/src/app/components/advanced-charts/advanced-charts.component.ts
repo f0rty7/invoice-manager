@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { InvoiceStateService } from '../../services/invoice-state.service';
+import { provideCharts } from 'ng2-charts';
+import { ChartBootstrapService } from '../../services/chart-bootstrap.service';
 
 @Component({
   selector: 'app-advanced-charts',
@@ -12,12 +14,18 @@ import { InvoiceStateService } from '../../services/invoice-state.service';
   imports: [CommonModule, MatCardModule, MatIconModule, BaseChartDirective],
   templateUrl: './advanced-charts.component.html',
   styleUrls: ['./advanced-charts.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideCharts()]
 })
 export class AdvancedChartsComponent {
   private invoiceState = inject(InvoiceStateService);
+  private chartBootstrap = inject(ChartBootstrapService);
   
   invoices = this.invoiceState.invoices;
+
+  constructor() {
+    void this.chartBootstrap.ensureRegistered();
+  }
 
   // 1. Spending by Delivery Partner
   deliveryPartnerData = computed(() => {

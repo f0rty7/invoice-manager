@@ -1,11 +1,11 @@
 <div class="filter-sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">
-      <mat-icon>filter_list</mat-icon>
+      <mat-icon svgIcon="filter_list"></mat-icon>
       <span>Filters</span>
     </div>
     @if (hasActiveFilters()) {
-      <mat-icon class="active-indicator" matTooltip="Active filters">check_circle</mat-icon>
+      <mat-icon class="active-indicator" matTooltip="Active filters" svgIcon="check_circle"></mat-icon>
     }
   </div>
 
@@ -15,7 +15,7 @@
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Search</mat-label>
         <input matInput formControlName="search" placeholder="Order, invoice, item, partner...">
-        <mat-icon matSuffix>search</mat-icon>
+        <mat-icon matSuffix svgIcon="search"></mat-icon>
       </mat-form-field>
     </div>
 
@@ -25,7 +25,7 @@
     <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon>schedule</mat-icon>
+          <mat-icon svgIcon="schedule"></mat-icon>
           <span>Time Filters</span>
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -82,7 +82,7 @@
     <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon>trending_up</mat-icon>
+          <mat-icon svgIcon="trending_up"></mat-icon>
           <span>Spending Patterns</span>
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -104,7 +104,7 @@
     <mat-expansion-panel class="filter-expansion-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon>block</mat-icon>
+          <mat-icon svgIcon="block"></mat-icon>
           <span>Exclude</span>
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -135,7 +135,7 @@
     @if (isAdmin()) {
       <div class="filter-section">
         <div class="section-label">
-          <mat-icon>person</mat-icon>
+          <mat-icon svgIcon="person"></mat-icon>
           <span>User</span>
         </div>
         
@@ -150,7 +150,7 @@
     @if (savedFilters().length > 0) {
       <div class="filter-section saved-filters-section">
         <div class="section-label">
-          <mat-icon>bookmark</mat-icon>
+          <mat-icon svgIcon="bookmark"></mat-icon>
           <span>Saved Filters</span>
         </div>
         
@@ -160,22 +160,22 @@
               <div class="filter-info">
                 <span class="filter-name">{{ filter.name }}</span>
                 @if (filter.is_default) {
-                  <mat-icon class="default-badge" matTooltip="Default filter">star</mat-icon>
+                  <mat-icon class="default-badge" matTooltip="Default filter" svgIcon="star"></mat-icon>
                 }
               </div>
               <div class="filter-actions-menu">
                 <button mat-icon-button [matMenuTriggerFor]="filterMenu" (click)="$event.stopPropagation()">
-                  <mat-icon>more_vert</mat-icon>
+                  <mat-icon svgIcon="more_vert"></mat-icon>
                 </button>
                 <mat-menu #filterMenu="matMenu">
                   @if (!filter.is_default) {
                     <button mat-menu-item (click)="setAsDefaultFilter(filter, $event)">
-                      <mat-icon>star_outline</mat-icon>
+                      <mat-icon svgIcon="star_outline"></mat-icon>
                       <span>Set as default</span>
                     </button>
                   }
                   <button mat-menu-item (click)="deleteSavedFilter(filter, $event)">
-                    <mat-icon>delete</mat-icon>
+                    <mat-icon svgIcon="delete"></mat-icon>
                     <span>Delete</span>
                   </button>
                 </mat-menu>
@@ -194,7 +194,7 @@
         (click)="openSaveFilterDialog()"
         [disabled]="!hasActiveFilters()"
         class="save-filter-btn">
-        <mat-icon>bookmark_add</mat-icon>
+        <mat-icon svgIcon="bookmark_add"></mat-icon>
         Save Filter
       </button>
       <button 
@@ -203,7 +203,7 @@
         type="button" 
         (click)="clearFilters()"
         [disabled]="!hasActiveFilters()">
-        <mat-icon>clear_all</mat-icon>
+        <mat-icon svgIcon="clear_all"></mat-icon>
         Clear All
       </button>
     </div>

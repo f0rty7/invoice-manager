@@ -1,10 +1,12 @@
+import { provideAppInitializer, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
+import { IconRegistryService } from './app/services/icon-registry.service';
 
 // OPTIMIZED: Tree-shake Chart.js by importing only what we need
 import { Chart, LineController, BarController, DoughnutController,
@@ -33,14 +35,16 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(
       routes, 
-      withComponentInputBinding(),
-      withPreloading(PreloadAllModules)  // Preload lazy routes for faster navigation
+      withComponentInputBinding()
     ),
+    provideAppInitializer(() => {
+      inject(IconRegistryService).register();
+    }),
     provideHttpClient(
       withInterceptors([authInterceptor]),
       withFetch() // Angular 21: Use native fetch API
     ),
-    provideAnimations(),
+    provideAnimationsAsync(),
     provideCharts()  // No registerables - we manually registered only what we need
   ]
 }).catch(err => console.error(err));

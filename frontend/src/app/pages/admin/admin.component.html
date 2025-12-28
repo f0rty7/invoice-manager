@@ -2,14 +2,14 @@
   <!-- Toolbar -->
   <mat-toolbar color="accent" class="admin-toolbar">
     <span class="toolbar-title">
-      <mat-icon>admin_panel_settings</mat-icon>
+      <mat-icon svgIcon="admin_panel_settings"></mat-icon>
       Admin Panel
     </span>
 
     <span class="toolbar-spacer"></span>
 
     <span class="user-info">
-      <mat-icon>person</mat-icon>
+      <mat-icon svgIcon="person"></mat-icon>
       {{ currentUser()?.username }}
       <span class="admin-badge">ADMIN</span>
     </span>
@@ -18,7 +18,7 @@
       mat-button 
       (click)="goToDashboard()"
       matTooltip="My Dashboard">
-      <mat-icon>dashboard</mat-icon>
+      <mat-icon svgIcon="dashboard"></mat-icon>
       My Dashboard
     </button>
 
@@ -26,7 +26,7 @@
       mat-button 
       (click)="logout()"
       matTooltip="Logout">
-      <mat-icon>logout</mat-icon>
+      <mat-icon svgIcon="logout"></mat-icon>
       Logout
     </button>
   </mat-toolbar>
@@ -39,7 +39,7 @@
         <h1>Admin Dashboard</h1>
         <p class="subtitle">View and manage all users' invoices</p>
         <div class="admin-notice">
-          <mat-icon>info</mat-icon>
+          <mat-icon svgIcon="info"></mat-icon>
           <span>You are viewing data for all users. Use the username filter to narrow down results.</span>
         </div>
       </div>

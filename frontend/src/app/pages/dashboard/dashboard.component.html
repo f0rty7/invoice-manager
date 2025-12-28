@@ -2,7 +2,7 @@
   <!-- Toolbar -->
   <mat-toolbar color="primary" class="dashboard-toolbar">
     <span class="toolbar-title">
-      <mat-icon>dashboard</mat-icon>
+      <mat-icon svgIcon="dashboard"></mat-icon>
       PDF Invoice Manager
     </span>
 
@@ -12,12 +12,12 @@
       mat-button 
       (click)="openUploadDialog()"
       matTooltip="Upload PDF Invoices">
-      <mat-icon>cloud_upload</mat-icon>
+      <mat-icon svgIcon="cloud_upload"></mat-icon>
       Upload
     </button>
 
     <span class="user-info">
-      <mat-icon>person</mat-icon>
+      <mat-icon svgIcon="person"></mat-icon>
       {{ currentUser()?.username }}
       @if (isAdmin()) {
         <span class="admin-badge">ADMIN</span>
@@ -29,7 +29,7 @@
         mat-button 
         (click)="goToAdmin()"
         matTooltip="Admin Panel">
-        <mat-icon>admin_panel_settings</mat-icon>
+        <mat-icon svgIcon="admin_panel_settings"></mat-icon>
         Admin Panel
       </button>
     }
@@ -38,7 +38,7 @@
       mat-button 
       (click)="logout()"
       matTooltip="Logout">
-      <mat-icon>logout</mat-icon>
+      <mat-icon svgIcon="logout"></mat-icon>
       Logout
     </button>
   </mat-toolbar>
@@ -67,7 +67,7 @@
           <mat-expansion-panel (opened)="onAnalyticsOpened()">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <mat-icon>analytics</mat-icon>
+                <mat-icon svgIcon="analytics"></mat-icon>
                 Analytics & Insights
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -75,7 +75,7 @@
             <ng-template matExpansionPanelContent>
               @if (invoiceLoading()) {
                 <div class="chart-placeholder">
-                  <mat-icon>bar_chart</mat-icon>
+                  <mat-icon svgIcon="bar_chart"></mat-icon>
                   <span>Loading charts...</span>
                 </div>
               } @else {
@@ -83,7 +83,7 @@
                   <app-charts></app-charts>
                 } @placeholder {
                   <div class="chart-placeholder">
-                    <mat-icon>bar_chart</mat-icon>
+                    <mat-icon svgIcon="bar_chart"></mat-icon>
                     <span>Loading charts...</span>
                   </div>
                 }
@@ -94,7 +94,7 @@
           <mat-expansion-panel (opened)="onAdvancedAnalyticsOpened()">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <mat-icon>insights</mat-icon>
+                <mat-icon svgIcon="insights"></mat-icon>
                 Advanced Analytics
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -102,7 +102,7 @@
             <ng-template matExpansionPanelContent>
               @if (invoiceLoading()) {
                 <div class="chart-placeholder">
-                  <mat-icon>analytics</mat-icon>
+                  <mat-icon svgIcon="analytics"></mat-icon>
                   <span>Loading analytics...</span>
                 </div>
               } @else {
@@ -110,7 +110,7 @@
                   <app-advanced-charts></app-advanced-charts>
                 } @placeholder {
                   <div class="chart-placeholder">
-                    <mat-icon>analytics</mat-icon>
+                    <mat-icon svgIcon="analytics"></mat-icon>
                     <span>Loading analytics...</span>
                   </div>
                 }
@@ -123,14 +123,14 @@
         <mat-tab-group class="data-tables data-tabs" animationDuration="200ms" (selectedTabChange)="onTabChange($event)">
           <mat-tab>
             <ng-template mat-tab-label>
-              <mat-icon>receipt</mat-icon>
+              <mat-icon svgIcon="receipt"></mat-icon>
               <span>Invoices ({{ invoicesTotal() }})</span>
             </ng-template>
             <app-invoice-table></app-invoice-table>
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
-              <mat-icon>inventory_2</mat-icon>
+              <mat-icon svgIcon="inventory_2"></mat-icon>
               <span>Items ({{ itemsTotal() }})</span>
             </ng-template>
             <app-item-table></app-item-table>

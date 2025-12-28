@@ -5,6 +5,13 @@
 // Custom Material Light Theme
 @use '@angular/material' as mat;
 
+// Self-hosted Inter (WOFF2) via npm (replaces Google Fonts)
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
 @include mat.core();
 
 // Create the light theme using M3 color system

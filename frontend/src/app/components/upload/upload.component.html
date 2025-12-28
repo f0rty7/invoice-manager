@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  <mat-icon>cloud_upload</mat-icon>
+  <mat-icon svgIcon="cloud_upload"></mat-icon>
   Upload Invoice PDFs
 </h2>
 
@@ -11,12 +11,12 @@
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)">
     
-    <mat-icon class="upload-icon">cloud_upload</mat-icon>
+    <mat-icon class="upload-icon" svgIcon="cloud_upload"></mat-icon>
     <p class="drop-text">Drag & drop PDF files here</p>
     <p class="or-text">or</p>
     
     <button mat-raised-button color="primary" (click)="fileInput.click()">
-      <mat-icon>folder_open</mat-icon>
+      <mat-icon svgIcon="folder_open"></mat-icon>
       Choose Files
     </button>
     
@@ -36,7 +36,7 @@
       <div class="list-header">
         <h3>Files ({{ files().length }})</h3>
         <button mat-button color="warn" (click)="clearFiles()">
-          <mat-icon>delete_sweep</mat-icon>
+          <mat-icon svgIcon="delete_sweep"></mat-icon>
           Clear All
         </button>
       </div>
@@ -44,14 +44,23 @@
       <mat-list>
         @for (fileStatus of files(); track fileStatus.file.name; let i = $index) {
           <mat-list-item>
-            <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status">
-              @switch (fileStatus.status) {
-                @case ('pending') { schedule }
-                @case ('uploading') { hourglass_empty }
-                @case ('success') { check_circle }
-                @case ('error') { error }
+            @switch (fileStatus.status) {
+              @case ('pending') {
+                <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status" svgIcon="schedule"></mat-icon>
               }
-            </mat-icon>
+              @case ('uploading') {
+                <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status" svgIcon="hourglass_empty"></mat-icon>
+              }
+              @case ('success') {
+                <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status" svgIcon="check_circle"></mat-icon>
+              }
+              @case ('error') {
+                <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status" svgIcon="error"></mat-icon>
+              }
+              @default {
+                <mat-icon matListItemIcon [class]="'status-icon ' + fileStatus.status" svgIcon="error_outline"></mat-icon>
+              }
+            }
 
             <div matListItemTitle class="file-details">
               <span class="file-name">{{ fileStatus.file.name }}</span>
@@ -74,7 +83,7 @@
               matListItemMeta
               (click)="removeFile(i)"
               [disabled]="fileStatus.status === 'uploading'">
-              <mat-icon>close</mat-icon>
+              <mat-icon svgIcon="close"></mat-icon>
             </button>
           </mat-list-item>
         }

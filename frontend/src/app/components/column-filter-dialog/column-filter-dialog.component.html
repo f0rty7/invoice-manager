@@ -21,7 +21,7 @@
         <mat-label>Search</mat-label>
         <input matInput [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
         <button mat-icon-button matSuffix type="button" (click)="searchText.set('')">
-          <mat-icon>close</mat-icon>
+          <mat-icon svgIcon="close"></mat-icon>
         </button>
       </mat-form-field>
 

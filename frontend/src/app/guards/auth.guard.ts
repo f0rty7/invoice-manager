@@ -1,21 +1,13 @@
 import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
+import { Router, type CanMatchFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanMatchFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Check for stored auth first (in case of page refresh)
-  if (!authService.isAuthenticated()) {
-    authService.checkStoredAuth();
-  }
-
-  if (authService.isAuthenticated()) {
-    return true;
-  }
-
-  router.navigate(['/login']);
-  return false;
+  return authService.isAuthenticated()
+    ? true
+    : router.createUrlTree(['/login']);
 };
 

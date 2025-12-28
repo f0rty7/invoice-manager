@@ -7,7 +7,7 @@
     [class.active]="active"
     [matTooltip]="tooltip"
     (click)="onOpenClick($event)">
-    <mat-icon>{{ active ? 'filter_alt' : 'filter_alt_off' }}</mat-icon>
+    <mat-icon [svgIcon]="active ? 'filter_alt' : 'filter_alt_off'"></mat-icon>
   </button>
 </div>
 

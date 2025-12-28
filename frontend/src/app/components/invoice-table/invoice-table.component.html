@@ -7,12 +7,12 @@
       </div>
     } @else if (error()) {
       <div class="error-container">
-        <mat-icon>error_outline</mat-icon>
+        <mat-icon svgIcon="error_outline"></mat-icon>
         <p>{{ error() }}</p>
       </div>
     } @else if (invoices().length === 0) {
       <div class="empty-container">
-        <mat-icon>inbox</mat-icon>
+        <mat-icon svgIcon="inbox"></mat-icon>
         <p>No invoices found</p>
         <p class="hint">Upload some PDF invoices to get started!</p>
       </div>
@@ -86,10 +86,10 @@
                 }
                 <td class="actions-cell">
                   <button mat-icon-button matTooltip="Details" (click)="openInvoiceItems(invoice, $event)">
-                    <mat-icon>list</mat-icon>
+                    <mat-icon svgIcon="list"></mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteInvoice(invoice, $event)">
-                    <mat-icon>delete</mat-icon>
+                    <mat-icon svgIcon="delete"></mat-icon>
                   </button>
                 </td>
               </tr>

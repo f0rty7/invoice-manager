@@ -7,12 +7,12 @@
       </div>
     } @else if (error()) {
       <div class="error-container">
-        <mat-icon>error_outline</mat-icon>
+        <mat-icon svgIcon="error_outline"></mat-icon>
         <p>{{ error() }}</p>
       </div>
     } @else if (items().length === 0) {
       <div class="empty-container">
-        <mat-icon>inbox</mat-icon>
+        <mat-icon svgIcon="inbox"></mat-icon>
         <p>No items found</p>
         <p class="hint">Upload some PDF invoices to see items here!</p>
       </div>

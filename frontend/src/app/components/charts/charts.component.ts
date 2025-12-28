@@ -1,4 +1,4 @@
-import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy, isDevMode } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -78,7 +78,8 @@ export class ChartsComponent {
   monthlyTrendsOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false, // Disable animations for better dev tools performance
+    // Chart.js doesn't accept `true` here; use `false` to disable, otherwise omit for defaults.
+    animation: isDevMode() ? false : undefined,
     plugins: {
       legend: {
         display: true,
@@ -198,7 +199,8 @@ export class ChartsComponent {
   topCategoriesOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false, // Disable animations for better dev tools performance
+    // Chart.js doesn't accept `true` here; use `false` to disable, otherwise omit for defaults.
+    animation: isDevMode() ? false : undefined,
     indexAxis: 'y',
     plugins: {
       legend: {
@@ -292,7 +294,8 @@ export class ChartsComponent {
   topItemsOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: false, // Disable animations for better dev tools performance
+    // Chart.js doesn't accept `true` here; use `false` to disable, otherwise omit for defaults.
+    animation: isDevMode() ? false : undefined,
     indexAxis: 'y',
     plugins: {
       legend: {

@@ -2,10 +2,11 @@
   "name": "@pdf-invoice/backend",
   "version": "1.0.0",
   "description": "Backend API with Hono.js",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && node scripts/fix-esm-imports.mjs",
     "start": "node dist/index.js",
     "test": "jest",
     "migrate:categories": "tsx scripts/update-categories.ts",

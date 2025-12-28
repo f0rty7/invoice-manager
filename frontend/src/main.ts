@@ -3,7 +3,6 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
 import { IconRegistryService } from './app/services/icon-registry.service';
@@ -22,7 +21,6 @@ bootstrapApplication(AppComponent, {
       withInterceptors([authInterceptor]),
       withFetch() // Angular 21: Use native fetch API
     ),
-    provideAnimationsAsync()
   ]
 }).catch(err => console.error(err));
 

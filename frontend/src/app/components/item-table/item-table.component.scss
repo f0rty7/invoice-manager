@@ -3,7 +3,7 @@ mat-card-content { padding: 0 !important; }
 :host {
   // Column widths (override these from a parent if needed, e.g. `app-item-table { --item-col-description: 420px; }`)
   --item-col-partner: 130px;
-  --item-col-date: 110px;
+  --item-col-date: 120px;
   --item-col-order-no: 150px;
   --item-col-description: auto; // flex column
   --item-col-category: auto; // flex column

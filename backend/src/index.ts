@@ -92,9 +92,29 @@ app.get('*', async (c) => {
     const body = await readFile(resolvedPath);
     const ct = contentTypeForExt(ext || '.html');
 
+    // Cache strategy:
+    // - index.html: no-cache (so deployments update immediately)
+    // - hashed assets + media: long cache (repeat loads are fast)
+    // - other static assets (e.g. favicon): short cache
+    const fileName = path.posix.basename(relativeFsPath);
+    const isIndexHtml = relativeFsPath === 'index.html';
+    const isStaticAsset = !!ext && ext !== '.html';
+    const isLikelyHashedAsset =
+      requestPath.startsWith('/media/') ||
+      /-(?:[a-f0-9]{8,}|[a-z0-9]{8,})\./i.test(fileName) ||
+      /^(?:main|styles|chunk)-/i.test(fileName);
+
+    const cacheControl = isIndexHtml
+      ? 'no-cache'
+      : isStaticAsset && isLikelyHashedAsset
+        ? 'public, max-age=31536000, immutable'
+        : isStaticAsset
+          ? 'public, max-age=3600'
+          : 'no-cache';
+
     return c.body(body, 200, {
       'Content-Type': ct,
-      'Cache-Control': 'no-cache',
+      'Cache-Control': cacheControl,
     });
   } catch {
     // For non-file routes we already mapped to index.html; missing means build isn't present.

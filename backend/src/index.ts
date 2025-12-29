@@ -12,6 +12,7 @@ import { authRouter } from './routes/auth.routes';
 import { invoiceRouter } from './routes/invoice.routes';
 import { filterRouter } from './routes/filter.routes';
 import { authService } from './services/auth.service';
+import { invoiceImportService } from './services/invoice-import.service';
 
 const app = new Hono();
 
@@ -64,34 +65,34 @@ app.route('/api/filters', filterRouter);
 app.get('*', async (c) => {
   const url = new URL(c.req.url);
   const pathname = decodeURIComponent(url.pathname);
-
+  
   // Never try to serve frontend assets for API routes
   if (pathname === '/health' || pathname === '/api' || pathname.startsWith('/api/')) {
     return c.notFound();
   }
-
+  
   const requestPath = pathname === '/' ? '/index.html' : pathname;
   const ext = path.posix.extname(requestPath);
-
+  
   // SPA fallback for routes without an extension (e.g. /login, /dashboard)
   const relativeFsPath = ext ? requestPath.replace(/^\/+/, '') : 'index.html';
   const resolvedPath = path.resolve(FRONTEND_DIST_ROOT, relativeFsPath);
-
+  
   // Path traversal protection
   const rel = path.relative(FRONTEND_DIST_ROOT, resolvedPath);
   if (rel.startsWith('..') || path.isAbsolute(rel)) {
     return c.text('Bad request', 400);
   }
-
+  
   try {
     const fileStat = await stat(resolvedPath);
     if (!fileStat.isFile()) {
       return c.text('Not found', 404);
     }
-
+    
     const body = await readFile(resolvedPath);
     const ct = contentTypeForExt(ext || '.html');
-
+    
     // Cache strategy:
     // - index.html: no-cache (so deployments update immediately)
     // - hashed assets + media: long cache (repeat loads are fast)
@@ -100,18 +101,18 @@ app.get('*', async (c) => {
     const isIndexHtml = relativeFsPath === 'index.html';
     const isStaticAsset = !!ext && ext !== '.html';
     const isLikelyHashedAsset =
-      requestPath.startsWith('/media/') ||
-      /-(?:[a-f0-9]{8,}|[a-z0-9]{8,})\./i.test(fileName) ||
-      /^(?:main|styles|chunk)-/i.test(fileName);
-
+    requestPath.startsWith('/media/') ||
+    /-(?:[a-f0-9]{8,}|[a-z0-9]{8,})\./i.test(fileName) ||
+    /^(?:main|styles|chunk)-/i.test(fileName);
+    
     const cacheControl = isIndexHtml
-      ? 'no-cache'
-      : isStaticAsset && isLikelyHashedAsset
-        ? 'public, max-age=31536000, immutable'
-        : isStaticAsset
-          ? 'public, max-age=3600'
-          : 'no-cache';
-
+    ? 'no-cache'
+    : isStaticAsset && isLikelyHashedAsset
+    ? 'public, max-age=31536000, immutable'
+    : isStaticAsset
+    ? 'public, max-age=3600'
+    : 'no-cache';
+    
     return c.body(body, 200, {
       'Content-Type': ct,
       'Cache-Control': cacheControl,
@@ -153,6 +154,15 @@ async function startServer() {
     console.log(`   - GET    /api/invoices/:id`);
     console.log(`   - DELETE /api/invoices/:id`);
     console.log(`   - GET    /api/invoices/stats/summary`);
+    
+    // Startup invoice import (optional)
+    const importPromise = invoiceImportService.syncOnce();
+    if (CONFIG.invoiceImport.blocking) {
+      await importPromise;
+    } else {
+      importPromise.catch((err) => console.error('[invoice-import] Startup import failed:', err));
+    }
+    
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);

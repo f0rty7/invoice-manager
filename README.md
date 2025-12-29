@@ -53,6 +53,7 @@ pdf-extract/
 - ✅ JWT authentication with role-based access (user/admin)
 - ✅ Auto-detect PDF format (Zepto/Blinkit)
 - ✅ Multi-file upload with deduplication
+- ✅ Startup invoice folder sync (optional)
 - ✅ Efficient MongoDB queries with indexes
 - ✅ Pagination & filtering (date, category, price, user)
 - ✅ Statistics aggregation
@@ -115,6 +116,23 @@ MONGODB_URI=mongodb://localhost:27017/invoice_manager
 MONGODB_DB_NAME=invoice_manager
 JWT_SECRET=your-secret-key-here
 ```
+
+### Optional: Startup invoice sync from `invoice-sync/`
+
+If you want the backend to automatically import PDFs **when it starts**, place invoice PDFs under the repo-root `invoice-sync/` folder and enable the importer in `backend/.env`:
+
+```env
+INVOICE_IMPORT_ENABLED=true
+# Optional override (defaults to repo-root invoice-sync/):
+# INVOICE_IMPORT_DIR=../invoice-sync
+INVOICE_IMPORT_USERNAME=admin
+# If true, backend waits for import before starting HTTP server:
+INVOICE_IMPORT_BLOCKING=false
+```
+
+Notes:
+- The import user (e.g. `admin`) must already exist in the database.
+- The importer tracks processed files in MongoDB (`imported_files`) so restarts don’t keep reprocessing unchanged PDFs.
 
 4. **Start Backend**
 ```bash

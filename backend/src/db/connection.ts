@@ -52,6 +52,13 @@ class Database {
       await this.db.collection('saved_filters').createIndex({ user_id: 1, name: 1 }, { unique: true });
       await this.db.collection('saved_filters').createIndex({ user_id: 1, is_default: 1 });
 
+      // Imported files tracking (startup invoice sync)
+      await this.db.collection('imported_files').createIndex(
+        { path: 1, fingerprint: 1 },
+        { unique: true }
+      );
+      await this.db.collection('imported_files').createIndex({ status: 1, processed_at: -1 });
+
       console.log('✅ Database indexes created');
     } catch (error) {
       console.error('⚠️ Error creating indexes:', error);

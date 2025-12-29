@@ -14,6 +14,9 @@ type QueryFilters = Omit<InvoiceFilters, 'page' | 'limit'>;
 export class InvoiceStateService {
   private invoiceService = inject(InvoiceService);
 
+  // Defer expensive/secondary requests so they don't compete with initial render/LCP
+  private aggregatesEnabledSignal = signal(false);
+
   // Separate query filters from pagination (and split invoices vs items)
   private invoiceQueryFiltersSignal = signal<QueryFilters>({});
   private invoicePageSignal = signal(1);
@@ -115,6 +118,8 @@ export class InvoiceStateService {
   });
 
   constructor() {
+    this.deferEnableAggregates();
+
     // Use toObservable + switchMap for automatic request cancellation
     // Load data when filters change (including initial empty filters)
     toObservable(this.invoiceQueryFiltersSignal).pipe(
@@ -149,11 +154,18 @@ export class InvoiceStateService {
       this.loadingSignal.set(false);
     });
 
-    // Aggregate invoices totals (all filtered rows), cancel on filter changes
-    toObservable(this.invoiceQueryFiltersSignal).pipe(
+    // Aggregate invoices totals (all filtered rows), cancel on filter changes.
+    // Deferred so it doesn't compete with first paint (it is not required for table rendering).
+    toObservable(
+      computed(() => ({
+        enabled: this.aggregatesEnabledSignal(),
+        queryFilters: this.invoiceQueryFiltersSignal()
+      }))
+    ).pipe(
       distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       debounceTime(100),
-      switchMap(queryFilters => {
+      filter(v => v.enabled),
+      switchMap(({ queryFilters }) => {
         const filters: InvoiceFilters = { ...queryFilters };
         return this.invoiceService.aggregateInvoices(filters).pipe(
           catchError(() => of(null))
@@ -164,7 +176,7 @@ export class InvoiceStateService {
       if (res?.success && res.data) {
         this.invoiceAggregateSignal.set(res.data);
       } else {
-        this.invoiceAggregateSignal.set({ total_amount: 0, total_count: 0 });
+        this.invoiceAggregateSignal.set(null);
       }
     });
 
@@ -281,6 +293,19 @@ export class InvoiceStateService {
         console.error('Failed to load stats:', err);
       }
     });
+  }
+
+  enableAggregates(): void {
+    this.aggregatesEnabledSignal.set(true);
+  }
+
+  private deferEnableAggregates(): void {
+    const w = window as any;
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(() => this.enableAggregates(), { timeout: 2000 });
+    } else {
+      setTimeout(() => this.enableAggregates(), 1500);
+    }
   }
 
   refreshInvoices(): void {

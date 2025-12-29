@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,6 +19,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { debounceTime } from 'rxjs';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { InvoiceService } from '../../services/invoice.service';
+import { FilterOptionsService } from '../../services/filter-options.service';
 import { AuthService } from '../../services/auth.service';
 import type { InvoiceFilters, SavedFilter } from '@pdf-invoice/shared';
 import { SaveFilterDialogComponent } from './save-filter-dialog.component';
@@ -53,12 +54,14 @@ export class FilterBarComponent {
   private destroyRef = inject(DestroyRef);
   private invoiceState = inject(InvoiceStateService);
   private invoiceService = inject(InvoiceService);
+  private filterOptionsService = inject(FilterOptionsService);
   private authService = inject(AuthService);
   private dialog = inject(MatDialog);
 
   filterForm: FormGroup;
-  categories = signal<string[]>([]);
-  deliveryPartners = signal<string[]>([]);
+  // Prefer the shared filter-options endpoint (prevents extra /categories + /delivery-partners calls)
+  readonly categories = computed(() => this.filterOptionsService.categories().map(o => o.value));
+  readonly deliveryPartners = computed(() => this.filterOptionsService.partners().map(o => o.value));
   savedFilters = signal<SavedFilter[]>([]);
   isAdmin = this.authService.isAdmin;
 
@@ -125,10 +128,11 @@ export class FilterBarComponent {
       spending_pattern: ['']
     });
 
-    // Load categories/partners for exclusion pickers + saved filters list
-    this.loadCategories();
-    this.loadDeliveryPartners();
-    this.loadSavedFilters();
+    // Load shared filter options once (cached in `FilterOptionsService`)
+    this.filterOptionsService.loadFilterOptions();
+
+    // Defer saved filters fetch so it doesn't compete with first paint/LCP
+    this.deferLoadSavedFilters();
 
     // FIXED: Add takeUntilDestroyed to prevent subscription leak
     this.filterForm.valueChanges
@@ -177,32 +181,14 @@ export class FilterBarComponent {
       });
   }
 
-  private loadCategories(): void {
-    this.invoiceService.getCategories().subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.categories.set(response.data);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to load categories:', err);
-        this.categories.set([]);
-      }
-    });
-  }
-
-  private loadDeliveryPartners(): void {
-    this.invoiceService.getDeliveryPartners().subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.deliveryPartners.set(response.data);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to load delivery partners:', err);
-        this.deliveryPartners.set([]);
-      }
-    });
+  private deferLoadSavedFilters(): void {
+    const w = window as any;
+    if (typeof w.requestIdleCallback === 'function') {
+      w.requestIdleCallback(() => this.loadSavedFilters(), { timeout: 2000 });
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(() => this.loadSavedFilters(), 1500);
+    }
   }
 
   clearFilters(): void {

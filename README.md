@@ -130,6 +130,18 @@ npm start
 # App runs on http://localhost:4200
 ```
 
+### ▶️ Preview Production Build (recommended for prod-like testing)
+
+This runs the **real Angular production build output** and serves it from the backend (same origin as `/api/*`).
+
+```bash
+# From repo root
+npm run preview
+```
+
+- Frontend + API: `http://localhost:3000`
+- Note: make sure nothing else is already using port `3000` before running preview.
+
 ### Default Credentials
 - **Admin**: username: `admin`, password: `admin123`
 - **User**: Register a new account
@@ -248,6 +260,13 @@ npm start
 cd frontend
 npm run build
 # Output in frontend/dist
+```
+
+### Full-stack (single command)
+
+```bash
+# From repo root
+npm run preview
 ```
 
 ## 🎓 SOLID Principles Applied

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration } from 'chart.js';
+import type { ChartConfiguration } from 'chart.js';
 import { InvoiceStateService } from '../../services/invoice-state.service';
 import { provideCharts } from 'ng2-charts';
 import { ChartBootstrapService } from '../../services/chart-bootstrap.service';

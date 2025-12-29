@@ -113,10 +113,20 @@
 
         <div class="table-footer">
           <div class="footer-left">
-            Total (filtered): <strong>₹{{ (aggregate()?.total_amount || 0).toFixed(2) }}</strong>
+            Total (filtered):
+            @if (aggregate()) {
+              <strong>₹{{ aggregate()!.total_amount.toFixed(2) }}</strong>
+            } @else {
+              <strong>—</strong>
+            }
           </div>
           <div class="footer-right">
-            Count: <strong>{{ aggregate()?.total_count || 0 }}</strong>
+            Count:
+            @if (aggregate()) {
+              <strong>{{ aggregate()!.total_count }}</strong>
+            } @else {
+              <strong>—</strong>
+            }
           </div>
         </div>
       </div>

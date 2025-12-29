@@ -6,11 +6,11 @@
 @use '@angular/material' as mat;
 
 // Self-hosted Inter (WOFF2) via npm (replaces Google Fonts)
-@import "@fontsource/inter/300.css";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
+// Limit to Latin subset + the weights we actually use in the UI to reduce font requests/bytes.
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
 
 @include mat.core();
 

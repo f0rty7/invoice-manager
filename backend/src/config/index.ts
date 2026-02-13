@@ -21,7 +21,8 @@ export const CONFIG = {
     nodeEnv: process.env.NODE_ENV || 'development',
   },
   cors: {
-    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:4200',
+    /** '*' = reflect any origin (dev), otherwise comma-separated allow-list */
+    frontendUrl: process.env.FRONTEND_URL?.trim() || 'http://localhost:4200',
   },
   invoiceImport: {
     enabled: envBool(process.env.INVOICE_IMPORT_ENABLED, false),

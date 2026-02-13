@@ -1,0 +1,66 @@
+---
+description: Expert guidance for building mobile and cross-platform apps with React Native (New Architecture), Expo, TypeScript, and high-performance mobile engineering. Apply when the user is working on React Native, Expo, or cross-platform mobile projects.
+alwaysApply: false
+---
+
+# React Native & Cross-Platform Mobile Best Practices
+
+You are an expert in TypeScript, React Native (New Architecture), Expo, and High-Performance Mobile Engineering with a focus on performance, energy efficiency, and runtime optimization.
+
+## Core Architecture
+
+- Default to React Native's **New Architecture**: Fabric renderer + TurboModules with JSI for low-latency native interactions.
+- Enable **Hermes** as the primary JS engine in all production builds for improved cold startup, memory usage, and runtime efficiency.
+- Use **Codegen** and C++ modules (or Nitro Modules) where heavy native integration or low-overhead computation is required.
+
+## Performance & Battery Optimization
+
+- Minimize JS thread load; offload CPU-heavy work via **worklets** (e.g., `react-native-reanimated`, `react-native-worklets-core`).
+- Avoid frequent JS timers (`setInterval`, `requestAnimationFrame` loops). Prefer native schedulers / background fetch APIs for periodic work.
+- Use lazy loading and code splitting (`React.lazy` + `Suspense`) for non-critical screens & modules; enable `inlineRequires` in Metro.
+- Profile with Flipper, Hermes Profiler, and native instruments to measure FPS drops, GC pauses, and memory allocations.
+- Track and optimize for **Time to Interactive (TTI)**, FPS stability (60/120), and *frames within budget* over plain CPU usage.
+- Optimize energy usage by avoiding wake locks, reducing unnecessary background activity, and limiting sensor/polling frequency.
+
+## UI & Render Optimization
+
+- Prefer high-performance lists: `@shopify/flash-list` or Legend List with proper virtualization and `getItemLayout`.
+- Memoize components, stabilize props with `useMemo`/`useCallback`, and avoid anonymous functions in render loops.
+- Use **Reanimated v3+** worklets for animation and gesture logic on the UI thread.
+
+## State, Network & Data
+
+- Use **React Query (TanStack)** to cache and dedupe server requests; tune `staleTime` to minimize unnecessary CPU/network wakeups.
+- Use lightweight state libraries (**Zustand**) with selectors to minimize update propagation.
+
+## Images & Assets
+
+- Use `expo-image` with aggressive caching strategies and WebP/AVIF formats.
+- Use placeholders (thumbhash/blurhash) to reduce visual jank.
+- Compress/resize images at build time and lazy-load non-visible assets.
+
+## Memory Management
+
+- Clean up references, subscriptions, and listeners in effects; guard against leaks.
+- Use native profiling and memory leak detectors regularly.
+
+## Navigation & Experience
+
+- Use `react-navigation` with lazy screen loading, `detachInactiveScreens`, and avoid deeply nested navigators.
+
+## Error Handling & Telemetry
+
+- Use robust tools (**Sentry**) for performance/error telemetry; correlate errors with performance metrics.
+
+## Testing & QA
+
+- Write performance tests for critical flows; integrate profiling into CI.
+
+## Security & Build
+
+- Sanitize inputs and use secure storage (`expo-secure-store` or platform equivalents).
+- Optimize builds using Hermes bytecode and tree shaking to reduce app size and runtime overhead.
+
+## Documentation References
+
+- Follow official docs for New Architecture, TurboModules, Hermes, and Nitro Modules.

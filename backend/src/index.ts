@@ -42,11 +42,13 @@ function contentTypeForExt(ext: string): string {
   }
 }
 
-// Middleware
+// Middleware (CORS accepts multiple origins via array)
 app.use('*', logger());
 app.use('*', compress());
 app.use('*', cors({
-  origin: CONFIG.cors.frontendUrl,
+  origin: CONFIG.cors.frontendUrl === '*'
+    ? (origin) => origin          // reflect requesting origin (dev/LAN)
+    : CONFIG.cors.frontendUrl.split(',').map((u) => u.trim()),
   credentials: true,
 }));
 app.use('*', errorHandler);

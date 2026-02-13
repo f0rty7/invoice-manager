@@ -1,6 +1,7 @@
 ---
-description: This rule provides comprehensive best practices and coding standards for Angular development, focusing on modern TypeScript, standalone components, signals, and performance optimizations.
-globs: ["**/*.{ts,html,scss,css}"]
+description: Angular 20 best practices for standalone components, signals, control flow, inject(), and modern patterns
+globs: **/*.ts, **/*.html
+alwaysApply: false
 ---
 
 # Angular Best Practices

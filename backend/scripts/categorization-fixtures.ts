@@ -91,7 +91,7 @@ export const categorizationFixtures: CategorizationFixture[] = [
   },
   {
     description: 'Continental Xtra Instant Coffee 1 pack',
-    expected: 'Household, Personal Care & Miscellaneous'
+    expected: 'Beverages & Drinks'
   },
   {
     description: 'Kurkure Masala Munch Crisps (Pack)',

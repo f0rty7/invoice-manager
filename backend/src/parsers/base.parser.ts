@@ -31,7 +31,7 @@ export const CATEGORIES = [
   },
   {
     // Spices, condiments, sauces, pickles, masalas, cooking flavour / condiments
-    regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|spices|jeera|cumin|masala|masalas|salt|pepper|seasoning|manchurian|gravy\s*mix|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
+    regex: /^(?!.*\b(chip|chips|crisps|kurkure|nacho|namkeen|snack|salty\s*snack|popcorn|cracker|wafers?)\b).*?\b(spice|spices|jeera|cumin|masala|masalas|pepper|seasoning|manchurian|gravy\s*mix|sauce|soy\s*sauce|green\s*chilli\s*sauce|red\s*chilli\s*sauce|pickl(e|es)|pickle|pickle\s*jar|condiment|chutney|paste|ginger\s*garlic\s*paste)\b/i,
     category: 'Spices, Condiments & Cooking Essentials'
   },
   {
@@ -42,7 +42,7 @@ export const CATEGORIES = [
   {
     // Dairy products & eggs & related — milk, butter, yogurt/curd, paneer/cheese, cream, ghee etc.
     regex:
-      /^(?!.*\b(ice\s*cream|ice-cream|icecream|cornetto|popsicle|frozen\s*dessert|frozen|cone|choco|chocolate|wafer|lindt|lindor|kitkat|munch|dukes|waffy|flavoured\s*milk|kool|cafe|coffee)\b).*?\b(milk|dairy|curd|yogurt|yoghurt|paneer|cheese|butter|cream|ghee|dahi|lassi|buttermilk|condensed\s*milk|milk\s*powder)\b/i,
+      /^(?!.*\b(ice\s*cream|ice-cream|icecream|cornetto|popsicle|frozen\s*dessert|frozen|cone|choco|chocolate|wafer|lindt|lindor|kitkat|munch|dukes|waffy|flavoured\s*milk|kool|cafe|coffee)\b).*?\b(milk|dairy|curd|yogurt|yoghurt|paneer|cheese|butter|cream|ghee|dahi|lassi|buttermilk|condensed\s*milk|milk\s*powder|egg|eggs|anda)\b/i,
     category: 'Dairy & Eggs'
   },
   {
@@ -53,7 +53,7 @@ export const CATEGORIES = [
   {
     // Confectionery, sweets, chocolates, desserts, biscuity sweet snacks
     regex:
-      /^(?!.*\b(cone)\b).*?\b(choco|chocolate|chocolates|candy|bubble\s*gum|gum|sweets?|dessert|lindt|lindor|kitkat|nestle\s*munch|dukes|waffy|cookie|cookies|biscuit|biscuits|wafer|wafers|waffle|croissant|cake|sweet\s*snack|sweet)\b/i,
+      /^(?!.*\b(cone)\b).*?\b(choco|chocolate|chocolates|candy|bubble\s*gum|gum|sweets?|dessert|lindt|lindor|kitkat|nestle\s*munch|dukes|waffy|cookie|cookies|biscuit|biscuits|wafer|wafers|waffle|cake|sweet\s*snack|sweet)\b/i,
     category: 'Confectionery & Sweet Tooth'
   },
   {
@@ -69,17 +69,17 @@ export const CATEGORIES = [
   {
     // Beverages: soft drinks, soda, energy drinks, tea/coffee, bottled / canned drinks
     regex:
-      /^(?!.*\b(instant\s*coffee|coffee\s*powder)\b).*?\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink|daily\s*good.*\btaj\b)\b/i,
+      /\b(juice|fruit\s*juice|soft\s*drink|cola|soda|mineral\s*water|bottled\s*water|cold\s*drink|drink|beverage|energy\s*drink|tea|coffee|chai|tea\s*bag|milk\s*drink|flavoured\s*milk|health\s*drink|instant\s*coffee|coffee\s*powder|daily\s*good.*\btaj\b)\b/i,
     category: 'Beverages & Drinks'
   },
   {
     // Tobacco & related: cigarettes, pan/paan, chewing tobacco, hookah, tobacco-products
-    regex: /\b(cigarette|tobacco|cigar|pan|paan|supari|smoke|hookah|chewing\s*tobacco|rolling\s*paper|lighter|classic\s*(?:refined\s*taste|ultra\s*mild)|\bGold\s*Flake\b|\bMarlboro\b|\bWills\b|\bPlayers\b|\bStellar\s*Define\b|\bMagnate\b|\bMagic\s*Switch\b)\b/i,
+    regex: /\b(cigarette|tobacco|cigar|pan\s*masala|paan|supari|smoke|hookah|chewing\s*tobacco|rolling\s*paper|lighter|classic\s*(?:refined\s*taste|ultra\s*mild)|\bGold\s*Flake\b|\bMarlboro\b|\bWills\b|\bPlayers\b|\bStellar\s*Define\b|\bMagnate\b|\bMagic\s*Switch\b)\b/i,
     category: 'Tobacco & Related'
   },
   {
     // Non-food: household items, personal care, gift items, non-edible products — includes other misc items
-    regex: /\b(bouquet|flowers?|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous|incense|agarbatti|mangaldeep|facial|o3\+|aroma\s*magic|bottle\s*brush|sponge|gloves?|garbage\s*bags?|science\s*kit|roll[-\s]*on|instant\s*coffee|coffee\s*powder)\b/i,
+    regex: /\b(bouquet|flowers?|gift|hygiene|cleaning|soap|detergent|shampoo|toothpaste|sanitary|pad|tray|tape|bopp\s*tape|packet|box|packaging|wrap|misc|miscellaneous|incense|agarbatti|mangaldeep|facial|o3\+|aroma\s*magic|bottle\s*brush|sponge|gloves?|garbage\s*bags?|science\s*kit|roll[-\s]*on)\b/i,
     category: 'Household, Personal Care & Miscellaneous'
   },
   {

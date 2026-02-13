@@ -53,7 +53,9 @@ pdf-extract/
 - ✅ JWT authentication with role-based access (user/admin)
 - ✅ Auto-detect PDF format (Zepto/Blinkit)
 - ✅ Multi-file upload with deduplication
-- ✅ Startup invoice folder sync (optional)
+- ✅ Startup invoice folder sync from repo-root `invoice-sync/` (optional)
+- ✅ Import tracking in MongoDB (`imported_files`) to skip unchanged PDFs across restarts
+- ✅ Per-file import logging (SKIP / IMPORT_OK / IMPORT_FAIL) with timing + end-of-run summary
 - ✅ Efficient MongoDB queries with indexes
 - ✅ Pagination & filtering (date, category, price, user)
 - ✅ Statistics aggregation
@@ -133,6 +135,7 @@ INVOICE_IMPORT_BLOCKING=false
 Notes:
 - The import user (e.g. `admin`) must already exist in the database.
 - The importer tracks processed files in MongoDB (`imported_files`) so restarts don’t keep reprocessing unchanged PDFs.
+- Startup logs include SKIP / IMPORT_OK / IMPORT_FAIL per file (with `duration_ms`) and a final Summary line.
 
 4. **Start Backend**
 ```bash
@@ -188,6 +191,10 @@ JWT_EXPIRES_IN=7d
 PORT=3000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:4200
+INVOICE_IMPORT_ENABLED=false
+INVOICE_IMPORT_DIR=
+INVOICE_IMPORT_USERNAME=admin
+INVOICE_IMPORT_BLOCKING=false
 ```
 
 ## 🎯 Key Features
@@ -216,8 +223,8 @@ FRONTEND_URL=http://localhost:4200
   - Async pipes (no manual subscriptions)
 
 ### Data Management
-- **Deduplication**: order_no is unique key
-- **Check before insert**: Prevents duplicates
+- **Deduplication**: compound key `(order_no, invoice_no)` (MongoDB unique index)
+- **Upsert behavior**: existing invoices may be updated if totals/items change; identical duplicates are skipped
 - **Efficient filtering**: Date, category, price range, user
 - **Pagination**: Cursor-based for better performance
 
@@ -298,7 +305,7 @@ npm run preview
 ## 📈 Performance Metrics
 
 ### Database Indexes
-- `{ order_no: 1 }` - Unique, O(log n) lookup
+- `{ order_no: 1, invoice_no: 1 }` - Unique, O(log n) lookup
 - `{ user_id: 1, date: -1 }` - Compound for user queries
 - `{ 'items.category': 1, date: -1 }` - Category filtering
 - `{ items_total: 1 }` - Price range queries
